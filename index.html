@@ -217,6 +217,20 @@
   nav button { flex: 1; border: 0; background: none; padding: 9px 0 10px; font-size: 12px; color: var(--gris); }
   nav svg { display: block; margin: 0 auto 3px; width: 24px; height: 24px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
   nav button.activo { color: var(--rosa); font-weight: 600; }
+  nav button.mas { position: relative; }
+  nav .circulo {
+    display: grid; place-items: center; width: 52px; height: 52px; margin: -24px auto 2px; border-radius: 50%; color: #fff;
+    background: linear-gradient(160deg, var(--rosa), var(--frambuesa)); box-shadow: 0 6px 16px rgba(136, 21, 70, .35); border: 4px solid var(--fondo);
+  }
+  nav .circulo svg { margin: 0; width: 24px; height: 24px; stroke-width: 2.4; }
+  .accesos { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 16px; }
+  .accesos button {
+    text-align: left; border: 1px solid var(--borde); background: var(--blanco); border-radius: 18px; padding: 14px; min-height: 92px;
+    display: flex; flex-direction: column; gap: 4px; font-size: 15px; font-weight: 600; color: var(--tinta);
+  }
+  .accesos button i { font-style: normal; font-size: 22px; }
+  .accesos button small { font-size: 12px; font-weight: 400; color: var(--gris); line-height: 1.3; }
+  .accesos button.activo { border-color: var(--rosa); background: var(--rosa-suave); }
 
   .aviso {
     position: fixed; left: 50%; bottom: calc(92px + env(safe-area-inset-bottom)); transform: translateX(-50%);
@@ -408,12 +422,6 @@
       <button class="btn principal" id="btnInstalar" hidden>Instalar en el móvil</button>
     </div>
 
-    <div class="tarjeta copia" id="tarjetaCopia" hidden>
-      <h3>💾 Guarda una copia</h3>
-      <p class="sub" id="copiaRecordatorio"></p>
-      <div class="acciones" style="margin-top:12px"><button class="btn principal" data-copia="guardar">Guardar copia de seguridad</button></div>
-    </div>
-
     <div class="tarjeta">
       <h3>El servicio de hoy</h3>
       <div class="sub" id="hoySub"></div>
@@ -526,27 +534,15 @@
       <button class="btn secundario" id="btnAnadir">+ Añadir persona</button>
     </div>
     <p class="nota">Los cambios se guardan solos en este móvil.</p>
-
-    <div class="tarjeta copia" style="margin-top:20px">
-      <h3>💾 Copia de seguridad</h3>
-      <p class="sub" id="copiaEstado"></p>
-      <p class="sub">Guarda un archivo con todo (horarios, equipo, incidencias y stock) y mándatelo por WhatsApp o guárdalo en Drive. Si cambias de móvil o se borra la app, lo recuperas con ese archivo.</p>
-      <div class="acciones" style="margin-top:12px">
-        <button class="btn principal" data-copia="guardar">Guardar copia de seguridad</button>
-        <button class="btn secundario" data-copia="recuperar">Recuperar desde una copia</button>
-      </div>
-      <input type="file" id="archivoCopia" accept="application/json,.json" hidden>
-    </div>
   </section>
 </main>
 
 <nav>
   <button data-ir="inicio" class="activo"><svg viewBox="0 0 24 24"><path d="M3 11l9-7 9 7"/><path d="M5 10v10h14V10"/><path d="M10 20v-6h4v6"/></svg>Inicio</button>
   <button data-ir="rellenar"><svg viewBox="0 0 24 24"><path d="M4 20h4L19 9l-4-4L4 16z"/><path d="M13.5 6.5l4 4"/></svg>Rellenar</button>
+  <button id="btnMas" class="mas" aria-label="Más opciones"><span class="circulo"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></span>Más</button>
   <button data-ir="cuadro"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="15" rx="2"/><path d="M3 10h18M8 3v4M16 3v4M9 10v10M15 10v10"/></svg>Cuadro</button>
-  <button data-ir="horas"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>Horas</button>
   <button data-ir="stock"><svg viewBox="0 0 24 24"><path d="M3 7l9-4 9 4-9 4z"/><path d="M3 7v10l9 4 9-4V7"/><path d="M12 11v10"/></svg>Stock</button>
-  <button data-ir="equipo"><svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.6-3.6 3.3-5.5 6.5-5.5s5.9 1.9 6.5 5.5"/><circle cx="17" cy="9" r="2.5"/><path d="M17 14c2.4 0 4 1.5 4.5 4"/></svg>Equipo</button>
 </nav>
 
 <div class="aviso" id="aviso"></div>
@@ -573,6 +569,7 @@
   </div>
 </div>
 <div id="zonaImprimir"></div>
+<input type="file" id="archivoCopia" accept="application/json,.json" hidden>
 <canvas id="lienzo" hidden></canvas>
 
 <script>
@@ -836,7 +833,6 @@ function pintarInicio() {
   $('palabraTxt').textContent = palabra[2];
   $('anio').textContent = ahora.getFullYear();
   pintarStockInicio();
-  pintarRecordatorioCopia();
 
   pintarInstalar();
 }
@@ -1824,20 +1820,11 @@ $('stockContenido').addEventListener('click', (e) => {
 $('panel').addEventListener('click', (e) => { const b = e.target.closest('[data-accion]'); if (b) accionStock(b); });
 
 // --- Copia de seguridad: un archivo con todos los datos de este móvil ---
-const DIAS_RECORDAR_COPIA = 14;
-function hayDatos() {
-  return Object.values(datos.semanas).some(semanaTieneDatos) || (datos.stock && datos.stock.productos.length > 0);
-}
 function textoUltimaCopia() {
   if (!datos.ultimaCopia) return 'Todavía no has guardado ninguna copia.';
   const d = new Date(datos.ultimaCopia);
   const dias = Math.floor((Date.now() - datos.ultimaCopia) / 86400000);
   return 'Última copia: <b>' + d.getDate() + ' de ' + MESES[d.getMonth()] + '</b>' + (dias === 0 ? ' (hoy)' : dias === 1 ? ' (ayer)' : ' (hace ' + dias + ' días)') + '.';
-}
-function pintarRecordatorioCopia() {
-  const dias = datos.ultimaCopia ? (Date.now() - datos.ultimaCopia) / 86400000 : Infinity;
-  $('tarjetaCopia').hidden = !hayDatos() || dias < DIAS_RECORDAR_COPIA;
-  $('copiaRecordatorio').innerHTML = textoUltimaCopia() + ' Si se rompe o cambias el móvil, con la copia no pierdes nada.';
 }
 async function guardarCopia() {
   const ahora = new Date();
@@ -1879,16 +1866,43 @@ $('archivoCopia').addEventListener('change', async (e) => {
   refrescar();
   ofrecerDeshacer('Copia recuperada', () => { datos = antes; });
 });
-document.addEventListener('click', (e) => {
-  const b = e.target.closest('[data-copia]');
+
+// --- Ventana ＋ : atajos y lo que se usa menos ---
+function abrirMas() {
+  const acceso = (clave, icono, titulo, sub, activo) => '<button data-mas="' + clave + '"' + (activo ? ' class="activo"' : '') + '><i>' + icono + '</i>' + titulo + '<small>' + sub + '</small></button>';
+  const pedir = productosActivos().length ? listaPedir().length : 0;
+  abrirPanel('<h3>¿Qué quieres hacer?</h3><p class="sub">&nbsp;</p>' +
+    '<div class="grupo-stock">Apuntar rápido</div><div class="accesos">' +
+    acceso('compra', '🧾', 'Apuntar compra', 'Lo que ha llegado y lo que costó') +
+    acceso('recuento', '📦', 'Hacer recuento', pedir ? pedir + ' por pedir ahora' : 'Contar lo que queda') +
+    '</div><div class="grupo-stock">Más</div><div class="accesos">' +
+    acceso('horas', '🕒', 'Horas del mes', 'Informe en PDF para la nómina', vista === 'horas') +
+    acceso('equipo', '👥', 'Tu equipo', datos.equipo.length + (datos.equipo.length === 1 ? ' persona' : ' personas'), vista === 'equipo') +
+    '</div><div class="grupo-stock">Tus datos</div><div class="accesos">' +
+    acceso('guardar-copia', '💾', 'Guardar copia', textoUltimaCopia().replace(/<[^>]+>/g, '')) +
+    acceso('recuperar-copia', '📂', 'Recuperar copia', 'Desde un archivo guardado') +
+    '</div><div class="acciones"><button class="btn secundario" data-mas="cerrar">Cerrar</button></div>');
+}
+$('btnMas').addEventListener('click', abrirMas);
+$('panel').addEventListener('click', (e) => {
+  const b = e.target.closest('[data-mas]');
   if (!b) return;
-  if (b.dataset.copia === 'guardar') guardarCopia();
-  if (b.dataset.copia === 'recuperar') $('archivoCopia').click();
+  const que = b.dataset.mas;
+  cerrarPanel();
+  if (que === 'horas' || que === 'equipo') irA(que);
+  if (que === 'recuento' || que === 'compra') {
+    if (!productosActivos().length) { subStock = 'lista'; enRecuento = false; irA('stock'); avisar('Primero añade los productos'); return; }
+    subStock = que === 'compra' ? 'compras' : 'lista';
+    enRecuento = que === 'recuento';
+    irA('stock');
+    if (que === 'compra') abrirCompra();
+  }
+  if (que === 'guardar-copia') guardarCopia();
+  if (que === 'recuperar-copia') $('archivoCopia').click();
 });
 
 // --- Equipo ---
 function pintarEquipo() {
-  $('copiaEstado').innerHTML = textoUltimaCopia();
   const n = datos.equipo.length;
   $('equipo').innerHTML = datos.equipo.map((p, i) =>
     '<div class="fila-equipo">' + avatar(p) +
@@ -1932,7 +1946,7 @@ let vista = 'inicio';
 function irA(nombre) {
   vista = nombre;
   document.querySelectorAll('.vista').forEach((v) => v.classList.toggle('activa', v.id === 'vista' + nombre[0].toUpperCase() + nombre.slice(1)));
-  document.querySelectorAll('nav button').forEach((b) => b.classList.toggle('activo', b.dataset.ir === nombre));
+  document.querySelectorAll('nav button').forEach((b) => b.classList.toggle('activo', b.dataset.ir === nombre || (b.id === 'btnMas' && ['horas', 'equipo'].includes(nombre))));
   $('cabecera').hidden = ['inicio', 'equipo', 'horas', 'stock'].includes(nombre);
   $('dias').style.display = nombre === 'rellenar' ? '' : 'none';
   refrescar();
