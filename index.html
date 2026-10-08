@@ -225,6 +225,43 @@
   }
   .aviso.ver { opacity: 1; }
 
+  /* Repetir horario en otros días */
+  .repetir { border: 0; background: var(--rosa-suave); color: var(--frambuesa); border-radius: 99px; padding: 5px 11px; font-size: 12.5px; font-weight: 600; margin-left: 6px; }
+  .repetir svg, .btn svg { width: 14px; height: 14px; vertical-align: -2px; margin-right: 4px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+  .hoja-fondo { position: fixed; inset: 0; z-index: 30; background: rgba(31, 20, 24, .45); display: flex; align-items: flex-end; }
+  .hoja-fondo[hidden] { display: none; }
+  .hoja {
+    background: var(--blanco); width: 100%; max-width: 720px; margin: 0 auto; border-radius: 26px 26px 0 0;
+    padding: 10px 18px calc(18px + env(safe-area-inset-bottom)); animation: subir .22s ease-out;
+  }
+  @keyframes subir { from { transform: translateY(40px); opacity: 0; } }
+  .asa { width: 42px; height: 5px; border-radius: 99px; background: #e6d6dd; margin: 0 auto 14px; }
+  .hoja h3 { margin: 0; font-family: var(--titulo); font-style: italic; font-weight: 600; font-size: 23px; color: var(--frambuesa); }
+  .hoja .sub { font-size: 14px; color: var(--gris); margin: 4px 0 0; }
+  .hoja .sub b { color: var(--frambuesa); font-weight: 600; }
+  .atajos { display: flex; gap: 6px; flex-wrap: wrap; margin: 16px 0 12px; }
+  .atajos button { border: 1px solid var(--rosa-medio); background: var(--blanco); color: var(--frambuesa); border-radius: 99px; padding: 7px 13px; font-size: 13px; font-weight: 500; }
+  .dias-hoja { display: flex; gap: 6px; }
+  .dias-hoja button {
+    flex: 1; min-width: 0; height: 62px; border-radius: 14px; border: 1px solid var(--borde); background: var(--fondo);
+    line-height: 1.15; position: relative; color: var(--tinta); padding: 0;
+  }
+  .dias-hoja button span { display: block; font-size: 11px; color: var(--gris); }
+  .dias-hoja button b { font-size: 18px; font-weight: 600; }
+  .dias-hoja button em { display: block; font-style: normal; font-size: 9.5px; color: var(--rosa); font-weight: 600; height: 11px; }
+  .dias-hoja button.sel { background: linear-gradient(160deg, var(--rosa), var(--frambuesa)); border-color: transparent; color: #fff; }
+  .dias-hoja button.sel span, .dias-hoja button.sel em { color: rgba(255,255,255,.9); }
+  .dias-hoja button:disabled { background: var(--rosa-suave); border: 1.5px dashed var(--rosa-medio); }
+  .nota-hoja { font-size: 12.5px; color: var(--gris); margin: 10px 2px 14px; }
+  .hoja .acciones { margin: 0; }
+  .deshacer {
+    position: fixed; left: 50%; bottom: calc(92px + env(safe-area-inset-bottom)); transform: translateX(-50%); z-index: 25;
+    display: flex; align-items: center; gap: 12px; background: var(--tinta); color: #fff; font-size: 14px;
+    padding: 6px 6px 6px 16px; border-radius: 99px; white-space: nowrap; box-shadow: 0 6px 20px rgba(0,0,0,.2);
+  }
+  .deshacer[hidden] { display: none; }
+  .deshacer button { border: 0; background: var(--rosa); color: #fff; border-radius: 99px; padding: 7px 14px; font-weight: 600; font-size: 14px; }
+
   #zonaImprimir { display: none; }
   @media print {
     @page { size: landscape; margin: 8mm; }
@@ -309,6 +346,7 @@
     <h2 id="tituloDia"></h2>
     <div id="personas"></div>
     <div class="acciones">
+      <button class="btn secundario" id="btnRepetirDia" hidden><svg viewBox="0 0 24 24"><rect x="8" y="8" width="13" height="13" rx="2"/><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"/></svg>Repetir todo este día en otros días</button>
       <button class="btn principal" data-ir="cuadro">Ver cuadro y enviar</button>
     </div>
   </section>
@@ -346,6 +384,27 @@
 </nav>
 
 <div class="aviso" id="aviso"></div>
+<div class="deshacer" id="deshacer" hidden><span id="deshacerTxt"></span><button id="btnDeshacer">Deshacer</button></div>
+<div class="hoja-fondo" id="hojaFondo" hidden>
+  <div class="hoja" role="dialog" aria-modal="true" aria-labelledby="hojaTitulo">
+    <div class="asa"></div>
+    <h3 id="hojaTitulo"></h3>
+    <p class="sub" id="hojaSub"></p>
+    <div class="atajos">
+      <button data-atajo="siguientes">Días siguientes</button>
+      <button data-atajo="todos">Toda la semana</button>
+      <button data-atajo="laborables">Lun a vie</button>
+      <button data-atajo="finde">Sáb y dom</button>
+      <button data-atajo="ninguno">Ninguno</button>
+    </div>
+    <div class="dias-hoja" id="hojaDias"></div>
+    <p class="nota-hoja">Si esos días ya tenían horas, se cambian por estas. Podrás deshacerlo.</p>
+    <div class="acciones">
+      <button class="btn principal" id="hojaAplicar"></button>
+      <button class="btn secundario" id="hojaCancelar">Cancelar</button>
+    </div>
+  </div>
+</div>
 <div id="zonaImprimir"><img id="imgImprimir" alt=""></div>
 <canvas id="lienzo" hidden></canvas>
 
@@ -679,9 +738,15 @@ function pintarDia() {
     };
     const trabaja = t.some(Boolean);
     return '<div class="persona"><div class="nombre">' + avatar(p) + escapar(p.nombre.toUpperCase()) +
-      '<span class="etiqueta' + (trabaja ? ' trabaja' : '') + '">' + (trabaja ? textoHoras(minutosTurnos(t)) : 'Libre') + '</span></div>' +
+      '<span class="etiqueta' + (trabaja ? ' trabaja' : '') + '">' + (trabaja ? textoHoras(minutosTurnos(t)) : 'Libre') + '</span>' +
+      '<button class="repetir" data-p="' + p.id + '"' + (trabaja ? '' : ' hidden') + '><svg viewBox="0 0 24 24"><rect x="8" y="8" width="13" height="13" rx="2"/><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"/></svg>Repetir</button></div>' +
       fila(0) + fila(1) + '</div>';
   }).join('');
+  actualizarRepetirDia();
+}
+function actualizarRepetirDia() {
+  const sem = semana();
+  $('btnRepetirDia').hidden = !datos.equipo.some((p) => sem[p.id] && sem[p.id][diaActivo].some(Boolean));
 }
 
 // Se guarda sin volver a pintar la lista, para no perder el sitio mientras se rellena.
@@ -702,11 +767,15 @@ function guardarHora(casilla) {
     const trabaja = t.some(Boolean);
     etiqueta.classList.toggle('trabaja', trabaja);
     etiqueta.textContent = trabaja ? textoHoras(minutosTurnos(t)) : 'Libre';
+    casilla.closest('.persona').querySelector('.repetir').hidden = !trabaja;
+    actualizarRepetirDia();
     pintarCabecera();
   }
 }
 $('personas').addEventListener('change', (e) => { if (e.target.tagName === 'INPUT') guardarHora(e.target); });
 $('personas').addEventListener('click', (e) => {
+  const rep = e.target.closest('.repetir');
+  if (rep) { abrirRepetir([rep.dataset.p]); return; }
   const btn = e.target.closest('.borrar');
   if (!btn) return;
   const t = turnosDe(semana(), btn.dataset.p, diaActivo);
@@ -715,6 +784,94 @@ $('personas').addEventListener('click', (e) => {
   guardar();
   pintarDia();
   pintarCabecera();
+});
+
+// --- Repetir el horario de un día en otros días de la misma semana ---
+let repetir = null;
+function abrirRepetir(ids) {
+  const sem = semana();
+  const conHoras = ids.filter((id) => sem[id] && sem[id][diaActivo].some(Boolean));
+  if (!conHoras.length) return;
+  const siguientes = [];
+  for (let d = diaActivo + 1; d < 7; d++) siguientes.push(d);
+  repetir = { ids: conHoras, dias: new Set(siguientes) };
+  const fecha = sumarDias(lunes, diaActivo);
+  const dia = DIAS[diaActivo] + ' ' + fecha.getDate();
+  if (ids.length === 1) {
+    const p = datos.equipo.find((x) => x.id === ids[0]);
+    const t = sem[p.id][diaActivo];
+    const turnos = [[t[0], t[1]], [t[2], t[3]]].filter(([a, b]) => a || b).map(([a, b]) => (a || '?') + '–' + (b || '?')).join(' y ');
+    $('hojaTitulo').textContent = 'Repetir el horario de ' + p.nombre.toUpperCase();
+    $('hojaSub').innerHTML = 'Lo del ' + dia + ' (<b>' + turnos + '</b>). ¿En qué días lo repito?';
+  } else {
+    $('hojaTitulo').textContent = 'Repetir todo el ' + DIAS[diaActivo];
+    $('hojaSub').innerHTML = 'Los turnos de <b>' + conHoras.length + (conHoras.length === 1 ? ' persona' : ' personas') + '</b> del ' + dia + '. ¿En qué días los repito?';
+  }
+  pintarHoja();
+  $('hojaFondo').hidden = false;
+}
+function pintarHoja() {
+  const sem = semana();
+  $('hojaDias').innerHTML = DIAS_CORTOS.map((l, d) => {
+    const origen = d === diaActivo;
+    const ocupado = !origen && repetir.ids.some((id) => sem[id] && sem[id][d].some(Boolean));
+    return '<button data-d="' + d + '" class="' + (repetir.dias.has(d) ? 'sel' : '') + '"' + (origen ? ' disabled' : '') + '>' +
+      '<span>' + l + '</span><b>' + sumarDias(lunes, d).getDate() + '</b><em>' + (origen ? 'este' : ocupado ? 'con horas' : '') + '</em></button>';
+  }).join('');
+  const n = repetir.dias.size;
+  $('hojaAplicar').disabled = !n;
+  $('hojaAplicar').style.opacity = n ? '' : '.5';
+  $('hojaAplicar').textContent = n ? 'Repetir en ' + n + (n === 1 ? ' día' : ' días') : 'Elige al menos un día';
+}
+function cerrarRepetir() { $('hojaFondo').hidden = true; repetir = null; }
+$('hojaDias').addEventListener('click', (e) => {
+  const b = e.target.closest('button');
+  if (!b || b.disabled) return;
+  const d = +b.dataset.d;
+  if (repetir.dias.has(d)) repetir.dias.delete(d); else repetir.dias.add(d);
+  pintarHoja();
+});
+document.querySelector('.atajos').addEventListener('click', (e) => {
+  const b = e.target.closest('button');
+  if (!b) return;
+  const grupos = { siguientes: [0, 1, 2, 3, 4, 5, 6].filter((d) => d > diaActivo), todos: [0, 1, 2, 3, 4, 5, 6], laborables: [0, 1, 2, 3, 4], finde: [5, 6], ninguno: [] };
+  repetir.dias = new Set(grupos[b.dataset.atajo].filter((d) => d !== diaActivo));
+  pintarHoja();
+});
+$('hojaAplicar').addEventListener('click', () => {
+  if (!repetir || !repetir.dias.size) return;
+  const clave = claveSemana(lunes);
+  const copia = JSON.parse(JSON.stringify(semana()));
+  const sem = semana();
+  repetir.ids.forEach((id) => {
+    const origen = turnosDe(sem, id, diaActivo);
+    repetir.dias.forEach((d) => { sem[id][d] = [...origen]; });
+  });
+  const n = repetir.dias.size;
+  guardar();
+  cerrarRepetir();
+  pintarDia();
+  pintarCabecera();
+  ofrecerDeshacer('Repetido en ' + n + (n === 1 ? ' día' : ' días'), () => { datos.semanas[clave] = copia; });
+});
+$('btnRepetirDia').addEventListener('click', () => abrirRepetir(datos.equipo.map((p) => p.id)));
+$('hojaCancelar').addEventListener('click', cerrarRepetir);
+$('hojaFondo').addEventListener('click', (e) => { if (e.target === $('hojaFondo')) cerrarRepetir(); });
+document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && !$('hojaFondo').hidden) cerrarRepetir(); });
+
+let accionDeshacer = null, temporizadorDeshacer;
+function ofrecerDeshacer(texto, accion) {
+  accionDeshacer = accion;
+  $('deshacerTxt').textContent = texto;
+  $('deshacer').hidden = false;
+  clearTimeout(temporizadorDeshacer);
+  temporizadorDeshacer = setTimeout(() => { $('deshacer').hidden = true; accionDeshacer = null; }, 10000);
+}
+$('btnDeshacer').addEventListener('click', () => {
+  if (accionDeshacer) { accionDeshacer(); guardar(); refrescar(); }
+  accionDeshacer = null;
+  $('deshacer').hidden = true;
+  avisar('Deshecho');
 });
 
 // --- Cuadro como imagen (mismo formato que el Excel) ---
