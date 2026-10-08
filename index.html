@@ -256,6 +256,10 @@
   .tarjeta-avisos h3 { color: #8a5a00; }
   .tarjeta-avisos ul { margin: 8px 0 0; padding-left: 18px; font-size: 13.5px; line-height: 1.55; color: #5c3d00; }
   .tarjeta-avisos .sub { margin-bottom: 0; }
+  .tarjeta-ok { border: 1px solid #bfe8d2; background: #f0fbf5; display: flex; gap: 12px; align-items: center; padding: 14px 16px; }
+  .tarjeta-ok b { color: #1f7a4d; font-size: 15px; }
+  .tarjeta-ok span { display: block; font-size: 12.5px; color: #4b7a63; margin-top: 2px; }
+  .tarjeta-ok i { font-style: normal; font-size: 24px; }
   .incid { display: flex; align-items: center; gap: 8px; margin-top: 8px; padding-top: 8px; border-top: 1px dashed var(--borde); }
   .incid .badge { flex: 1; min-width: 0; font-size: 12.5px; font-weight: 500; padding: 5px 10px; border-radius: 10px; }
   .badge.falta { background: #ffe4e1; color: #b42318; }
@@ -896,6 +900,7 @@ function pintarInicio() {
     : 'Vas por <b>' + listos + ' de 7 días</b>. ¡Ya casi!';
   const avisosProx = listos ? avisosSemana(lunesProxima).length : 0;
   if (avisosProx) $('proxEstado').innerHTML += '<br>⚖️ <b>' + avisosProx + (avisosProx === 1 ? ' aviso de descanso' : ' avisos de descanso') + '</b>: míralos en Cuadro antes de enviarla.';
+  else if (listos) $('proxEstado').innerHTML += '<br>✅ Sin avisos de descanso.';
 
   const esta = datos.semanas[claveSemana(lunesEsta)];
   let botones = '<button class="btn principal" data-accion="preparar">' + (listos ? 'Seguir con el horario' : 'Preparar el horario') + '</button>';
@@ -1359,7 +1364,9 @@ async function pintarCuadro() {
     ? '<div class="tarjeta tarjeta-avisos"><h3>⚖️ ' + avisos.length + (avisos.length === 1 ? ' aviso de descanso' : ' avisos de descanso') + '</h3>' +
       '<p class="sub">Revísalo antes de enviarlo. Son las reglas generales del Estatuto; tu convenio puede tener otras.</p><ul>' +
       avisos.map((a) => '<li>' + escapar(a.texto) + '</li>').join('') + '</ul></div>'
-    : '';
+    : semanaTieneDatos(datos.semanas[claveSemana(lunes)])
+      ? '<div class="tarjeta tarjeta-ok"><i>✅</i><div><b>Sin avisos de descanso</b><span>Revisé descansos de 12 h, día y medio libre, 9 h al día y 40 h a la semana.</span></div></div>'
+      : '';
   await fuentesListas();
   $('cuadroImg').src = dibujarCuadro().toDataURL('image/png');
 }
