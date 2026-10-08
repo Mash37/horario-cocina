@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="robots" content="noindex, nofollow">
-<meta name="theme-color" content="#881546">
+<meta name="theme-color" content="#ff5f80">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -19,15 +19,20 @@
   @font-face { font-family: 'Jost'; font-weight: 100 900; font-display: swap; src: url(fuentes/Jost.woff2) format('woff2'); }
 
   :root {
-    --rosa: #ea5084;
-    --frambuesa: #881546;
-    --frambuesa-oscuro: #5c0d2f;
-    --rosa-medio: #f4c3d3;
-    --rosa-suave: #fce8ef;
+    --rosa: #ff4d8d;
+    --coral: #ff7a59;
+    --violeta: #8e2de2;
+    --frambuesa: #b0135f;
+    --frambuesa-oscuro: #5a0f3c;
+    --rosa-medio: #ffc2d6;
+    --rosa-suave: #fff0f5;
+    --deg: linear-gradient(135deg, #ff4d8d 0%, #ff7a59 100%);
+    --deg-intenso: linear-gradient(150deg, #ff8a5c 0%, #ff4d8d 38%, #d6247a 70%, #8e2de2 100%);
+    --deg-oscuro: linear-gradient(135deg, #3a0d3f 0%, #7a1246 100%);
     --tinta: #1f1418;
     --gris: #7a6970;
-    --borde: #f1dfe6;
-    --fondo: #fff8fa;
+    --borde: #f6e1ea;
+    --fondo: #fff7f9;
     --blanco: #ffffff;
     --verde: #2fb37a;
     --titulo: 'Playfair Display', Georgia, serif;
@@ -37,7 +42,7 @@
   html, body { margin: 0; }
   body {
     font-family: 'Jost', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    background: var(--fondo); color: var(--tinta); font-size: 16px;
+    background: linear-gradient(180deg, #fff1f6 0%, #fff8f3 55%, #fff7f9 100%) fixed; background-color: var(--fondo); color: var(--tinta); font-size: 16px;
     padding-bottom: calc(80px + env(safe-area-inset-bottom));
   }
   button, select, input { font: inherit; color: inherit; }
@@ -49,8 +54,9 @@
     position: relative; overflow: hidden; color: #fff;
     background:
       url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='24' viewBox='0 0 48 24'%3E%3Cg fill='none' stroke='%23ffffff' stroke-opacity='.11' stroke-width='1.4'%3E%3Ccircle cx='24' cy='24' r='22'/%3E%3Ccircle cx='24' cy='24' r='15'/%3E%3Ccircle cx='24' cy='24' r='8'/%3E%3Ccircle cx='0' cy='24' r='22'/%3E%3Ccircle cx='0' cy='24' r='15'/%3E%3Ccircle cx='0' cy='24' r='8'/%3E%3Ccircle cx='48' cy='24' r='22'/%3E%3Ccircle cx='48' cy='24' r='15'/%3E%3Ccircle cx='48' cy='24' r='8'/%3E%3C/g%3E%3C/svg%3E"),
-      radial-gradient(120% 90% at 85% 10%, #f472a0 0%, transparent 55%),
-      linear-gradient(165deg, var(--rosa) 0%, #c22b63 50%, var(--frambuesa) 85%, var(--frambuesa-oscuro) 100%);
+      radial-gradient(90% 70% at 90% 0%, rgba(255, 184, 107, .85) 0%, transparent 60%),
+      radial-gradient(80% 80% at 0% 100%, rgba(142, 45, 226, .55) 0%, transparent 60%),
+      var(--deg-intenso);
     padding: calc(18px + env(safe-area-inset-top)) 22px 78px;
   }
   .barra-sup { display: flex; align-items: baseline; justify-content: space-between; }
@@ -62,9 +68,9 @@
   .saludo .nombre { font-family: var(--firma); font-size: 64px; line-height: .95; display: block; margin-top: 2px; text-shadow: 0 2px 18px rgba(92, 13, 47, .35); }
   .fecha { font-size: 15px; opacity: .9; margin-top: 8px; letter-spacing: .02em; }
   .fecha::first-letter { text-transform: uppercase; }
-  .maki { position: absolute; right: -26px; top: calc(70px + env(safe-area-inset-top)); width: 150px; height: 150px; animation: girar 60s linear infinite; }
-  @keyframes girar { to { transform: rotate(360deg); } }
-  @media (prefers-reduced-motion: reduce) { .maki, .pulso::after { animation: none !important; } }
+  .sushi { position: absolute; right: 6px; top: calc(66px + env(safe-area-inset-top)); width: 168px; height: 138px; filter: drop-shadow(0 12px 18px rgba(58, 13, 63, .35)); animation: flotar 5s ease-in-out infinite; }
+  @keyframes flotar { 50% { transform: translateY(-6px); } }
+  @media (prefers-reduced-motion: reduce) { .sushi, .pulso::after { animation: none !important; } }
 
   .ahora {
     position: absolute; left: 22px; bottom: 26px; display: inline-flex; align-items: center; gap: 10px;
@@ -79,13 +85,13 @@
   .tablero { padding: 0 14px; margin: -14px auto 0; position: relative; max-width: 720px; }
   .tarjeta {
     background: var(--blanco); border-radius: 22px; padding: 18px 16px; margin-bottom: 14px;
-    box-shadow: 0 8px 28px rgba(136, 21, 70, .08), 0 1px 2px rgba(136, 21, 70, .06);
+    box-shadow: 0 8px 28px rgba(176, 19, 95, .08), 0 1px 2px rgba(176, 19, 95, .06);
   }
   .tarjeta h3 { margin: 0; font-family: var(--titulo); font-style: italic; font-weight: 600; font-size: 22px; color: var(--frambuesa); }
   .tarjeta .sub { font-size: 13px; color: var(--gris); margin: 2px 0 14px; }
   .vacio { font-size: 14px; color: var(--gris); padding: 4px 0; }
 
-  .instalar { background: linear-gradient(135deg, #2b1a21, var(--frambuesa-oscuro)); color: #fff; position: relative; }
+  .instalar { background: var(--deg-oscuro); color: #fff; position: relative; }
   .instalar h3 { color: #fff; }
   .instalar p { margin: 6px 0 14px; font-size: 14px; opacity: .9; line-height: 1.45; }
   .instalar .cerrar { position: absolute; right: 8px; top: 8px; width: 36px; height: 36px; border: 0; background: none; color: #fff; opacity: .6; font-size: 18px; }
@@ -106,9 +112,9 @@
   .tramo {
     position: absolute; top: 0; bottom: 0; border-radius: 8px; color: #fff; font-size: 10.5px; font-weight: 600;
     display: flex; align-items: center; justify-content: center; white-space: nowrap; overflow: hidden;
-    background: linear-gradient(90deg, var(--rosa), #c22b63);
+    background: var(--deg);
   }
-  .tramo.noche { background: linear-gradient(90deg, #c22b63, var(--frambuesa)); }
+  .tramo.noche { background: linear-gradient(90deg, #d6247a, #8e2de2); }
   .horas-eje { position: relative; height: 18px; margin-left: 116px; font-size: 10.5px; color: var(--gris); }
   .horas-eje span { position: absolute; transform: translateX(-50%); }
   .ya { position: absolute; top: -6px; bottom: 16px; width: 2px; background: var(--tinta); border-radius: 2px; pointer-events: none; }
@@ -126,7 +132,7 @@
   .barras-dias { flex: 1; display: flex; gap: 6px; align-items: flex-end; height: 72px; }
   .barras-dias div { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; height: 100%; gap: 4px; }
   .barras-dias i { width: 100%; max-width: 22px; border-radius: 6px 6px 3px 3px; background: var(--rosa-suave); min-height: 6px; }
-  .barras-dias .ok i { background: linear-gradient(180deg, var(--rosa), var(--frambuesa)); }
+  .barras-dias .ok i { background: linear-gradient(180deg, #ff7a59, #ff4d8d 60%, #d6247a); }
   .barras-dias span { font-size: 11px; color: var(--gris); }
   .barras-dias em { font-style: normal; font-size: 10px; font-weight: 600; color: var(--frambuesa); height: 12px; }
   .estado { font-size: 14px; margin: 0 0 14px; color: var(--gris); }
@@ -135,8 +141,8 @@
   .horas-fila { display: grid; grid-template-columns: 30px 78px 1fr 46px; align-items: center; gap: 8px; padding: 5px 0; font-size: 14px; }
   .horas-fila b { font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 13px; }
   .horas-fila .barra { height: 10px; background: var(--rosa-suave); border-radius: 99px; overflow: hidden; }
-  .horas-fila .barra i { display: block; height: 100%; background: linear-gradient(90deg, var(--rosa), var(--frambuesa)); border-radius: 99px; }
-  .horas-fila span { text-align: right; color: var(--gris); font-variant-numeric: tabular-nums; }
+  .horas-fila .barra i { display: block; height: 100%; background: var(--deg); border-radius: 99px; }
+  .horas-fila > span:last-child { text-align: right; color: var(--gris); font-variant-numeric: tabular-nums; }
 
   .palabra { text-align: center; background: linear-gradient(180deg, var(--blanco), var(--rosa-suave)); }
   .palabra .kicker { font-size: 11px; letter-spacing: .22em; text-transform: uppercase; color: var(--gris); }
@@ -149,7 +155,7 @@
   /* ---------- Cabecera con la semana ---------- */
   header.cabecera {
     position: sticky; top: 0; z-index: 10; color: #fff;
-    background: linear-gradient(165deg, var(--rosa), var(--frambuesa));
+    background: var(--deg-intenso);
     padding: calc(10px + env(safe-area-inset-top)) 12px 10px;
   }
   .semana { display: flex; align-items: center; gap: 8px; }
@@ -188,7 +194,7 @@
   .turno input::-webkit-calendar-picker-indicator { display: none; }
   .turno input::-webkit-date-and-time-value { text-align: center; }
   .turno input:not(.lleno)::-webkit-datetime-edit { color: #c9b5bd; }
-  .turno input:focus { border-color: var(--rosa); box-shadow: 0 0 0 3px rgba(234, 80, 132, .18); background: var(--blanco); }
+  .turno input:focus { border-color: var(--rosa); box-shadow: 0 0 0 3px rgba(255, 77, 141, .18); background: var(--blanco); }
   .turno input.lleno { background: var(--rosa-suave); border-color: var(--rosa-medio); color: var(--frambuesa); font-weight: 600; }
   .turno .a { color: var(--gris); font-size: 13px; }
   .turno .borrar { width: 40px; height: 46px; border: 0; background: none; font-size: 18px; color: #c9b5bd; }
@@ -196,7 +202,7 @@
   .acciones { display: grid; gap: 10px; margin: 16px 0; }
   .tarjeta .acciones { margin: 0; }
   .btn { display: block; width: 100%; min-height: 52px; border-radius: 16px; border: 0; font-weight: 600; font-size: 16.5px; padding: 12px; letter-spacing: .01em; }
-  .btn.principal { background: linear-gradient(135deg, var(--rosa), #c22b63); color: #fff; box-shadow: 0 6px 16px rgba(234, 80, 132, .35); }
+  .btn.principal { background: var(--deg); color: #fff; box-shadow: 0 8px 20px rgba(255, 77, 141, .35); }
   .btn.secundario { background: var(--blanco); border: 1px solid var(--rosa-medio); color: var(--frambuesa); }
   .btn.peligro { background: var(--blanco); border: 1px solid #f0c9c9; color: #b42318; }
   .btn:active { transform: scale(.985); }
@@ -222,7 +228,7 @@
   nav button.mas { position: relative; }
   nav .circulo {
     display: grid; place-items: center; width: 52px; height: 52px; margin: -24px auto 2px; border-radius: 50%; color: #fff;
-    background: linear-gradient(160deg, var(--rosa), var(--frambuesa)); box-shadow: 0 6px 16px rgba(136, 21, 70, .35); border: 4px solid var(--fondo);
+    background: var(--deg-intenso); box-shadow: 0 8px 20px rgba(214, 36, 122, .4); border: 4px solid var(--fondo);
   }
   nav .circulo svg { margin: 0; width: 24px; height: 24px; stroke-width: 2.4; }
   .accesos { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 16px; }
@@ -242,6 +248,14 @@
   .aviso.ver { opacity: 1; }
 
   /* Repetir horario en otros días */
+  .avisos-desc { margin: 2px 0 6px; display: grid; gap: 4px; }
+  .avisos-desc div { font-size: 12.5px; line-height: 1.35; background: #fff3d6; color: #8a5a00; border-radius: 10px; padding: 6px 10px; }
+  .dias button.con-aviso::after { content: '!'; position: absolute; top: -4px; right: -3px; width: 16px; height: 16px; border-radius: 50%; background: #f5a524; color: #fff; font-size: 11px; font-weight: 700; line-height: 16px; }
+  .dias button { position: relative; }
+  .tarjeta-avisos { border: 1px solid #f5d38f; background: #fffaf0; }
+  .tarjeta-avisos h3 { color: #8a5a00; }
+  .tarjeta-avisos ul { margin: 8px 0 0; padding-left: 18px; font-size: 13.5px; line-height: 1.55; color: #5c3d00; }
+  .tarjeta-avisos .sub { margin-bottom: 0; }
   .incid { display: flex; align-items: center; gap: 8px; margin-top: 8px; padding-top: 8px; border-top: 1px dashed var(--borde); }
   .incid .badge { flex: 1; min-width: 0; font-size: 12.5px; font-weight: 500; padding: 5px 10px; border-radius: 10px; }
   .badge.falta { background: #ffe4e1; color: #b42318; }
@@ -284,7 +298,7 @@
   .dias-hoja button span { display: block; font-size: 11px; color: var(--gris); }
   .dias-hoja button b { font-size: 18px; font-weight: 600; }
   .dias-hoja button em { display: block; font-style: normal; font-size: 9.5px; color: var(--rosa); font-weight: 600; height: 11px; }
-  .dias-hoja button.sel { background: linear-gradient(160deg, var(--rosa), var(--frambuesa)); border-color: transparent; color: #fff; }
+  .dias-hoja button.sel { background: var(--deg-intenso); border-color: transparent; color: #fff; }
   .dias-hoja button.sel span, .dias-hoja button.sel em { color: rgba(255,255,255,.9); }
   .dias-hoja button:disabled { background: var(--rosa-suave); border: 1.5px dashed var(--rosa-medio); }
   .nota-hoja { font-size: 12.5px; color: var(--gris); margin: 10px 2px 14px; }
@@ -300,7 +314,7 @@
   /* Informe mensual de horas */
   .mes-nav {
     display: flex; align-items: center; gap: 8px; color: #fff; border-radius: 22px; padding: 12px;
-    background: linear-gradient(165deg, var(--rosa), var(--frambuesa)); margin-bottom: 14px;
+    background: var(--deg-intenso); margin-bottom: 14px;
   }
   .mes-nav button { width: 44px; height: 44px; border-radius: 14px; border: 0; color: #fff; background: rgba(255,255,255,.18); font-size: 22px; }
   .mes-nav div { flex: 1; text-align: center; line-height: 1.25; }
@@ -326,10 +340,10 @@
   /* Stock e inventario */
   .segmento { display: flex; background: var(--rosa-suave); border-radius: 14px; padding: 4px; margin-bottom: 14px; }
   .segmento button { flex: 1; border: 0; background: none; border-radius: 11px; padding: 9px 0; font-size: 14px; font-weight: 500; color: var(--frambuesa); }
-  .segmento button.activo { background: var(--blanco); font-weight: 600; box-shadow: 0 1px 4px rgba(136, 21, 70, .15); }
+  .segmento button.activo { background: var(--blanco); font-weight: 600; box-shadow: 0 1px 4px rgba(176, 19, 95, .15); }
   .fila-botones { display: flex; gap: 8px; margin-bottom: 14px; }
   .fila-botones .btn { min-height: 46px; font-size: 15px; padding: 10px 8px; }
-  .pedir { background: linear-gradient(135deg, #2b1a21, var(--frambuesa-oscuro)); color: #fff; }
+  .pedir { background: var(--deg-oscuro); color: #fff; }
   .pedir h3 { color: #fff; }
   .pedir ul { margin: 8px 0 14px; padding-left: 18px; font-size: 14px; line-height: 1.6; opacity: .95; }
   .grupo-stock { font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: var(--gris); margin: 6px 0 4px; }
@@ -349,7 +363,7 @@
   .fila-recuento small { display: block; font-size: 11.5px; color: var(--gris); }
   .fila-recuento span { font-size: 13px; color: var(--gris); }
   .numero { height: 44px; width: 100%; border-radius: 12px; border: 1px solid var(--borde); background: var(--fondo); text-align: center; font-size: 17px; font-variant-numeric: tabular-nums; outline: none; }
-  .numero:focus { border-color: var(--rosa); background: var(--blanco); box-shadow: 0 0 0 3px rgba(234, 80, 132, .18); }
+  .numero:focus { border-color: var(--rosa); background: var(--blanco); box-shadow: 0 0 0 3px rgba(255, 77, 141, .18); }
   .compra { display: grid; grid-template-columns: 1fr auto 36px; gap: 8px; align-items: center; padding: 9px 0; border-top: 1px solid var(--borde); font-size: 14px; }
   .compra:first-of-type { border-top: 0; }
   .compra b { font-weight: 600; }
@@ -374,17 +388,17 @@
 
   #zonaImprimir { display: none; }
   .inf { font-family: 'Jost', Arial, sans-serif; color: #1f1418; font-size: 11pt; }
-  .inf-marca { font-size: 8.5pt; letter-spacing: .18em; text-transform: uppercase; color: #881546; }
-  .inf h1 { font-family: 'Playfair Display', Georgia, serif; font-style: italic; font-size: 22pt; margin: 4px 0 2px; color: #881546; }
+  .inf-marca { font-size: 8.5pt; letter-spacing: .18em; text-transform: uppercase; color: #b0135f; }
+  .inf h1 { font-family: 'Playfair Display', Georgia, serif; font-style: italic; font-size: 22pt; margin: 4px 0 2px; color: #b0135f; }
   .inf .inf-sub { margin: 0 0 14px; color: #7a6970; font-size: 10pt; }
   .inf table { width: 100%; border-collapse: collapse; margin-bottom: 10px; }
-  .inf th { background: #f4c3d3; text-align: left; font-weight: 600; padding: 6px 8px; font-size: 9.5pt; }
+  .inf th { background: #ffd3e1; text-align: left; font-weight: 600; padding: 6px 8px; font-size: 9.5pt; }
   .inf td { padding: 5px 8px; border-bottom: 1px solid #ead6dd; font-variant-numeric: tabular-nums; }
   .inf td.n, .inf th.n { text-align: right; }
   .inf tr.suma td { font-weight: 700; border-top: 2px solid #1f1418; border-bottom: 0; }
   .inf .inf-nota { font-size: 9pt; color: #7a6970; margin: 0 0 16px; }
   .inf-persona { break-inside: avoid; margin-top: 14px; }
-  .inf h2 { font-size: 12pt; margin: 0 0 4px; display: flex; justify-content: space-between; border-bottom: 2px solid #881546; padding-bottom: 3px; }
+  .inf h2 { font-size: 12pt; margin: 0 0 4px; display: flex; justify-content: space-between; border-bottom: 2px solid #b0135f; padding-bottom: 3px; }
   .inf-firmas { display: flex; gap: 40px; margin-top: 36px; break-inside: avoid; font-size: 10pt; }
   .inf-firmas div { flex: 1; border-top: 1px solid #1f1418; padding-top: 6px; }
   @media print {
@@ -405,13 +419,26 @@
     <div class="barra-sup"><span class="logo-txt">Kumi<small>Kitchen · 組</small></span><span class="marca">Miss Sushi · Cocina</span></div>
     <div class="saludo"><span class="t" id="saludo">Hola,</span><span class="nombre">Mara</span></div>
     <div class="fecha" id="fechaHoy"></div>
-    <svg class="maki" viewBox="0 0 120 120" aria-hidden="true">
-      <circle cx="60" cy="60" r="54" fill="#1f1418"/>
-      <circle cx="60" cy="60" r="47" fill="#fff8fa"/>
-      <circle cx="60" cy="60" r="23" fill="#ea5084"/>
-      <path d="M46 56 q14 -10 28 0 M46 66 q14 -10 28 0" stroke="#f9a8c4" stroke-width="3" fill="none" stroke-linecap="round"/>
-      <circle cx="33" cy="42" r="2" fill="#f1d9e1"/><circle cx="85" cy="38" r="2" fill="#f1d9e1"/>
-      <circle cx="88" cy="80" r="2" fill="#f1d9e1"/><circle cx="36" cy="84" r="2" fill="#f1d9e1"/>
+    <svg class="sushi" viewBox="0 0 220 180" aria-hidden="true">
+      <defs>
+        <linearGradient id="gSalmon" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ffb48c"/><stop offset=".55" stop-color="#ff7a59"/><stop offset="1" stop-color="#ef4f3f"/></linearGradient>
+        <linearGradient id="gArroz" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#f1e6ea"/></linearGradient>
+        <linearGradient id="gPalillo" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#2a161c"/><stop offset=".8" stop-color="#5a3440"/><stop offset="1" stop-color="#c98b6b"/></linearGradient>
+      </defs>
+      <g transform="rotate(-24 120 50)"><rect x="18" y="34" width="210" height="7" rx="3.5" fill="url(#gPalillo)"/><rect x="26" y="48" width="200" height="7" rx="3.5" fill="url(#gPalillo)"/></g>
+      <ellipse cx="108" cy="152" rx="88" ry="10" fill="#3a0d3f" opacity=".22"/>
+      <path d="M35 122 C35 102 65 94 105 94 C145 94 175 102 175 122 C175 138 145 145 105 145 C65 145 35 138 35 122Z" fill="url(#gArroz)"/>
+      <g fill="#e6d8dd"><ellipse cx="60" cy="130" rx="4" ry="2" transform="rotate(20 60 130)"/><ellipse cx="82" cy="138" rx="4" ry="2" transform="rotate(-15 82 138)"/><ellipse cx="108" cy="134" rx="4" ry="2" transform="rotate(10 108 134)"/><ellipse cx="134" cy="139" rx="4" ry="2" transform="rotate(-25 134 139)"/><ellipse cx="156" cy="128" rx="4" ry="2" transform="rotate(15 156 128)"/></g>
+      <path d="M26 109 C30 81 72 67 110 69 C150 71 186 83 188 105 C189 115 178 118 165 113 C134 102 76 101 46 115 C35 120 25 118 26 109Z" fill="url(#gSalmon)"/>
+      <g fill="none" stroke="#fff" stroke-opacity=".78" stroke-width="5" stroke-linecap="round"><path d="M56 81 C66 93 70 103 67 112"/><path d="M86 72 C98 86 102 97 99 106"/><path d="M118 70 C130 83 134 94 131 104"/><path d="M150 75 C160 87 163 96 160 106"/></g>
+      <path d="M62 79 C84 71 112 69 134 72" fill="none" stroke="#fff" stroke-opacity=".55" stroke-width="3" stroke-linecap="round"/>
+      <g transform="translate(182 140)">
+        <circle r="31" fill="#1f1418"/><circle r="26" fill="url(#gArroz)"/>
+        <circle cx="-3" cy="-3" r="11" fill="#ff7a59"/><path d="M-9 -7 C-4 -10 2 -9 5 -5" stroke="#fff" stroke-opacity=".7" stroke-width="2" fill="none" stroke-linecap="round"/>
+        <ellipse cx="9" cy="7" rx="6.5" ry="4.5" fill="#8fd16a"/><circle cx="-9" cy="9" r="4" fill="#d4f59a"/>
+        <g fill="#f2dfb3"><ellipse cx="-16" cy="-12" rx="2" ry="1.2"/><ellipse cx="14" cy="-15" rx="2" ry="1.2" transform="rotate(30 14 -15)"/><ellipse cx="18" cy="12" rx="2" ry="1.2"/></g>
+      </g>
+      <g fill="#fff"><path d="M30 64 l3 -9 l3 9 l9 3 l-9 3 l-3 9 l-3 -9 l-9 -3z" opacity=".9"/><path d="M196 86 l2 -6 l2 6 l6 2 l-6 2 l-2 6 l-2 -6 l-6 -2z" opacity=".75"/></g>
     </svg>
     <div class="ahora"><span class="pulso" id="pulso"></span><span id="ahoraTxt"></span></div>
   </div>
@@ -486,6 +513,7 @@
   </section>
 
   <section class="vista" id="vistaCuadro">
+    <div id="avisosCuadro"></div>
     <img id="cuadroImg" class="cuadro-img" alt="Cuadro de horario de la semana">
     <p class="nota">Pellizca la imagen para hacer zoom.</p>
     <div class="acciones">
@@ -584,7 +612,7 @@ const DIAS_CORTOS = ['L', 'M', 'X', 'J', 'V', 'S', 'D'];
 const MESES = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
 const MESES_CORTOS = ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sept', 'oct', 'nov', 'dic'];
 const EQUIPO_INICIAL = ['MARA', 'SHEENA', 'MAHJOUB', 'RAÚL', 'DANI', 'ALEJANDRO', 'MARI'];
-const COLORES = ['#d63a72', '#881546', '#b0245a', '#6d1238', '#c4416f', '#9c1c50', '#e0527f', '#5c0d2f'];
+const COLORES = ['#e8336f', '#b0135f', '#f2614a', '#7b2bd1', '#d6247a', '#8f1150', '#e2553a', '#5d1fa3'];
 const PALABRAS = [
   ['板前', 'Itamae', 'El cocinero que corta y sirve frente al cliente.'],
   ['お任せ', 'Omakase', '«Lo dejo en tus manos»: el menú lo elige el chef.'],
@@ -716,6 +744,55 @@ function avatar(p) {
   return '<span class="avatar" style="background:' + COLORES[i % COLORES.length] + '">' + escapar(iniciales(p.nombre)) + '</span>';
 }
 
+// --- Avisos de descanso (Estatuto de los Trabajadores, reglas generales; el convenio puede cambiarlas) ---
+// 12 h entre jornadas (art. 34.3) · día y medio seguido de descanso a la semana (art. 37.1) · 9 h ordinarias al día (art. 34.3) · 40 h semanales (art. 34.1).
+const DESCANSO_ENTRE_DIAS = 12 * 60, DESCANSO_SEMANAL = 36 * 60, MAX_DIA = 9 * 60, MAX_SEMANA = 40 * 60;
+function nombreCorto(n) { return n.charAt(0) + n.slice(1).toLowerCase(); }
+function avisosSemana(lunesSem) {
+  const sem = datos.semanas[claveSemana(lunesSem)] || {};
+  const anterior = datos.semanas[claveSemana(sumarDias(lunesSem, -7))];
+  const siguiente = datos.semanas[claveSemana(sumarDias(lunesSem, 7))];
+  const avisos = [];
+  datos.equipo.forEach((p) => {
+    if (!sem[p.id]) return;
+    // Cada día como tramos en minutos desde el lunes a las 0:00 (el domingo anterior es el día -1).
+    const delDia = (fuente, d) => (fuente && fuente[p.id] ? tramosDe(fuente[p.id][d]) : []);
+    const dias = [];
+    for (let d = -1; d <= 7; d++) {
+      const t = d === -1 ? delDia(anterior, 6) : d === 7 ? delDia(siguiente, 0) : delDia(sem, d);
+      dias.push({ d, tramos: t.map(([a, b]) => [a + d * 1440, b + d * 1440]) });
+    }
+    const semana = dias.filter((x) => x.d >= 0 && x.d <= 6);
+    const total = semana.reduce((s, x) => s + minutosDe(x.tramos), 0);
+    if (!total) return;
+    const nombre = nombreCorto(p.nombre);
+    semana.forEach((x) => {
+      const min = minutosDe(x.tramos);
+      if (min > MAX_DIA) avisos.push({ id: p.id, dia: x.d, texto: nombre + ' trabaja ' + horasExactas(min) + ' el ' + DIAS[x.d] + ' (más de 9 h en el día).' });
+      const antes = dias.find((y) => y.d === x.d - 1);
+      if (!x.tramos.length || !antes.tramos.length) return;
+      const hueco = Math.min(...x.tramos.map((t) => t[0])) - Math.max(...antes.tramos.map((t) => t[1]));
+      if (hueco < DESCANSO_ENTRE_DIAS) {
+        avisos.push({ id: p.id, dia: x.d, texto: nombre + ' solo descansa ' + horasExactas(Math.max(0, hueco)) + ' entre el ' + (x.d === 0 ? 'domingo' : DIAS[x.d - 1]) + ' y el ' + DIAS[x.d] + ' (mínimo 12 h).' });
+      }
+    });
+    if (total > MAX_SEMANA) avisos.push({ id: p.id, dia: null, texto: nombre + ' suma ' + horasExactas(total) + ' esta semana (más de 40 h).' });
+    // Descanso semanal: el hueco más largo entre turnos. Si la semana de al lado no está rellena,
+    // se supone que no se entra antes del mediodía (así no salta un falso aviso por librar el domingo).
+    const todos = dias.flatMap((x) => x.tramos).sort((a, b) => a[0] - b[0]);
+    const inicio = anterior ? -1440 : -720, fin = siguiente ? 8 * 1440 : 7 * 1440 + 720;
+    let maxHueco = 0, ultimoFin = inicio;
+    todos.forEach(([a, b]) => { maxHueco = Math.max(maxHueco, a - ultimoFin); ultimoFin = Math.max(ultimoFin, b); });
+    maxHueco = Math.max(maxHueco, fin - ultimoFin);
+    if (maxHueco < DESCANSO_SEMANAL) avisos.push({ id: p.id, dia: null, texto: nombre + ' no tiene día y medio de descanso seguido esta semana (36 h).' });
+  });
+  return avisos;
+}
+function htmlAvisosPersona(avisos, id, dia) {
+  const suyos = avisos.filter((a) => a.id === id && (a.dia === dia || a.dia === null));
+  return suyos.length ? '<div class="avisos-desc">' + suyos.map((a) => '<div>⚠️ ' + escapar(a.texto) + '</div>').join('') + '</div>' : '';
+}
+
 // --- Incidencias: lo que pasó de verdad, sin tocar el horario planificado ---
 const MOTIVOS = ['Enfermedad o baja', 'Asunto propio', 'Vacaciones', 'Sin avisar', 'Otro'];
 const VACIO = ['', '', '', ''];
@@ -810,13 +887,15 @@ function pintarInicio() {
     '<div class="' + (porDia[d] ? 'ok' : '') + '"><em>' + (porDia[d] || '') + '</em><i style="height:' + (porDia[d] ? 14 + (porDia[d] / maxDia) * 40 : 6) + 'px"></i><span>' + l + '</span></div>').join('');
   const r = 36, circ = 2 * Math.PI * r;
   $('proxAnillo').innerHTML =
-    '<svg width="86" height="86" viewBox="0 0 86 86"><defs><linearGradient id="gAnillo" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ea5084"/><stop offset="1" stop-color="#881546"/></linearGradient></defs>' +
+    '<svg width="86" height="86" viewBox="0 0 86 86"><defs><linearGradient id="gAnillo" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ff7a59"/><stop offset="1" stop-color="#ff4d8d"/></linearGradient></defs>' +
     '<circle cx="43" cy="43" r="' + r + '" fill="none" stroke="#fce8ef" stroke-width="9"/>' +
     '<circle cx="43" cy="43" r="' + r + '" fill="none" stroke="url(#gAnillo)" stroke-width="9" stroke-linecap="round" stroke-dasharray="' + circ + '" stroke-dashoffset="' + (circ * (1 - listos / 7)) + '"/></svg>' +
     '<div class="cifra"><b>' + listos + '/7</b><small>días</small></div>';
   $('proxEstado').innerHTML = listos === 0 ? 'Todavía <b>sin empezar</b>. Lo normal es prepararla el jueves o el viernes.'
     : listos === 7 ? '<b>¡Lista!</b> Todos los días tienen turnos. Ya puedes enviarla.'
     : 'Vas por <b>' + listos + ' de 7 días</b>. ¡Ya casi!';
+  const avisosProx = listos ? avisosSemana(lunesProxima).length : 0;
+  if (avisosProx) $('proxEstado').innerHTML += '<br>⚖️ <b>' + avisosProx + (avisosProx === 1 ? ' aviso de descanso' : ' avisos de descanso') + '</b>: míralos en Cuadro antes de enviarla.';
 
   const esta = datos.semanas[claveSemana(lunesEsta)];
   let botones = '<button class="btn principal" data-accion="preparar">' + (listos ? 'Seguir con el horario' : 'Preparar el horario') + '</button>';
@@ -888,10 +967,12 @@ function pintarCabecera() {
   $('semanaRango').textContent = rango(lunes, false);
 
   const sem = datos.semanas[clave] || {};
+  const avisos = avisosSemana(lunes);
   $('dias').innerHTML = DIAS_CORTOS.map((letra, i) => {
     const fecha = sumarDias(lunes, i);
     const trabajan = datos.equipo.filter((p) => sem[p.id] && sem[p.id][i].some(Boolean)).length;
-    return '<button data-dia="' + i + '" class="' + (i === diaActivo ? 'activo' : '') + '">' +
+    const clases = (i === diaActivo ? 'activo' : '') + (avisos.some((a) => a.dia === i) ? ' con-aviso' : '');
+    return '<button data-dia="' + i + '" class="' + clases + '">' +
       '<span>' + letra + '</span><b>' + fecha.getDate() + '</b><i>' + (trabajan ? '●'.repeat(Math.min(trabajan, 3)) : '') + '</i></button>';
   }).join('');
 }
@@ -928,6 +1009,7 @@ function pintarDia() {
     $('personas').innerHTML = '<p class="nota">Añade a tu equipo en la pestaña «Equipo».</p>';
     return;
   }
+  const avisos = avisosSemana(lunes);
   $('personas').innerHTML = datos.equipo.map((p) => {
     const t = turnosDe(sem, p.id, diaActivo);
     const fila = (n) => {
@@ -945,6 +1027,7 @@ function pintarDia() {
     return '<div class="persona"><div class="nombre">' + avatar(p) + escapar(p.nombre.toUpperCase()) +
       '<span class="etiqueta' + (trabaja ? ' trabaja' : '') + '">' + (trabaja ? textoHoras(minutosTurnos(t)) : 'Libre') + '</span>' +
       '<button class="repetir" data-p="' + p.id + '"' + (trabaja ? '' : ' hidden') + '><svg viewBox="0 0 24 24"><rect x="8" y="8" width="13" height="13" rx="2"/><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"/></svg>Repetir</button></div>' +
+      '<div data-avisos="' + p.id + '">' + htmlAvisosPersona(avisos, p.id, diaActivo) + '</div>' +
       fila(0) + fila(1) + pie + '</div>';
   }).join('');
   actualizarRepetirDia();
@@ -973,6 +1056,8 @@ function guardarHora(casilla) {
     etiqueta.classList.toggle('trabaja', trabaja);
     etiqueta.textContent = trabaja ? textoHoras(minutosTurnos(t)) : 'Libre';
     casilla.closest('.persona').querySelector('.repetir').hidden = !trabaja;
+    const avisos = avisosSemana(lunes);
+    document.querySelectorAll('[data-avisos]').forEach((c) => { c.innerHTML = htmlAvisosPersona(avisos, c.dataset.avisos, diaActivo); });
     actualizarRepetirDia();
     pintarCabecera();
   }
@@ -1211,14 +1296,14 @@ function dibujarCuadro() {
 
   const fuente = 'Jost, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif';
   ctx.textBaseline = 'middle';
-  ctx.fillStyle = '#881546'; ctx.textAlign = 'left';
+  ctx.fillStyle = '#b0135f'; ctx.textAlign = 'left';
   ctx.font = 'italic 700 30px "Playfair Display", Georgia, serif';
   ctx.fillText('Horario · semana del ' + rango(lunes, true) + ' ' + sumarDias(lunes, 6).getFullYear(), M, M + TIT / 2 - 8);
 
   const x0 = M, y0 = M + TIT, xd = x0 + NOM, yp = y0 + CAB;
   const finX = xd + COL * 14, finY = yp + equipo.length * FIL * 2;
 
-  ctx.fillStyle = '#f4c3d3';
+  ctx.fillStyle = '#ffd3e1';
   ctx.fillRect(xd, y0, COL * 14, CAB);
   ctx.fillRect(x0, yp, NOM, finY - yp);
 
@@ -1269,6 +1354,12 @@ function fuentesListas() {
   ]).catch(() => {});
 }
 async function pintarCuadro() {
+  const avisos = avisosSemana(lunes);
+  $('avisosCuadro').innerHTML = avisos.length
+    ? '<div class="tarjeta tarjeta-avisos"><h3>⚖️ ' + avisos.length + (avisos.length === 1 ? ' aviso de descanso' : ' avisos de descanso') + '</h3>' +
+      '<p class="sub">Revísalo antes de enviarlo. Son las reglas generales del Estatuto; tu convenio puede tener otras.</p><ul>' +
+      avisos.map((a) => '<li>' + escapar(a.texto) + '</li>').join('') + '</ul></div>'
+    : '';
   await fuentesListas();
   $('cuadroImg').src = dibujarCuadro().toDataURL('image/png');
 }
