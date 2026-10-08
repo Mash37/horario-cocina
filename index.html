@@ -226,6 +226,25 @@
   .aviso.ver { opacity: 1; }
 
   /* Repetir horario en otros días */
+  .incid { display: flex; align-items: center; gap: 8px; margin-top: 8px; padding-top: 8px; border-top: 1px dashed var(--borde); }
+  .incid .badge { flex: 1; min-width: 0; font-size: 12.5px; font-weight: 500; padding: 5px 10px; border-radius: 10px; }
+  .badge.falta { background: #ffe4e1; color: #b42318; }
+  .badge.cambio { background: #fff3d6; color: #8a5a00; }
+  .badge.cubre { background: #e3f6ec; color: #1f7a4d; }
+  .incid .que-paso { margin-left: auto; border: 0; background: none; color: var(--gris); font-size: 12.5px; font-weight: 500; padding: 4px 2px; text-decoration: underline; text-underline-offset: 3px; }
+  .opciones-inc { display: grid; gap: 8px; margin: 14px 0; }
+  .opciones-inc button { text-align: left; border: 1.5px solid var(--borde); background: var(--blanco); border-radius: 14px; padding: 12px 14px; font-size: 15px; font-weight: 500; }
+  .opciones-inc button small { display: block; font-size: 12.5px; color: var(--gris); font-weight: 400; }
+  .opciones-inc button.sel { border-color: var(--rosa); background: var(--rosa-suave); color: var(--frambuesa); }
+  .chips-inc { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; }
+  .chips-inc button { border: 1px solid var(--rosa-medio); background: var(--blanco); color: var(--frambuesa); border-radius: 99px; padding: 7px 13px; font-size: 13.5px; }
+  .chips-inc button.sel { background: var(--frambuesa); color: #fff; border-color: transparent; }
+  .turno-inc { display: flex; align-items: center; gap: 6px; margin-bottom: 8px; }
+  .turno-inc span { font-size: 13px; color: var(--gris); }
+  .turno-inc .lbl { width: 58px; }
+  .turno-inc input { flex: 1; min-width: 0; width: 0; height: 46px; border-radius: 12px; border: 1px solid var(--borde); background: var(--fondo); font-size: 16px; text-align: center; padding: 0 2px; }
+  .turno-inc input::-webkit-calendar-picker-indicator { display: none; }
+  .turno-inc input::-webkit-date-and-time-value { text-align: center; }
   .repetir { border: 0; background: var(--rosa-suave); color: var(--frambuesa); border-radius: 99px; padding: 5px 11px; font-size: 12.5px; font-weight: 600; margin-left: 6px; }
   .repetir svg, .btn svg { width: 14px; height: 14px; vertical-align: -2px; margin-right: 4px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
   .hoja-fondo { position: fixed; inset: 0; z-index: 30; background: rgba(31, 20, 24, .45); display: flex; align-items: flex-end; }
@@ -478,7 +497,7 @@
     <div class="acciones">
       <button class="btn principal" id="btnInforme">Guardar PDF para nómina</button>
     </div>
-    <p class="nota">Son las horas del horario, no las fichadas. Si alguien faltó o hizo horas de más, corrígelo en «Rellenar» antes de sacar el informe.</p>
+    <p class="nota">Son las horas del horario más las incidencias apuntadas (faltas, cambios y coberturas), no las fichadas. Si alguien faltó o hizo otras horas, apúntalo en «Rellenar» con «¿Qué pasó?».</p>
   </section>
 
   <section class="vista" id="vistaStock">
@@ -677,6 +696,42 @@ function avatar(p) {
   return '<span class="avatar" style="background:' + COLORES[i % COLORES.length] + '">' + escapar(iniciales(p.nombre)) + '</span>';
 }
 
+// --- Incidencias: lo que pasó de verdad, sin tocar el horario planificado ---
+const MOTIVOS = ['Enfermedad o baja', 'Asunto propio', 'Vacaciones', 'Sin avisar', 'Otro'];
+const VACIO = ['', '', '', ''];
+function incidenciasDelDia(fecha) { return (datos.incidencias || {})[claveSemana(fecha)] || {}; }
+function incidenciaDe(fecha, id) { return incidenciasDelDia(fecha)[id] || null; }
+function ponerIncidencia(fecha, id, inc) {
+  if (!datos.incidencias) datos.incidencias = {};
+  const k = claveSemana(fecha);
+  if (inc) { (datos.incidencias[k] = datos.incidencias[k] || {})[id] = inc; return; }
+  if (datos.incidencias[k]) { delete datos.incidencias[k][id]; if (!Object.keys(datos.incidencias[k]).length) delete datos.incidencias[k]; }
+}
+function turnosPlan(fecha, id) {
+  const sem = datos.semanas[claveSemana(lunesDe(fecha))];
+  return sem && sem[id] ? sem[id][(fecha.getDay() + 6) % 7] : VACIO;
+}
+function tramosDe(t) { return [tramo(t[0], t[1]), tramo(t[2], t[3])].filter(Boolean); }
+function minutosDe(tramos) { return tramos.reduce((s, [a, b]) => s + b - a, 0); }
+// Faltó: 0 · Cambió: sus horas reales · Cubre: su plan más el turno que cubre.
+function tramosReales(fecha, id) {
+  const plan = tramosDe(turnosPlan(fecha, id));
+  const inc = incidenciaDe(fecha, id);
+  if (!inc) return plan;
+  if (inc.tipo === 'falta') return [];
+  if (inc.tipo === 'cambio') return tramosDe(inc.turnos);
+  return plan.concat(tramosDe(inc.turnos));
+}
+function textoTurnos4(t) { return [textoTurnoCorto(t[0], t[1]), textoTurnoCorto(t[2], t[3])].filter(Boolean).join(' y '); }
+function textoIncidencia(inc, fecha, id) {
+  if (inc.tipo === 'falta') {
+    const quien = Object.entries(incidenciasDelDia(fecha)).find(([, x]) => x.tipo === 'cubre' && x.a === id);
+    return 'Faltó · ' + inc.motivo + (quien ? ' · cubre: ' + nombreDe(quien[0]) : '');
+  }
+  if (inc.tipo === 'cambio') return tramosDe(inc.turnos).length ? 'Hizo ' + textoTurnos4(inc.turnos) : 'No trabajó';
+  return 'Cubre a ' + nombreDe(inc.a) + ' · ' + textoTurnos4(inc.turnos);
+}
+
 // --- Inicio ---
 function pintarInicio() {
   const ahora = new Date();
@@ -691,10 +746,7 @@ function pintarInicio() {
   let minAhora = h * 60 + ahora.getMinutes();
   if (h < 6) minAhora += 24 * 60;
 
-  const filas = datos.equipo.map((p) => {
-    const t = semServicio && semServicio[p.id] ? semServicio[p.id][idxServicio] : null;
-    return { p, tramos: t ? [tramo(t[0], t[1]), tramo(t[2], t[3])].filter(Boolean) : [] };
-  });
+  const filas = datos.equipo.map((p) => ({ p, tramos: tramosReales(diaServicio, p.id) }));
   const trabajan = filas.filter((f) => f.tramos.length);
   const enCocina = trabajan.filter((f) => f.tramos.some(([a, b]) => minAhora >= a && minAhora < b));
 
@@ -867,10 +919,13 @@ function pintarDia() {
         '<button class="borrar" data-p="' + p.id + '" data-turno="' + n + '" aria-label="Borrar turno ' + (n + 1) + '">✕</button></div>';
     };
     const trabaja = t.some(Boolean);
+    const inc = incidenciaDe(fecha, p.id);
+    const pie = '<div class="incid">' + (inc ? '<span class="badge ' + inc.tipo + '">' + escapar(textoIncidencia(inc, fecha, p.id)) + '</span>' : '') +
+      '<button class="que-paso" data-incidencia="' + p.id + '">' + (inc ? 'Cambiar' : '¿Qué pasó este día?') + '</button></div>';
     return '<div class="persona"><div class="nombre">' + avatar(p) + escapar(p.nombre.toUpperCase()) +
       '<span class="etiqueta' + (trabaja ? ' trabaja' : '') + '">' + (trabaja ? textoHoras(minutosTurnos(t)) : 'Libre') + '</span>' +
       '<button class="repetir" data-p="' + p.id + '"' + (trabaja ? '' : ' hidden') + '><svg viewBox="0 0 24 24"><rect x="8" y="8" width="13" height="13" rx="2"/><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"/></svg>Repetir</button></div>' +
-      fila(0) + fila(1) + '</div>';
+      fila(0) + fila(1) + pie + '</div>';
   }).join('');
   actualizarRepetirDia();
 }
@@ -906,6 +961,8 @@ $('personas').addEventListener('change', (e) => { if (e.target.tagName === 'INPU
 $('personas').addEventListener('click', (e) => {
   const rep = e.target.closest('.repetir');
   if (rep) { abrirRepetir([rep.dataset.p]); return; }
+  const inc = e.target.closest('[data-incidencia]');
+  if (inc) { abrirIncidencia(inc.dataset.incidencia); return; }
   const btn = e.target.closest('.borrar');
   if (!btn) return;
   const t = turnosDe(semana(), btn.dataset.p, diaActivo);
@@ -914,6 +971,115 @@ $('personas').addEventListener('click', (e) => {
   guardar();
   pintarDia();
   pintarCabecera();
+});
+
+// --- Ventana «¿Qué pasó?» ---
+let incUI = null;
+function abrirIncidencia(id) {
+  const fecha = sumarDias(lunes, diaActivo);
+  const inc = incidenciaDe(fecha, id);
+  const plan = turnosPlan(fecha, id);
+  const tienePlan = tramosDe(plan).length > 0;
+  const faltan = datos.equipo.filter((p) => p.id !== id && incidenciaDe(fecha, p.id) && incidenciaDe(fecha, p.id).tipo === 'falta');
+  incUI = {
+    id, fecha, tienePlan,
+    tipo: inc ? inc.tipo : (tienePlan ? 'falta' : 'cubre'),
+    motivo: inc && inc.motivo ? inc.motivo : MOTIVOS[0],
+    cubre: '',
+    a: inc && inc.a ? inc.a : (faltan[0] ? faltan[0].id : ''),
+    turnos: inc && inc.turnos ? [...inc.turnos] : [...plan],
+    habia: !!inc,
+  };
+  if (incUI.tipo === 'falta') {
+    const quien = Object.entries(incidenciasDelDia(fecha)).find(([, x]) => x.tipo === 'cubre' && x.a === id);
+    incUI.cubre = quien ? quien[0] : '';
+  }
+  if (incUI.tipo === 'cubre' && !inc && incUI.a) incUI.turnos = [...turnosPlan(fecha, incUI.a)];
+  pintarPanelIncidencia();
+}
+function casillaInc(i, valor) { return '<input type="time" step="60" data-inc-hora="' + i + '" value="' + aCasilla(valor) + '">'; }
+function pintarPanelIncidencia() {
+  const u = incUI;
+  const plan = turnosPlan(u.fecha, u.id);
+  const otros = datos.equipo.filter((p) => p.id !== u.id);
+  const libres = otros.filter((p) => !tramosDe(turnosPlan(u.fecha, p.id)).length);
+  const opcion = (tipo, titulo, sub) => '<button data-inc-tipo="' + tipo + '" class="' + (u.tipo === tipo ? 'sel' : '') + '">' + titulo + '<small>' + sub + '</small></button>';
+  let html = '<h3>' + escapar(nombreDe(u.id)) + ' · ' + DIAS[(u.fecha.getDay() + 6) % 7] + ' ' + u.fecha.getDate() + '</h3>' +
+    '<p class="sub">' + (u.tienePlan ? 'En el horario: <b>' + textoTurnos4(plan) + '</b>' : 'Según el horario, libra este día') + '</p>' +
+    '<div class="opciones-inc">' +
+    (u.tienePlan ? opcion('falta', '❌ Faltó', 'No vino a trabajar') + opcion('cambio', '🕒 Hizo otro horario', 'Llegó tarde, se fue antes o se quedó más') : '') +
+    opcion('cubre', '🤝 Cubrió a un compañero', u.tienePlan ? 'Además de su turno, hizo el de otra persona' : 'Vino aunque libraba, para cubrir a alguien') +
+    '</div>';
+  if (u.tipo === 'falta') {
+    html += '<div class="grupo-stock">Motivo</div><div class="chips-inc">' + MOTIVOS.map((m) => '<button data-inc-motivo="' + m + '" class="' + (u.motivo === m ? 'sel' : '') + '">' + m + '</button>').join('') + '</div>' +
+      '<label class="campo"><span>¿Alguien cubrió su turno?</span><select id="incCubre"><option value="">Nadie</option>' +
+      libres.concat(otros.filter((p) => !libres.includes(p))).map((p) => '<option value="' + p.id + '"' + (u.cubre === p.id ? ' selected' : '') + '>' + escapar(p.nombre.toUpperCase()) + (libres.includes(p) ? ' (libraba)' : '') + '</option>').join('') +
+      '</select></label>' +
+      (u.cubre ? '<p class="pista-campo">A ' + escapar(nombreDe(u.cubre)) + ' se le sumará este turno: ' + textoTurnos4(plan) + '.</p>' : '');
+  }
+  if (u.tipo === 'cambio' || u.tipo === 'cubre') {
+    if (u.tipo === 'cubre') {
+      html += '<label class="campo"><span>¿A quién cubrió?</span><select id="incA"><option value="">Elige…</option>' +
+        otros.map((p) => '<option value="' + p.id + '"' + (u.a === p.id ? ' selected' : '') + '>' + escapar(p.nombre.toUpperCase()) + (incidenciaDe(u.fecha, p.id) && incidenciaDe(u.fecha, p.id).tipo === 'falta' ? ' (faltó)' : '') + '</option>').join('') + '</select></label>';
+    }
+    html += '<div class="grupo-stock">' + (u.tipo === 'cubre' ? 'Horas que cubrió' : 'Horas que hizo de verdad') + '</div>' +
+      [0, 1].map((n) => '<div class="turno-inc"><span class="lbl">Turno ' + (n + 1) + '</span>' + casillaInc(n * 2, u.turnos[n * 2]) + '<span>a</span>' + casillaInc(n * 2 + 1, u.turnos[n * 2 + 1]) + '</div>').join('');
+  }
+  html += '<div class="acciones" style="margin-top:14px"><button class="btn principal" data-accion-inc="guardar">Guardar</button>' +
+    '<button class="btn secundario" data-accion-inc="cerrar">Cancelar</button>' +
+    (u.habia ? '<button class="btn texto" data-accion-inc="quitar">Quitar la incidencia</button>' : '') + '</div>';
+  abrirPanel(html);
+}
+$('panel').addEventListener('change', (e) => {
+  if (!incUI || $('panelFondo').hidden) return;
+  if (e.target.id === 'incCubre') { incUI.cubre = e.target.value; pintarPanelIncidencia(); }
+  if (e.target.id === 'incA') { incUI.a = e.target.value; if (incUI.a) incUI.turnos = [...turnosPlan(incUI.fecha, incUI.a)]; pintarPanelIncidencia(); }
+  if (e.target.dataset.incHora !== undefined) {
+    const v = normalizarHora(e.target.value || '');
+    incUI.turnos[+e.target.dataset.incHora] = v || '';
+  }
+});
+$('panel').addEventListener('click', (e) => {
+  if (!incUI) return;
+  const tipo = e.target.closest('[data-inc-tipo]');
+  if (tipo) {
+    incUI.tipo = tipo.dataset.incTipo;
+    incUI.turnos = incUI.tipo === 'cubre' && incUI.a ? [...turnosPlan(incUI.fecha, incUI.a)] : [...turnosPlan(incUI.fecha, incUI.id)];
+    pintarPanelIncidencia();
+    return;
+  }
+  const motivo = e.target.closest('[data-inc-motivo]');
+  if (motivo) { incUI.motivo = motivo.dataset.incMotivo; pintarPanelIncidencia(); return; }
+  const b = e.target.closest('[data-accion-inc]');
+  if (!b) return;
+  const accion = b.dataset.accionInc;
+  if (accion === 'cerrar') { cerrarPanel(); incUI = null; return; }
+  const u = incUI;
+  const copia = JSON.parse(JSON.stringify(incidenciasDelDia(u.fecha)));
+  const restaurar = () => { datos.incidencias = datos.incidencias || {}; if (Object.keys(copia).length) datos.incidencias[claveSemana(u.fecha)] = copia; else delete datos.incidencias[claveSemana(u.fecha)]; };
+  // Quien cubría a esta persona deja de cubrirla si ya no consta que faltó.
+  const soltarCoberturas = () => Object.entries(incidenciasDelDia(u.fecha)).forEach(([id, x]) => { if (x.tipo === 'cubre' && x.a === u.id) ponerIncidencia(u.fecha, id, null); });
+  if (accion === 'quitar') {
+    ponerIncidencia(u.fecha, u.id, null);
+    soltarCoberturas();
+  }
+  if (accion === 'guardar') {
+    if (u.tipo === 'falta') {
+      soltarCoberturas();
+      ponerIncidencia(u.fecha, u.id, { tipo: 'falta', motivo: u.motivo });
+      if (u.cubre) ponerIncidencia(u.fecha, u.cubre, { tipo: 'cubre', a: u.id, turnos: [...turnosPlan(u.fecha, u.id)] });
+    } else {
+      if (u.tipo === 'cubre' && !u.a) { avisar('Elige a quién cubrió'); return; }
+      if (u.tipo === 'cubre' && !tramosDe(u.turnos).length) { avisar('Pon las horas que cubrió'); return; }
+      soltarCoberturas();
+      ponerIncidencia(u.fecha, u.id, u.tipo === 'cubre' ? { tipo: 'cubre', a: u.a, turnos: [...u.turnos] } : { tipo: 'cambio', turnos: [...u.turnos] });
+    }
+  }
+  guardar();
+  cerrarPanel();
+  incUI = null;
+  pintarDia();
+  ofrecerDeshacer(accion === 'quitar' ? 'Incidencia quitada' : 'Incidencia guardada', restaurar);
 });
 
 // --- Repetir el horario de un día en otros días de la misma semana ---
@@ -1158,31 +1324,48 @@ function nombreDe(id) {
 function informeMes(anio, mes) {
   const porPersona = new Map();
   const sinHorario = [];
+  const incidencias = [];
+  const nueva = () => ({ dias: [], min: 0, noche: 0, domingo: 0, trabajados: 0, faltas: 0, coberturas: 0 });
   const ultimo = new Date(anio, mes + 1, 0).getDate();
   for (let n = 1; n <= ultimo; n++) {
     const fecha = new Date(anio, mes, n);
     const idx = (fecha.getDay() + 6) % 7;
     const sem = datos.semanas[claveSemana(lunesDe(fecha))] || {};
+    const delDia = incidenciasDelDia(fecha);
     let alguien = false;
-    Object.keys(sem).forEach((id) => {
-      const t = sem[id][idx];
-      const tramos = [tramo(t[0], t[1]), tramo(t[2], t[3])].filter(Boolean);
-      if (!tramos.length) return;
+    new Set([...Object.keys(sem), ...Object.keys(delDia)]).forEach((id) => {
+      const t = sem[id] ? sem[id][idx] : VACIO;
+      const inc = delDia[id] || null;
+      const planMin = minutosDe(tramosDe(t));
+      if (!planMin && !inc) return;
       alguien = true;
-      if (!porPersona.has(id)) porPersona.set(id, { dias: [], min: 0, noche: 0, domingo: 0 });
+      if (!porPersona.has(id)) porPersona.set(id, nueva());
       const r = porPersona.get(id);
-      const min = tramos.reduce((s, [a, b]) => s + b - a, 0);
+      const tramos = tramosReales(fecha, id);
+      const min = minutosDe(tramos);
       // Horario nocturno según el Estatuto de los Trabajadores: de 22:00 a 6:00.
       r.noche += tramos.reduce((s, [a, b]) => s + solape(a, b, 0, 360) + solape(a, b, 1320, 1800), 0);
       if (idx === 6) r.domingo += min;
       r.min += min;
-      r.dias.push({ fecha, idx, t, min });
+      if (min) r.trabajados++;
+      if (inc && inc.tipo === 'falta') r.faltas++;
+      if (inc && inc.tipo === 'cubre') r.coberturas++;
+      r.dias.push({ fecha, idx, t, min, inc, planMin, id });
+      if (inc) incidencias.push({ fecha, idx, id, inc, planMin, min });
     });
     if (!alguien) sinHorario.push(n);
   }
   const ids = datos.equipo.map((p) => p.id).concat([...porPersona.keys()].filter((id) => !datos.equipo.some((p) => p.id === id)));
-  const filas = ids.map((id) => ({ id, nombre: nombreDe(id), ...(porPersona.get(id) || { dias: [], min: 0, noche: 0, domingo: 0 }) }));
-  return { filas, sinHorario, ultimo };
+  const filas = ids.map((id) => ({ id, nombre: nombreDe(id), ...(porPersona.get(id) || nueva()) }));
+  return { filas, sinHorario, ultimo, incidencias };
+}
+// Lo que se hizo ese día, con la incidencia si la hubo.
+function textoDiaInforme(d) {
+  const plan = textoTurnos4(d.t);
+  if (!d.inc) return plan;
+  if (d.inc.tipo === 'falta') return 'Faltó (' + d.inc.motivo.toLowerCase() + ')' + (plan ? ' · tenía ' + plan : '');
+  if (d.inc.tipo === 'cambio') return (textoTurnos4(d.inc.turnos) || 'no trabajó') + (plan ? ' · tenía ' + plan : '');
+  return (plan ? plan + ' + ' : '') + 'cubre a ' + nombreDe(d.inc.a) + ' ' + textoTurnos4(d.inc.turnos);
 }
 // [2,3,4,9] → «2–4 y 9»
 function tramosDias(lista) {
@@ -1213,16 +1396,17 @@ function pintarHoras() {
     : filas.map((f) => {
         const i = datos.equipo.findIndex((p) => p.id === f.id);
         const color = i >= 0 ? COLORES[i % COLORES.length] : '#b3a9b1';
-        const extras = [f.dias.length + (f.dias.length === 1 ? ' día' : ' días')];
+        const extras = [f.trabajados + (f.trabajados === 1 ? ' día' : ' días')];
+        if (f.faltas) extras.push(f.faltas + (f.faltas === 1 ? ' falta' : ' faltas'));
+        if (f.coberturas) extras.push('cubrió ' + f.coberturas);
         if (f.noche) extras.push(horasExactas(f.noche) + ' noche');
         if (f.domingo) extras.push(horasExactas(f.domingo) + ' domingo');
         return '<details class="persona-mes"><summary><span class="avatar" style="background:' + color + '">' + escapar(iniciales(f.nombre.replace(' (baja)', ''))) + '</span>' +
           '<span class="quien"><b>' + escapar(f.nombre) + '</b><small>' + extras.join(' · ') + '</small></span>' +
           '<span class="total' + (f.min ? '' : ' cero') + '">' + horasExactas(f.min) + '</span></summary>' +
           (f.dias.length ? '<div class="detalle-mes">' + f.dias.map((d) =>
-            '<div><span>' + DIAS_ABREV[d.idx] + ' ' + d.fecha.getDate() + '</span><span>' +
-            [textoTurnoCorto(d.t[0], d.t[1]), textoTurnoCorto(d.t[2], d.t[3])].filter(Boolean).join(' y ') +
-            '</span><span>' + horasExactas(d.min) + '</span></div>').join('') + '</div>' : '') +
+            '<div><span>' + DIAS_ABREV[d.idx] + ' ' + d.fecha.getDate() + '</span><span' + (d.inc ? ' style="color:var(--frambuesa)"' : '') + '>' +
+            escapar(textoDiaInforme(d)) + '</span><span>' + horasExactas(d.min) + '</span></div>').join('') + '</div>' : '') +
           '</details>';
       }).join('');
 }
@@ -1230,8 +1414,8 @@ $('mesAnterior').addEventListener('click', () => { mesInforme = new Date(mesInfo
 $('mesSiguiente').addEventListener('click', () => { mesInforme = new Date(mesInforme.getFullYear(), mesInforme.getMonth() + 1, 1); pintarHoras(); });
 $('btnInforme').addEventListener('click', async () => {
   const anio = mesInforme.getFullYear(), mes = mesInforme.getMonth();
-  const { filas, sinHorario, ultimo } = informeMes(anio, mes);
-  const conHoras = filas.filter((f) => f.min);
+  const { filas, sinHorario, ultimo, incidencias } = informeMes(anio, mes);
+  const conHoras = filas.filter((f) => f.min || f.faltas);
   if (!conHoras.length) { avisar('No hay turnos apuntados este mes'); return; }
   const suma = (k) => conHoras.reduce((s, f) => s + f[k], 0);
   const nombreMes = MESES[mes] + ' ' + anio;
@@ -1242,15 +1426,20 @@ $('btnInforme').addEventListener('click', async () => {
     '<div class="inf-marca">Kumi Kitchen · Miss Sushi · Cocina</div>' +
     '<h1>Horas trabajadas · ' + nombreMes + '</h1>' +
     '<p class="inf-sub">Del 1 al ' + ultimo + ' de ' + MESES[mes] + ' de ' + anio + ' · Generado el ' + generado + '</p>' +
-    '<table><thead><tr><th>Persona</th><th class="n">Días</th><th class="n">Horas totales</th><th class="n">Nocturnas (22–6 h)</th><th class="n">En domingo</th></tr></thead><tbody>' +
-    conHoras.map((f) => '<tr><td>' + escapar(f.nombre) + '</td><td class="n">' + f.dias.length + '</td><td class="n">' + horasExactas(f.min) + '</td><td class="n">' + (f.noche ? horasExactas(f.noche) : '—') + '</td><td class="n">' + (f.domingo ? horasExactas(f.domingo) : '—') + '</td></tr>').join('') +
-    '<tr class="suma"><td>Total</td><td class="n"></td><td class="n">' + horasExactas(suma('min')) + '</td><td class="n">' + horasExactas(suma('noche')) + '</td><td class="n">' + horasExactas(suma('domingo')) + '</td></tr>' +
+    '<table><thead><tr><th>Persona</th><th class="n">Días</th><th class="n">Faltas</th><th class="n">Horas totales</th><th class="n">Nocturnas (22–6 h)</th><th class="n">En domingo</th></tr></thead><tbody>' +
+    conHoras.map((f) => '<tr><td>' + escapar(f.nombre) + '</td><td class="n">' + f.trabajados + '</td><td class="n">' + (f.faltas || '—') + '</td><td class="n">' + horasExactas(f.min) + '</td><td class="n">' + (f.noche ? horasExactas(f.noche) : '—') + '</td><td class="n">' + (f.domingo ? horasExactas(f.domingo) : '—') + '</td></tr>').join('') +
+    '<tr class="suma"><td>Total</td><td class="n"></td><td class="n">' + (suma('faltas') || '—') + '</td><td class="n">' + horasExactas(suma('min')) + '</td><td class="n">' + horasExactas(suma('noche')) + '</td><td class="n">' + horasExactas(suma('domingo')) + '</td></tr>' +
     '</tbody></table>' +
-    '<p class="inf-nota">Horas según el horario planificado del equipo (no según fichajes). Los turnos que pasan de medianoche cuentan en el día en que empiezan.' +
+    '<p class="inf-nota">Horas según el horario del equipo con las incidencias apuntadas (faltas, cambios y coberturas); no son fichajes. Los turnos que pasan de medianoche cuentan en el día en que empiezan.' +
     (sinHorario.length ? ' Días del mes sin ningún turno apuntado: ' + tramosDias(sinHorario) + '.' : '') + '</p>' +
+    (incidencias.length ? '<div class="inf-persona"><h2><span>Incidencias del mes</span><span>' + incidencias.length + '</span></h2>' +
+      '<table><thead><tr><th>Fecha</th><th>Persona</th><th>Qué pasó</th><th class="n">Horario</th><th class="n">Hizo</th></tr></thead><tbody>' +
+      incidencias.map((x) => '<tr><td>' + DIAS_ABREV[x.idx] + ' ' + x.fecha.getDate() + '/' + (mes + 1) + '</td><td>' + escapar(nombreDe(x.id)) + '</td><td>' +
+        escapar(textoIncidencia(x.inc, x.fecha, x.id)) + '</td><td class="n">' + horasExactas(x.planMin) + '</td><td class="n">' + horasExactas(x.min) + '</td></tr>').join('') +
+      '</tbody></table></div>' : '') +
     conHoras.map((f) => '<div class="inf-persona"><h2><span>' + escapar(f.nombre) + '</span><span>' + horasExactas(f.min) + '</span></h2>' +
-      '<table><thead><tr><th>Fecha</th><th>Turno 1</th><th>Turno 2</th><th class="n">Horas</th></tr></thead><tbody>' +
-      f.dias.map((d) => '<tr><td>' + DIAS_ABREV[d.idx] + ' ' + d.fecha.getDate() + '/' + (mes + 1) + '</td><td>' + (textoTurnoCorto(d.t[0], d.t[1]) || '—') + '</td><td>' + (textoTurnoCorto(d.t[2], d.t[3]) || '—') + '</td><td class="n">' + horasExactas(d.min) + '</td></tr>').join('') +
+      '<table><thead><tr><th>Fecha</th><th>Horario</th><th class="n">Horas</th></tr></thead><tbody>' +
+      f.dias.map((d) => '<tr><td>' + DIAS_ABREV[d.idx] + ' ' + d.fecha.getDate() + '/' + (mes + 1) + '</td><td>' + escapar(textoDiaInforme(d)) + '</td><td class="n">' + horasExactas(d.min) + '</td></tr>').join('') +
       '</tbody></table></div>').join('') +
     '<div class="inf-firmas"><div>Responsable de cocina</div><div>Recibido (nóminas)</div></div>' +
     '</div>';

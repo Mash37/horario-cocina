@@ -1,5 +1,5 @@
 // Primero intenta la red (para recibir mejoras); sin conexión, sirve lo guardado.
-const CACHE = 'kumi-v10';
+const CACHE = 'kumi-v11';
 const ARCHIVOS = ['./', './index.html', './manifest.webmanifest', './icon-180.png', './icon-192.png', './icon-512.png',
   './fuentes/PlayfairDisplay-Italic.woff2', './fuentes/GreatVibes.woff2', './fuentes/Jost.woff2'];
 
