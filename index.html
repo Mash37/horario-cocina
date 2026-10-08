@@ -181,7 +181,16 @@
 
   .persona { background: var(--blanco); border: 1px solid var(--borde); border-radius: 18px; padding: 12px 12px 10px; margin-bottom: 10px; }
   .persona .nombre { display: flex; align-items: center; gap: 8px; font-weight: 600; margin-bottom: 4px; }
-  .persona .nombre .etiqueta { margin-left: auto; }
+  .persona .nombre .derecha { margin-left: auto; display: flex; align-items: center; gap: 8px; }
+  .etiqueta[hidden] { display: none; }
+  .interruptor { display: inline-flex; align-items: center; gap: 6px; border: 0; background: none; font-size: 12.5px; font-weight: 600; color: var(--gris); padding: 4px 0 4px 2px; }
+  .interruptor i { width: 36px; height: 21px; border-radius: 99px; background: #e7dde2; position: relative; transition: background .2s; }
+  .interruptor i::after { content: ''; position: absolute; top: 2px; left: 2px; width: 17px; height: 17px; border-radius: 50%; background: #fff; box-shadow: 0 1px 3px rgba(0,0,0,.25); transition: transform .2s; }
+  .interruptor.on { color: #1f7a4d; }
+  .interruptor.on i { background: #2fb37a; }
+  .interruptor.on i::after { transform: translateX(15px); }
+  .dia-libre { margin: 6px 0 2px; padding: 12px; border-radius: 14px; background: linear-gradient(135deg, #f0fbf5, #e3f6ec); color: #1f7a4d; font-weight: 600; text-align: center; }
+  .persona.es-libre { background: linear-gradient(180deg, #fff, #fbfffd); }
   .etiqueta { font-size: 12px; font-weight: 500; padding: 3px 10px; border-radius: 99px; background: #f3eef0; color: var(--gris); }
   .etiqueta.trabaja { background: var(--rosa-suave); color: var(--frambuesa); }
   .turno { display: flex; align-items: center; gap: 6px; margin-top: 6px; }
@@ -292,7 +301,8 @@
   .turno-inc input { flex: 1; min-width: 0; width: 0; height: 46px; border-radius: 12px; border: 1px solid var(--borde); background: var(--fondo); font-size: 16px; text-align: center; padding: 0 2px; }
   .turno-inc input::-webkit-calendar-picker-indicator { display: none; }
   .turno-inc input::-webkit-date-and-time-value { text-align: center; }
-  .repetir { border: 0; background: var(--rosa-suave); color: var(--frambuesa); border-radius: 99px; padding: 5px 11px; font-size: 12.5px; font-weight: 600; margin-left: 6px; }
+  .repetir { border: 0; background: var(--rosa-suave); color: var(--frambuesa); border-radius: 99px; padding: 5px 11px; font-size: 12.5px; font-weight: 600; }
+  .repetir[hidden] { display: none; }
   .repetir svg, .btn svg { width: 14px; height: 14px; vertical-align: -2px; margin-right: 4px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
   .hoja-fondo { position: fixed; inset: 0; z-index: 30; background: rgba(31, 20, 24, .45); display: flex; align-items: flex-end; }
   .hoja-fondo[hidden] { display: none; }
@@ -876,6 +886,44 @@ function htmlAvisosPersona(avisos, id, dia) {
   return suyos.length ? '<div class="avisos-desc">' + suyos.map((a) => '<div>⚠️ ' + escapar(a.texto) + '</div>').join('') + '</div>' : '';
 }
 
+// --- Días libres marcados a mano. Se guarda lo que había para recuperarlo si se quita el «libre». ---
+function libresDelDia(fecha) { return (datos.libres || {})[claveSemana(fecha)] || {}; }
+function esLibre(fecha, id) { return !!libresDelDia(fecha)[id] && !turnosPlan(fecha, id).some(Boolean); }
+function quitarLibre(fecha, id) {
+  const k = claveSemana(fecha);
+  if (!datos.libres || !datos.libres[k]) return;
+  delete datos.libres[k][id];
+  if (!Object.keys(datos.libres[k]).length) delete datos.libres[k];
+}
+function alternarLibre(id) {
+  const fecha = sumarDias(lunes, diaActivo);
+  const t = turnosDe(semana(), id, diaActivo);
+  if (esLibre(fecha, id)) {
+    const antes = libresDelDia(fecha)[id];
+    quitarLibre(fecha, id);
+    if (Array.isArray(antes)) antes.forEach((v, i) => { t[i] = v; });
+  } else {
+    if (!datos.libres) datos.libres = {};
+    (datos.libres[claveSemana(fecha)] = datos.libres[claveSemana(fecha)] || {})[id] = [...t];
+    t.fill('');
+  }
+  guardar();
+  pintarDia();
+  pintarCabecera();
+}
+// Al copiar una semana entera, también se copian sus días libres.
+function copiarLibres(desdeLunes, aLunes) {
+  for (let d = 0; d < 7; d++) {
+    const origen = libresDelDia(sumarDias(desdeLunes, d));
+    const destino = sumarDias(aLunes, d);
+    Object.keys(libresDelDia(destino)).forEach((id) => quitarLibre(destino, id));
+    Object.keys(origen).forEach((id) => {
+      if (!datos.libres) datos.libres = {};
+      (datos.libres[claveSemana(destino)] = datos.libres[claveSemana(destino)] || {})[id] = ['', '', '', ''];
+    });
+  }
+}
+
 // --- Incidencias: lo que pasó de verdad, sin tocar el horario planificado ---
 const MOTIVOS = ['Enfermedad o baja', 'Asunto propio', 'Vacaciones', 'Sin avisar', 'Otro'];
 const VACIO = ['', '', '', ''];
@@ -1009,6 +1057,7 @@ $('proxAcciones').addEventListener('click', (e) => {
   lunes = lunesProxima;
   if (b.dataset.accion === 'copiar') {
     datos.semanas[claveSemana(lunesProxima)] = JSON.parse(JSON.stringify(datos.semanas[claveSemana(lunesEsta)]));
+    copiarLibres(lunesEsta, lunesProxima);
     guardar();
     avisar('Copiada. Cambia solo lo que sea distinto');
   }
@@ -1106,14 +1155,17 @@ function pintarDia() {
         '<button class="borrar" data-p="' + p.id + '" data-turno="' + n + '" aria-label="Borrar turno ' + (n + 1) + '">✕</button></div>';
     };
     const trabaja = t.some(Boolean);
+    const libre = esLibre(fecha, p.id);
     const inc = incidenciaDe(fecha, p.id);
-    const pie = '<div class="incid">' + (inc ? '<span class="badge ' + inc.tipo + '">' + escapar(textoIncidencia(inc, fecha, p.id)) + '</span>' : '') +
+    const pie = '<div class="incid">' +
+      '<button class="repetir" data-p="' + p.id + '"' + (trabaja ? '' : ' hidden') + '><svg viewBox="0 0 24 24"><rect x="8" y="8" width="13" height="13" rx="2"/><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"/></svg>Repetir</button>' +
+      (inc ? '<span class="badge ' + inc.tipo + '">' + escapar(textoIncidencia(inc, fecha, p.id)) + '</span>' : '') +
       '<button class="que-paso" data-incidencia="' + p.id + '">' + (inc ? 'Cambiar' : '¿Qué pasó este día?') + '</button></div>';
-    return '<div class="persona"><div class="nombre">' + avatar(p) + escapar(p.nombre.toUpperCase()) +
-      '<span class="etiqueta' + (trabaja ? ' trabaja' : '') + '">' + (trabaja ? textoHoras(minutosTurnos(t)) : 'Libre') + '</span>' +
-      '<button class="repetir" data-p="' + p.id + '"' + (trabaja ? '' : ' hidden') + '><svg viewBox="0 0 24 24"><rect x="8" y="8" width="13" height="13" rx="2"/><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"/></svg>Repetir</button></div>' +
+    return '<div class="persona' + (libre ? ' es-libre' : '') + '"><div class="nombre">' + avatar(p) + escapar(p.nombre.toUpperCase()) +
+      '<span class="derecha"><span class="etiqueta trabaja"' + (trabaja ? '' : ' hidden') + '>' + (trabaja ? textoHoras(minutosTurnos(t)) : '') + '</span>' +
+      '<button class="interruptor' + (libre ? ' on' : '') + '" data-libre="' + p.id + '" role="switch" aria-checked="' + libre + '">Libre<i></i></button></span></div>' +
       '<div data-avisos="' + p.id + '">' + htmlAvisosPersona(avisos, p.id, diaActivo) + '</div>' +
-      fila(0) + fila(1) + pie + '</div>';
+      (libre ? '<div class="dia-libre">🌴 Libre</div>' : fila(0) + fila(1)) + pie + '</div>';
   }).join('');
   actualizarRepetirDia();
   pintarCoberturaDia();
@@ -1139,8 +1191,8 @@ function guardarHora(casilla) {
     guardar();
     const etiqueta = casilla.closest('.persona').querySelector('.etiqueta');
     const trabaja = t.some(Boolean);
-    etiqueta.classList.toggle('trabaja', trabaja);
-    etiqueta.textContent = trabaja ? textoHoras(minutosTurnos(t)) : 'Libre';
+    etiqueta.hidden = !trabaja;
+    etiqueta.textContent = trabaja ? textoHoras(minutosTurnos(t)) : '';
     casilla.closest('.persona').querySelector('.repetir').hidden = !trabaja;
     const avisos = avisosSemana(lunes);
     document.querySelectorAll('[data-avisos]').forEach((c) => { c.innerHTML = htmlAvisosPersona(avisos, c.dataset.avisos, diaActivo); });
@@ -1153,6 +1205,8 @@ $('personas').addEventListener('change', (e) => { if (e.target.tagName === 'INPU
 $('personas').addEventListener('click', (e) => {
   const rep = e.target.closest('.repetir');
   if (rep) { abrirRepetir([rep.dataset.p]); return; }
+  const lib = e.target.closest('[data-libre]');
+  if (lib) { alternarLibre(lib.dataset.libre); return; }
   const inc = e.target.closest('[data-incidencia]');
   if (inc) { abrirIncidencia(inc.dataset.incidencia); return; }
   const btn = e.target.closest('.borrar');
@@ -1336,17 +1390,18 @@ $('hojaAplicar').addEventListener('click', () => {
   if (!repetir || !repetir.dias.size) return;
   const clave = claveSemana(lunes);
   const copia = JSON.parse(JSON.stringify(semana()));
+  const copiaLibres = JSON.parse(JSON.stringify(datos.libres || {}));
   const sem = semana();
   repetir.ids.forEach((id) => {
     const origen = turnosDe(sem, id, diaActivo);
-    repetir.dias.forEach((d) => { sem[id][d] = [...origen]; });
+    repetir.dias.forEach((d) => { sem[id][d] = [...origen]; quitarLibre(sumarDias(lunes, d), id); });
   });
   const n = repetir.dias.size;
   guardar();
   cerrarRepetir();
   pintarDia();
   pintarCabecera();
-  ofrecerDeshacer('Repetido en ' + n + (n === 1 ? ' día' : ' días'), () => { datos.semanas[clave] = copia; });
+  ofrecerDeshacer('Repetido en ' + n + (n === 1 ? ' día' : ' días'), () => { datos.semanas[clave] = copia; datos.libres = copiaLibres; });
 });
 $('btnRepetirDia').addEventListener('click', () => abrirRepetir(datos.equipo.map((p) => p.id)));
 $('hojaCancelar').addEventListener('click', cerrarRepetir);
@@ -1402,10 +1457,12 @@ function dibujarCuadro() {
     ctx.textAlign = 'right'; ctx.fillText(String(sumarDias(lunes, d).getDate()), x + COL * 2 - 8, y0 + CAB / 2 + 1);
   }
 
+  const libres = [];
   equipo.forEach((p, i) => {
     const y = yp + i * FIL * 2;
     ctx.font = '600 18px ' + fuente; ctx.textAlign = 'center';
     ctx.fillText(p.nombre.toUpperCase(), x0 + NOM / 2, y + FIL + 1, NOM - 12);
+    for (let d = 0; d < 7; d++) if (esLibre(sumarDias(lunes, d), p.id)) libres.push([xd + d * COL * 2, y]);
     const dias = sem[p.id];
     if (!dias) return;
     ctx.font = '500 20px ' + fuente; ctx.textAlign = 'right';
@@ -1424,6 +1481,12 @@ function dibujarCuadro() {
   };
   for (let k = 1; k < 14; k += 2) linea(xd + k * COL, y0 + CAB, xd + k * COL, finY, 1, '#a8999f');
   equipo.forEach((_, i) => linea(xd, yp + i * FIL * 2 + FIL, finX, yp + i * FIL * 2 + FIL, 1, '#a8999f'));
+  // Los días libres van encima de las rayas finas: un solo bloque con «Libre».
+  libres.forEach(([x, y]) => {
+    ctx.fillStyle = '#eef9f3'; ctx.fillRect(x + 1, y + 1, COL * 2 - 2, FIL * 2 - 2);
+    ctx.fillStyle = '#1f7a4d'; ctx.font = 'italic 600 19px ' + fuente; ctx.textAlign = 'center';
+    ctx.fillText('Libre', x + COL, y + FIL + 1);
+  });
   for (let d = 0; d <= 7; d++) linea(xd + d * COL * 2, y0, xd + d * COL * 2, finY, 2.5, '#1f1418');
   for (let i = 0; i <= equipo.length; i++) linea(x0, yp + i * FIL * 2, finX, yp + i * FIL * 2, 2.5, '#1f1418');
   linea(xd, y0, finX, y0, 2.5, '#1f1418');
@@ -1507,12 +1570,14 @@ $('btnCopiar').addEventListener('click', () => {
   if (!semanaTieneDatos(anterior)) { avisar('La semana anterior está vacía'); return; }
   if (semanaTieneDatos(semana()) && !confirm('Esta semana ya tiene horas. ¿Reemplazarlas por las de la semana anterior?')) return;
   datos.semanas[claveSemana(lunes)] = JSON.parse(JSON.stringify(anterior));
+  copiarLibres(sumarDias(lunes, -7), lunes);
   guardar(); refrescar();
   avisar('Copiada. Cambia solo lo que sea distinto');
 });
 $('btnLimpiar').addEventListener('click', () => {
   if (!confirm('¿Borrar todas las horas de esta semana?')) return;
   datos.semanas[claveSemana(lunes)] = {};
+  for (let d = 0; d < 7; d++) { const f = sumarDias(lunes, d); Object.keys(libresDelDia(f)).forEach((id) => quitarLibre(f, id)); }
   guardar(); refrescar();
 });
 
