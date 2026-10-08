@@ -262,12 +262,101 @@
   .deshacer[hidden] { display: none; }
   .deshacer button { border: 0; background: var(--rosa); color: #fff; border-radius: 99px; padding: 7px 14px; font-weight: 600; font-size: 14px; }
 
+  /* Informe mensual de horas */
+  .mes-nav {
+    display: flex; align-items: center; gap: 8px; color: #fff; border-radius: 22px; padding: 12px;
+    background: linear-gradient(165deg, var(--rosa), var(--frambuesa)); margin-bottom: 14px;
+  }
+  .mes-nav button { width: 44px; height: 44px; border-radius: 14px; border: 0; color: #fff; background: rgba(255,255,255,.18); font-size: 22px; }
+  .mes-nav div { flex: 1; text-align: center; line-height: 1.25; }
+  .mes-nav small { display: block; font-size: 11px; letter-spacing: .14em; text-transform: uppercase; opacity: .85; }
+  .mes-nav b { font-family: var(--titulo); font-style: italic; font-weight: 600; font-size: 23px; }
+  .cifras { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; text-align: center; }
+  .cifras b { display: block; font-family: var(--titulo); font-style: italic; font-size: 24px; color: var(--frambuesa); line-height: 1.1; }
+  .cifras span { font-size: 12px; color: var(--gris); }
+  .alerta { background: #fff6e5; border: 1px solid #f5d38f; color: #7a4b00; border-radius: 16px; padding: 12px 14px; font-size: 14px; margin-bottom: 14px; line-height: 1.45; }
+  .persona-mes { border-top: 1px solid var(--borde); }
+  .persona-mes:first-child { border-top: 0; }
+  .persona-mes summary { list-style: none; display: grid; grid-template-columns: 30px 1fr auto; gap: 10px; align-items: center; padding: 11px 0; cursor: pointer; }
+  .persona-mes summary::-webkit-details-marker { display: none; }
+  .persona-mes .quien b { display: block; font-size: 14.5px; font-weight: 600; }
+  .persona-mes .quien small { font-size: 12px; color: var(--gris); }
+  .persona-mes .total { font-family: var(--titulo); font-style: italic; font-weight: 600; font-size: 19px; color: var(--frambuesa); white-space: nowrap; }
+  .persona-mes .total.cero { color: #c9b5bd; }
+  .detalle-mes { margin: 0 0 12px 40px; font-size: 13px; }
+  .detalle-mes div { display: grid; grid-template-columns: 62px 1fr auto; gap: 8px; padding: 4px 0; border-bottom: 1px dashed var(--borde); font-variant-numeric: tabular-nums; }
+  .detalle-mes span:first-child { color: var(--gris); }
+  .detalle-mes span:last-child { font-weight: 600; }
+
+  /* Stock e inventario */
+  .segmento { display: flex; background: var(--rosa-suave); border-radius: 14px; padding: 4px; margin-bottom: 14px; }
+  .segmento button { flex: 1; border: 0; background: none; border-radius: 11px; padding: 9px 0; font-size: 14px; font-weight: 500; color: var(--frambuesa); }
+  .segmento button.activo { background: var(--blanco); font-weight: 600; box-shadow: 0 1px 4px rgba(136, 21, 70, .15); }
+  .fila-botones { display: flex; gap: 8px; margin-bottom: 14px; }
+  .fila-botones .btn { min-height: 46px; font-size: 15px; padding: 10px 8px; }
+  .pedir { background: linear-gradient(135deg, #2b1a21, var(--frambuesa-oscuro)); color: #fff; }
+  .pedir h3 { color: #fff; }
+  .pedir ul { margin: 8px 0 14px; padding-left: 18px; font-size: 14px; line-height: 1.6; opacity: .95; }
+  .grupo-stock { font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: var(--gris); margin: 6px 0 4px; }
+  .producto { display: flex; align-items: center; gap: 10px; padding: 11px 0; border-top: 1px solid var(--borde); cursor: pointer; }
+  .producto:first-of-type { border-top: 0; }
+  .producto .info { flex: 1; min-width: 0; }
+  .producto .info b { display: block; font-weight: 600; font-size: 15px; }
+  .producto .info small { font-size: 12px; color: var(--gris); }
+  .producto .cant { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .producto .cant b { font-family: var(--titulo); font-style: italic; font-size: 19px; color: var(--frambuesa); }
+  .producto .cant small { display: block; font-size: 11px; color: var(--gris); }
+  .pill { font-size: 11px; font-weight: 600; padding: 3px 9px; border-radius: 99px; background: #ffe4e1; color: #b42318; white-space: nowrap; }
+  .pill.gris { background: #f3eef0; color: var(--gris); }
+  .fila-recuento { display: grid; grid-template-columns: 1fr 96px 62px; gap: 8px; align-items: center; padding: 8px 0; border-top: 1px solid var(--borde); }
+  .fila-recuento:first-of-type { border-top: 0; }
+  .fila-recuento b { font-weight: 600; font-size: 14.5px; }
+  .fila-recuento small { display: block; font-size: 11.5px; color: var(--gris); }
+  .fila-recuento span { font-size: 13px; color: var(--gris); }
+  .numero { height: 44px; width: 100%; border-radius: 12px; border: 1px solid var(--borde); background: var(--fondo); text-align: center; font-size: 17px; font-variant-numeric: tabular-nums; outline: none; }
+  .numero:focus { border-color: var(--rosa); background: var(--blanco); box-shadow: 0 0 0 3px rgba(234, 80, 132, .18); }
+  .compra { display: grid; grid-template-columns: 1fr auto 36px; gap: 8px; align-items: center; padding: 9px 0; border-top: 1px solid var(--borde); font-size: 14px; }
+  .compra:first-of-type { border-top: 0; }
+  .compra b { font-weight: 600; }
+  .compra small { display: block; color: var(--gris); font-size: 12px; }
+  .compra .importe { font-weight: 600; color: var(--frambuesa); font-variant-numeric: tabular-nums; }
+  .compra button { border: 0; background: none; color: #c9b5bd; font-size: 17px; height: 36px; }
+  .campo { display: block; margin-bottom: 12px; }
+  .campo > span { display: block; font-size: 13px; color: var(--gris); margin-bottom: 5px; }
+  .campo input, .campo select {
+    width: 100%; height: 48px; border-radius: 12px; border: 1px solid var(--borde); background: var(--fondo);
+    padding: 0 12px; font-size: 16px; outline: none; -webkit-appearance: none; appearance: none;
+  }
+  .campo input:focus, .campo select:focus { border-color: var(--rosa); background: var(--blanco); }
+  .campos-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .pista-campo { font-size: 12px; color: var(--gris); margin: -6px 2px 12px; }
+  .hoja { max-height: 92vh; overflow-y: auto; }
+  .historial { font-size: 13px; color: var(--gris); margin: 4px 0 14px; }
+  .historial div { display: flex; justify-content: space-between; padding: 4px 0; border-bottom: 1px dashed var(--borde); }
+  .btn.texto { background: none; color: #b42318; min-height: 44px; }
+
   #zonaImprimir { display: none; }
+  .inf { font-family: 'Jost', Arial, sans-serif; color: #1f1418; font-size: 11pt; }
+  .inf-marca { font-size: 8.5pt; letter-spacing: .18em; text-transform: uppercase; color: #881546; }
+  .inf h1 { font-family: 'Playfair Display', Georgia, serif; font-style: italic; font-size: 22pt; margin: 4px 0 2px; color: #881546; }
+  .inf .inf-sub { margin: 0 0 14px; color: #7a6970; font-size: 10pt; }
+  .inf table { width: 100%; border-collapse: collapse; margin-bottom: 10px; }
+  .inf th { background: #f4c3d3; text-align: left; font-weight: 600; padding: 6px 8px; font-size: 9.5pt; }
+  .inf td { padding: 5px 8px; border-bottom: 1px solid #ead6dd; font-variant-numeric: tabular-nums; }
+  .inf td.n, .inf th.n { text-align: right; }
+  .inf tr.suma td { font-weight: 700; border-top: 2px solid #1f1418; border-bottom: 0; }
+  .inf .inf-nota { font-size: 9pt; color: #7a6970; margin: 0 0 16px; }
+  .inf-persona { break-inside: avoid; margin-top: 14px; }
+  .inf h2 { font-size: 12pt; margin: 0 0 4px; display: flex; justify-content: space-between; border-bottom: 2px solid #881546; padding-bottom: 3px; }
+  .inf-firmas { display: flex; gap: 40px; margin-top: 36px; break-inside: avoid; font-size: 10pt; }
+  .inf-firmas div { flex: 1; border-top: 1px solid #1f1418; padding-top: 6px; }
   @media print {
     @page { size: landscape; margin: 8mm; }
+    @page informe { size: A4 portrait; margin: 14mm 12mm; }
     body { padding: 0; background: #fff; }
     body > *:not(#zonaImprimir) { display: none !important; }
     #zonaImprimir { display: block; }
+    #zonaImprimir.informe { page: informe; }
     #zonaImprimir img { width: 100%; }
   }
 </style>
@@ -319,6 +408,14 @@
       <h3>Horas de cada uno</h3>
       <div class="sub">Semana que viene, sumando todos los turnos</div>
       <div id="horasLista"></div>
+      <div class="acciones" style="margin-top:14px"><button class="btn secundario" data-ir="horas">Ver el informe del mes para nómina</button></div>
+    </div>
+
+    <div class="tarjeta" id="tarjetaStock">
+      <h3>Stock</h3>
+      <div class="sub" id="stockSub"></div>
+      <div id="stockInicio"></div>
+      <div class="acciones" style="margin-top:12px"><button class="btn secundario" data-ir="stock" id="btnIrStock">Ir al stock</button></div>
     </div>
 
     <div class="tarjeta palabra">
@@ -365,6 +462,35 @@
     </div>
   </section>
 
+  <section class="vista" id="vistaHoras">
+    <div class="mes-nav">
+      <button id="mesAnterior" aria-label="Mes anterior">‹</button>
+      <div><small>Informe de horas</small><b id="mesTitulo"></b></div>
+      <button id="mesSiguiente" aria-label="Mes siguiente">›</button>
+    </div>
+    <div class="tarjeta"><div class="cifras" id="cifrasMes"></div></div>
+    <div id="alertaMes"></div>
+    <div class="tarjeta">
+      <h3>Por persona</h3>
+      <div class="sub">Toca a alguien para ver sus días</div>
+      <div id="tablaMes"></div>
+    </div>
+    <div class="acciones">
+      <button class="btn principal" id="btnInforme">Guardar PDF para nómina</button>
+    </div>
+    <p class="nota">Son las horas del horario, no las fichadas. Si alguien faltó o hizo horas de más, corrígelo en «Rellenar» antes de sacar el informe.</p>
+  </section>
+
+  <section class="vista" id="vistaStock">
+    <h2>Stock de cocina</h2>
+    <div class="segmento" id="segStock">
+      <button data-sub="lista" class="activo">Stock</button>
+      <button data-sub="compras">Compras</button>
+      <button data-sub="informe">Informe</button>
+    </div>
+    <div id="stockContenido"></div>
+  </section>
+
   <section class="vista" id="vistaEquipo">
     <h2 class="titulo-equipo"><span class="jp-equipo">仲間</span> Tu equipo</h2>
     <p class="sub-equipo">El equipo de Miss Sushi</p>
@@ -380,10 +506,13 @@
   <button data-ir="inicio" class="activo"><svg viewBox="0 0 24 24"><path d="M3 11l9-7 9 7"/><path d="M5 10v10h14V10"/><path d="M10 20v-6h4v6"/></svg>Inicio</button>
   <button data-ir="rellenar"><svg viewBox="0 0 24 24"><path d="M4 20h4L19 9l-4-4L4 16z"/><path d="M13.5 6.5l4 4"/></svg>Rellenar</button>
   <button data-ir="cuadro"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="15" rx="2"/><path d="M3 10h18M8 3v4M16 3v4M9 10v10M15 10v10"/></svg>Cuadro</button>
+  <button data-ir="horas"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>Horas</button>
+  <button data-ir="stock"><svg viewBox="0 0 24 24"><path d="M3 7l9-4 9 4-9 4z"/><path d="M3 7v10l9 4 9-4V7"/><path d="M12 11v10"/></svg>Stock</button>
   <button data-ir="equipo"><svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.6-3.6 3.3-5.5 6.5-5.5s5.9 1.9 6.5 5.5"/><circle cx="17" cy="9" r="2.5"/><path d="M17 14c2.4 0 4 1.5 4.5 4"/></svg>Equipo</button>
 </nav>
 
 <div class="aviso" id="aviso"></div>
+<div class="hoja-fondo" id="panelFondo" hidden><div class="hoja" id="panel" role="dialog" aria-modal="true"></div></div>
 <div class="deshacer" id="deshacer" hidden><span id="deshacerTxt"></span><button id="btnDeshacer">Deshacer</button></div>
 <div class="hoja-fondo" id="hojaFondo" hidden>
   <div class="hoja" role="dialog" aria-modal="true" aria-labelledby="hojaTitulo">
@@ -405,7 +534,7 @@
     </div>
   </div>
 </div>
-<div id="zonaImprimir"><img id="imgImprimir" alt=""></div>
+<div id="zonaImprimir"></div>
 <canvas id="lienzo" hidden></canvas>
 
 <script>
@@ -635,6 +764,7 @@ function pintarInicio() {
   $('palabraRomaji').textContent = palabra[1];
   $('palabraTxt').textContent = palabra[2];
   $('anio').textContent = ahora.getFullYear();
+  pintarStockInicio();
 
   pintarInstalar();
 }
@@ -982,9 +1112,19 @@ $('btnDescargar').addEventListener('click', async () => {
 });
 $('btnPdf').addEventListener('click', async () => {
   await fuentesListas();
-  $('imgImprimir').onload = () => window.print();
-  $('imgImprimir').src = dibujarCuadro().toDataURL('image/png');
+  const zona = $('zonaImprimir');
+  zona.className = '';
+  zona.innerHTML = '<img alt="">';
+  zona.firstChild.onload = () => imprimir('Horario ' + rango(lunes, false));
+  zona.firstChild.src = dibujarCuadro().toDataURL('image/png');
 });
+// El título de la página es el nombre que el móvil propone para el PDF.
+const TITULO_APP = document.title;
+function imprimir(titulo) {
+  document.title = titulo;
+  window.addEventListener('afterprint', () => { document.title = TITULO_APP; }, { once: true });
+  window.print();
+}
 
 $('btnCopiar').addEventListener('click', () => {
   const anterior = datos.semanas[claveSemana(sumarDias(lunes, -7))];
@@ -999,6 +1139,480 @@ $('btnLimpiar').addEventListener('click', () => {
   datos.semanas[claveSemana(lunes)] = {};
   guardar(); refrescar();
 });
+
+// --- Informe mensual de horas ---
+// Los primeros días del mes se suele preparar la nómina del mes anterior.
+let mesInforme = hoy.getDate() <= 7 ? new Date(hoy.getFullYear(), hoy.getMonth() - 1, 1) : new Date(hoy.getFullYear(), hoy.getMonth(), 1);
+const DIAS_ABREV = ['lun', 'mar', 'mié', 'jue', 'vie', 'sáb', 'dom'];
+function solape(a, b, c, d) { return Math.max(0, Math.min(b, d) - Math.max(a, c)); }
+// Exacto para la nómina: «152 h 30 min», nunca redondeado.
+function horasExactas(min) {
+  const h = Math.floor(min / 60), m = min % 60;
+  return m ? h + ' h ' + m + ' min' : h + ' h';
+}
+function nombreDe(id) {
+  const p = datos.equipo.find((x) => x.id === id);
+  if (p) return p.nombre.toUpperCase();
+  return datos.bajas && datos.bajas[id] ? datos.bajas[id].toUpperCase() + ' (baja)' : 'SIN NOMBRE';
+}
+function informeMes(anio, mes) {
+  const porPersona = new Map();
+  const sinHorario = [];
+  const ultimo = new Date(anio, mes + 1, 0).getDate();
+  for (let n = 1; n <= ultimo; n++) {
+    const fecha = new Date(anio, mes, n);
+    const idx = (fecha.getDay() + 6) % 7;
+    const sem = datos.semanas[claveSemana(lunesDe(fecha))] || {};
+    let alguien = false;
+    Object.keys(sem).forEach((id) => {
+      const t = sem[id][idx];
+      const tramos = [tramo(t[0], t[1]), tramo(t[2], t[3])].filter(Boolean);
+      if (!tramos.length) return;
+      alguien = true;
+      if (!porPersona.has(id)) porPersona.set(id, { dias: [], min: 0, noche: 0, domingo: 0 });
+      const r = porPersona.get(id);
+      const min = tramos.reduce((s, [a, b]) => s + b - a, 0);
+      // Horario nocturno según el Estatuto de los Trabajadores: de 22:00 a 6:00.
+      r.noche += tramos.reduce((s, [a, b]) => s + solape(a, b, 0, 360) + solape(a, b, 1320, 1800), 0);
+      if (idx === 6) r.domingo += min;
+      r.min += min;
+      r.dias.push({ fecha, idx, t, min });
+    });
+    if (!alguien) sinHorario.push(n);
+  }
+  const ids = datos.equipo.map((p) => p.id).concat([...porPersona.keys()].filter((id) => !datos.equipo.some((p) => p.id === id)));
+  const filas = ids.map((id) => ({ id, nombre: nombreDe(id), ...(porPersona.get(id) || { dias: [], min: 0, noche: 0, domingo: 0 }) }));
+  return { filas, sinHorario, ultimo };
+}
+// [2,3,4,9] → «2–4 y 9»
+function tramosDias(lista) {
+  const grupos = [];
+  lista.forEach((n) => {
+    const ult = grupos[grupos.length - 1];
+    if (ult && n === ult[1] + 1) ult[1] = n; else grupos.push([n, n]);
+  });
+  const txt = grupos.map(([a, b]) => a === b ? String(a) : a + '–' + b);
+  return txt.length > 1 ? txt.slice(0, -1).join(', ') + ' y ' + txt[txt.length - 1] : txt[0];
+}
+function textoTurnoCorto(a, b) { return a || b ? (a || '?') + '–' + (b || '?') : ''; }
+function pintarHoras() {
+  const anio = mesInforme.getFullYear(), mes = mesInforme.getMonth();
+  $('mesTitulo').textContent = MESES[mes][0].toUpperCase() + MESES[mes].slice(1) + ' ' + anio;
+  const { filas, sinHorario, ultimo } = informeMes(anio, mes);
+  const total = filas.reduce((s, f) => s + f.min, 0);
+  $('cifrasMes').innerHTML =
+    '<div><b>' + horasExactas(total).replace(' min', '′') + '</b><span>horas del equipo</span></div>' +
+    '<div><b>' + filas.filter((f) => f.min).length + '</b><span>personas con turnos</span></div>' +
+    '<div><b>' + (ultimo - sinHorario.length) + '/' + ultimo + '</b><span>días con horario</span></div>';
+  $('alertaMes').innerHTML = sinHorario.length && sinHorario.length < ultimo
+    ? '<div class="alerta">⚠️ <b>' + sinHorario.length + (sinHorario.length === 1 ? ' día' : ' días') + ' sin ningún turno</b> (' +
+      tramosDias(sinHorario) + '). Si se trabajó esos días, falta rellenarlos para que la nómina salga bien.</div>'
+    : '';
+  $('tablaMes').innerHTML = !total
+    ? '<div class="vacio">No hay turnos apuntados en ' + MESES[mes] + '.</div>'
+    : filas.map((f) => {
+        const i = datos.equipo.findIndex((p) => p.id === f.id);
+        const color = i >= 0 ? COLORES[i % COLORES.length] : '#b3a9b1';
+        const extras = [f.dias.length + (f.dias.length === 1 ? ' día' : ' días')];
+        if (f.noche) extras.push(horasExactas(f.noche) + ' noche');
+        if (f.domingo) extras.push(horasExactas(f.domingo) + ' domingo');
+        return '<details class="persona-mes"><summary><span class="avatar" style="background:' + color + '">' + escapar(iniciales(f.nombre.replace(' (baja)', ''))) + '</span>' +
+          '<span class="quien"><b>' + escapar(f.nombre) + '</b><small>' + extras.join(' · ') + '</small></span>' +
+          '<span class="total' + (f.min ? '' : ' cero') + '">' + horasExactas(f.min) + '</span></summary>' +
+          (f.dias.length ? '<div class="detalle-mes">' + f.dias.map((d) =>
+            '<div><span>' + DIAS_ABREV[d.idx] + ' ' + d.fecha.getDate() + '</span><span>' +
+            [textoTurnoCorto(d.t[0], d.t[1]), textoTurnoCorto(d.t[2], d.t[3])].filter(Boolean).join(' y ') +
+            '</span><span>' + horasExactas(d.min) + '</span></div>').join('') + '</div>' : '') +
+          '</details>';
+      }).join('');
+}
+$('mesAnterior').addEventListener('click', () => { mesInforme = new Date(mesInforme.getFullYear(), mesInforme.getMonth() - 1, 1); pintarHoras(); });
+$('mesSiguiente').addEventListener('click', () => { mesInforme = new Date(mesInforme.getFullYear(), mesInforme.getMonth() + 1, 1); pintarHoras(); });
+$('btnInforme').addEventListener('click', async () => {
+  const anio = mesInforme.getFullYear(), mes = mesInforme.getMonth();
+  const { filas, sinHorario, ultimo } = informeMes(anio, mes);
+  const conHoras = filas.filter((f) => f.min);
+  if (!conHoras.length) { avisar('No hay turnos apuntados este mes'); return; }
+  const suma = (k) => conHoras.reduce((s, f) => s + f[k], 0);
+  const nombreMes = MESES[mes] + ' ' + anio;
+  const generado = hoy.getDate() + '/' + (hoy.getMonth() + 1) + '/' + hoy.getFullYear();
+  const zona = $('zonaImprimir');
+  zona.className = 'informe';
+  zona.innerHTML = '<div class="inf">' +
+    '<div class="inf-marca">Kumi Kitchen · Miss Sushi · Cocina</div>' +
+    '<h1>Horas trabajadas · ' + nombreMes + '</h1>' +
+    '<p class="inf-sub">Del 1 al ' + ultimo + ' de ' + MESES[mes] + ' de ' + anio + ' · Generado el ' + generado + '</p>' +
+    '<table><thead><tr><th>Persona</th><th class="n">Días</th><th class="n">Horas totales</th><th class="n">Nocturnas (22–6 h)</th><th class="n">En domingo</th></tr></thead><tbody>' +
+    conHoras.map((f) => '<tr><td>' + escapar(f.nombre) + '</td><td class="n">' + f.dias.length + '</td><td class="n">' + horasExactas(f.min) + '</td><td class="n">' + (f.noche ? horasExactas(f.noche) : '—') + '</td><td class="n">' + (f.domingo ? horasExactas(f.domingo) : '—') + '</td></tr>').join('') +
+    '<tr class="suma"><td>Total</td><td class="n"></td><td class="n">' + horasExactas(suma('min')) + '</td><td class="n">' + horasExactas(suma('noche')) + '</td><td class="n">' + horasExactas(suma('domingo')) + '</td></tr>' +
+    '</tbody></table>' +
+    '<p class="inf-nota">Horas según el horario planificado del equipo (no según fichajes). Los turnos que pasan de medianoche cuentan en el día en que empiezan.' +
+    (sinHorario.length ? ' Días del mes sin ningún turno apuntado: ' + tramosDias(sinHorario) + '.' : '') + '</p>' +
+    conHoras.map((f) => '<div class="inf-persona"><h2><span>' + escapar(f.nombre) + '</span><span>' + horasExactas(f.min) + '</span></h2>' +
+      '<table><thead><tr><th>Fecha</th><th>Turno 1</th><th>Turno 2</th><th class="n">Horas</th></tr></thead><tbody>' +
+      f.dias.map((d) => '<tr><td>' + DIAS_ABREV[d.idx] + ' ' + d.fecha.getDate() + '/' + (mes + 1) + '</td><td>' + (textoTurnoCorto(d.t[0], d.t[1]) || '—') + '</td><td>' + (textoTurnoCorto(d.t[2], d.t[3]) || '—') + '</td><td class="n">' + horasExactas(d.min) + '</td></tr>').join('') +
+      '</tbody></table></div>').join('') +
+    '<div class="inf-firmas"><div>Responsable de cocina</div><div>Recibido (nóminas)</div></div>' +
+    '</div>';
+  await fuentesListas();
+  imprimir('Horas ' + nombreMes + ' - Kumi Kitchen');
+});
+
+// --- Stock e inventario ---
+// Modelo de cocina: recuento semanal + compras. Consumo = lo que había + lo que entró − lo que queda.
+const UNIDADES = ['kg', 'g', 'L', 'ud', 'paquete', 'caja', 'bote', 'bandeja', 'manojo'];
+const CATEGORIAS = ['Pescado y marisco', 'Arroz y secos', 'Verdura y fruta', 'Lácteos y huevos', 'Salsas y condimentos', 'Bebidas', 'Envases y limpieza', 'Otros'];
+const PRODUCTOS_SUSHI = [
+  ['Salmón', 'kg', 0], ['Atún', 'kg', 0], ['Langostino', 'kg', 0], ['Pez mantequilla', 'kg', 0], ['Masago', 'kg', 0],
+  ['Arroz de sushi', 'kg', 1], ['Alga nori', 'paquete', 1], ['Sésamo', 'kg', 1], ['Panko', 'kg', 1],
+  ['Aguacate', 'ud', 2], ['Pepino', 'ud', 2], ['Cebollino', 'manojo', 2],
+  ['Queso crema', 'kg', 3],
+  ['Salsa de soja', 'L', 4], ['Vinagre de arroz', 'L', 4], ['Wasabi', 'kg', 4], ['Jengibre encurtido', 'kg', 4], ['Mayonesa japonesa', 'kg', 4], ['Salsa teriyaki', 'L', 4],
+  ['Palillos', 'caja', 6], ['Envases para llevar', 'caja', 6],
+];
+const euros = new Intl.NumberFormat('es-ES', { style: 'currency', currency: 'EUR' });
+const cifra = new Intl.NumberFormat('es-ES', { maximumFractionDigits: 2 });
+let subStock = 'lista';
+let enRecuento = false;
+let mesStock = new Date(hoy.getFullYear(), hoy.getMonth(), 1);
+
+function stock() {
+  if (!datos.stock) datos.stock = { productos: [], compras: [], recuentos: [] };
+  return datos.stock;
+}
+function productosActivos() { return stock().productos.filter((p) => !p.archivado); }
+function producto(id) { return stock().productos.find((p) => p.id === id); }
+// Admite «1,5», «1.5» y vacío; devuelve null si está vacío y NaN si no es un número válido.
+function leerNumero(texto) {
+  const v = String(texto).trim().replace(/\s/g, '').replace(',', '.');
+  if (!v) return null;
+  const n = Number(v);
+  return Number.isFinite(n) && n >= 0 ? n : NaN;
+}
+function fechaCorta(ts) { const d = new Date(ts); return DIAS_ABREV[(d.getDay() + 6) % 7] + ' ' + d.getDate() + '/' + (d.getMonth() + 1); }
+function cantidadTxt(n, p) { return cifra.format(n) + ' ' + p.unidad; }
+// Lo que queda: el último recuento más lo comprado después (no se apunta el gasto diario, así que es «como mucho»).
+function estadoProducto(p) {
+  const st = stock();
+  const ult = st.recuentos.filter((r) => r.p === p.id).sort((a, b) => b.ts - a.ts)[0];
+  const despues = st.compras.filter((c) => c.p === p.id && (!ult || c.ts > ult.ts));
+  if (!ult && !despues.length) return { cantidad: null, ult: null, compras: 0 };
+  return { cantidad: (ult ? ult.cant : 0) + despues.reduce((s, c) => s + c.cant, 0), ult, compras: despues.length };
+}
+function hayQuePedir(p, e) { return p.minimo != null && e.cantidad != null && e.cantidad < p.minimo; }
+function listaPedir() {
+  return productosActivos().map((p) => ({ p, e: estadoProducto(p) })).filter((x) => hayQuePedir(x.p, x.e));
+}
+function comprasDelMes(anio, mes) {
+  return stock().compras.filter((c) => { const d = new Date(c.ts); return d.getFullYear() === anio && d.getMonth() === mes; });
+}
+
+function pintarStockInicio() {
+  const activos = productosActivos();
+  if (!activos.length) {
+    $('stockSub').textContent = 'Nuevo';
+    $('stockInicio').innerHTML = '<div class="vacio">Lleva el control de lo que hay en cocina, qué pedir y cuánto se gasta cada mes.</div>';
+    $('btnIrStock').textContent = 'Empezar con el stock';
+    return;
+  }
+  const pedir = listaPedir();
+  const gasto = comprasDelMes(hoy.getFullYear(), hoy.getMonth()).reduce((s, c) => s + c.coste, 0);
+  $('stockSub').textContent = 'Compras de ' + MESES[hoy.getMonth()] + ': ' + euros.format(gasto);
+  $('stockInicio').innerHTML = pedir.length
+    ? '<div class="estado"><b>' + pedir.length + (pedir.length === 1 ? ' producto' : ' productos') + ' por pedir:</b> ' +
+      pedir.slice(0, 4).map((x) => escapar(x.p.nombre)).join(', ') + (pedir.length > 4 ? '…' : '') + '</div>'
+    : '<div class="estado">Todo por encima del mínimo. 👌</div>';
+  $('btnIrStock').textContent = pedir.length ? 'Ver qué pedir' : 'Ir al stock';
+}
+
+function pintarStock() {
+  document.querySelectorAll('#segStock button').forEach((b) => b.classList.toggle('activo', b.dataset.sub === subStock));
+  if (subStock === 'lista') enRecuento ? pintarRecuento() : pintarListaStock();
+  if (subStock === 'compras') pintarCompras();
+  if (subStock === 'informe') pintarInformeStock();
+}
+$('segStock').addEventListener('click', (e) => {
+  const b = e.target.closest('button');
+  if (!b) return;
+  subStock = b.dataset.sub;
+  enRecuento = false;
+  pintarStock();
+});
+
+function pintarListaStock() {
+  const activos = productosActivos();
+  if (!activos.length) {
+    $('stockContenido').innerHTML = '<div class="tarjeta"><h3>Aún no hay productos</h3>' +
+      '<p class="sub">Puedes empezar con los productos típicos de una cocina de sushi y ajustarlos después.</p>' +
+      '<div class="acciones"><button class="btn principal" data-accion="cargar-tipicos">Empezar con productos de sushi</button>' +
+      '<button class="btn secundario" data-accion="nuevo-producto">Añadirlos uno a uno</button></div></div>';
+    return;
+  }
+  const pedir = listaPedir();
+  let html = '';
+  if (pedir.length) {
+    html += '<div class="tarjeta pedir"><h3>🛒 ' + pedir.length + (pedir.length === 1 ? ' producto por pedir' : ' productos por pedir') + '</h3><ul>' +
+      pedir.map((x) => '<li><b>' + escapar(x.p.nombre) + '</b>: quedan ' + cantidadTxt(x.e.cantidad, x.p) + ' (mínimo ' + cantidadTxt(x.p.minimo, x.p) + ')</li>').join('') +
+      '</ul><button class="btn principal" data-accion="mandar-pedido">Mandar la lista al proveedor</button></div>';
+  }
+  html += '<div class="fila-botones"><button class="btn principal" data-accion="recuento">Hacer recuento</button>' +
+    '<button class="btn secundario" data-accion="nuevo-producto">+ Producto</button></div>';
+  html += '<div class="tarjeta">';
+  CATEGORIAS.forEach((cat) => {
+    const deCat = activos.filter((p) => p.categoria === cat);
+    if (!deCat.length) return;
+    html += '<div class="grupo-stock">' + cat + '</div>' + deCat.map((p) => {
+      const e = estadoProducto(p);
+      const detalle = [];
+      if (p.minimo != null) detalle.push('mín. ' + cantidadTxt(p.minimo, p));
+      if (e.ult) detalle.push('contado ' + fechaCorta(e.ult.ts) + (e.compras ? ' + compras' : ''));
+      else if (e.compras) detalle.push('solo compras, sin contar');
+      return '<div class="producto" data-producto="' + p.id + '"><div class="info"><b>' + escapar(p.nombre) + '</b><small>' + (detalle.join(' · ') || 'toca para poner el mínimo') + '</small></div>' +
+        (hayQuePedir(p, e) ? '<span class="pill">Pedir</span>' : '') +
+        '<div class="cant">' + (e.cantidad == null ? '<span class="pill gris">Sin contar</span>' : '<b>' + cifra.format(e.cantidad) + '</b><small>' + p.unidad + '</small>') + '</div></div>';
+    }).join('');
+  });
+  html += '</div><p class="nota">Lo que queda se calcula con el último recuento más lo comprado después. Haz un recuento cada semana para que sea exacto.</p>';
+  $('stockContenido').innerHTML = html;
+}
+
+function pintarRecuento() {
+  const activos = productosActivos();
+  let html = '<div class="tarjeta"><h3>Recuento de hoy</h3><div class="sub">' + fechaCorta(Date.now()) + ' · Escribe lo que hay ahora. Deja vacío lo que no cuentes.</div>';
+  CATEGORIAS.forEach((cat) => {
+    const deCat = activos.filter((p) => p.categoria === cat);
+    if (!deCat.length) return;
+    html += '<div class="grupo-stock">' + cat + '</div>' + deCat.map((p) => {
+      const e = estadoProducto(p);
+      return '<div class="fila-recuento"><div><b>' + escapar(p.nombre) + '</b><small>' + (e.cantidad == null ? 'sin datos' : 'antes: ' + cantidadTxt(e.cantidad, p)) + '</small></div>' +
+        '<input class="numero" inputmode="decimal" data-recuento="' + p.id + '" placeholder="—" aria-label="Cantidad de ' + escapar(p.nombre) + '"><span>' + p.unidad + '</span></div>';
+    }).join('');
+  });
+  html += '</div><div class="acciones"><button class="btn principal" data-accion="guardar-recuento">Guardar recuento</button>' +
+    '<button class="btn secundario" data-accion="cancelar-recuento">Cancelar</button></div>';
+  $('stockContenido').innerHTML = html;
+}
+
+function pintarCompras() {
+  const anio = hoy.getFullYear(), mes = hoy.getMonth();
+  const lista = stock().compras.slice().sort((a, b) => b.ts - a.ts).slice(0, 60);
+  const gastoMes = comprasDelMes(anio, mes).reduce((s, c) => s + c.coste, 0);
+  let html = '<div class="tarjeta"><div class="cifras" style="grid-template-columns:1fr 1fr">' +
+    '<div><b>' + euros.format(gastoMes) + '</b><span>compras de ' + MESES[mes] + '</span></div>' +
+    '<div><b>' + comprasDelMes(anio, mes).length + '</b><span>entradas este mes</span></div></div></div>';
+  html += '<div class="acciones"><button class="btn principal" data-accion="nueva-compra"' + (productosActivos().length ? '' : ' disabled') + '>+ Apuntar compra</button></div>';
+  html += '<div class="tarjeta"><h3>Últimas compras</h3>' + (lista.length
+    ? lista.map((c) => {
+        const p = producto(c.p) || { nombre: '¿?', unidad: '' };
+        return '<div class="compra"><div><b>' + escapar(p.nombre) + '</b><small>' + fechaCorta(c.ts) + ' · ' + cantidadTxt(c.cant, p) + (c.proveedor ? ' · ' + escapar(c.proveedor) : '') + '</small></div>' +
+          '<span class="importe">' + euros.format(c.coste) + '</span><button data-borrar-compra="' + c.id + '" aria-label="Borrar compra">✕</button></div>';
+      }).join('')
+    : '<div class="vacio">Cuando llegue un pedido, apúntalo aquí con lo que costó.</div>') + '</div>';
+  $('stockContenido').innerHTML = html;
+}
+
+// Consumo de cada periodo entre dos recuentos que termina dentro del mes.
+function informeStock(anio, mes) {
+  const st = stock();
+  const enMes = (ts) => { const d = new Date(ts); return d.getFullYear() === anio && d.getMonth() === mes; };
+  return st.productos.map((p) => {
+    const compras = st.compras.filter((c) => c.p === p.id && enMes(c.ts));
+    const recs = st.recuentos.filter((r) => r.p === p.id).sort((a, b) => a.ts - b.ts);
+    let consumo = 0, conConsumo = false;
+    for (let i = 1; i < recs.length; i++) {
+      if (!enMes(recs[i].ts)) continue;
+      const entradas = st.compras.filter((c) => c.p === p.id && c.ts > recs[i - 1].ts && c.ts <= recs[i].ts).reduce((s, c) => s + c.cant, 0);
+      consumo += recs[i - 1].cant + entradas - recs[i].cant;
+      conConsumo = true;
+    }
+    const comprado = compras.reduce((s, c) => s + c.cant, 0);
+    const gastado = compras.reduce((s, c) => s + c.coste, 0);
+    return { p, comprado, gastado, consumo, conConsumo, costeConsumo: conConsumo && p.precio ? consumo * p.precio : null };
+  }).filter((f) => f.comprado || f.conConsumo);
+}
+function pintarInformeStock() {
+  const anio = mesStock.getFullYear(), mes = mesStock.getMonth();
+  const filas = informeStock(anio, mes);
+  const gasto = filas.reduce((s, f) => s + f.gastado, 0);
+  const consumido = filas.reduce((s, f) => s + (f.costeConsumo || 0), 0);
+  let html = '<div class="mes-nav"><button data-mes-stock="-1" aria-label="Mes anterior">‹</button><div><small>Informe de stock</small><b>' +
+    MESES[mes][0].toUpperCase() + MESES[mes].slice(1) + ' ' + anio + '</b></div><button data-mes-stock="1" aria-label="Mes siguiente">›</button></div>';
+  html += '<div class="tarjeta"><div class="cifras" style="grid-template-columns:1fr 1fr">' +
+    '<div><b>' + euros.format(gasto) + '</b><span>gastado en compras</span></div>' +
+    '<div><b>' + euros.format(consumido) + '</b><span>coste de lo consumido</span></div></div></div>';
+  html += '<div class="tarjeta"><h3>Por producto</h3><div class="sub">Consumo calculado entre recuentos</div>' + (filas.length
+    ? filas.map((f) => '<div class="compra" style="grid-template-columns:1fr auto"><div><b>' + escapar(f.p.nombre) + '</b><small>' +
+        'comprado ' + cantidadTxt(f.comprado, f.p) + ' · consumido ' + (f.conConsumo ? cantidadTxt(f.consumo, f.p) : 'falta un 2.º recuento') + '</small></div>' +
+        '<span class="importe">' + euros.format(f.gastado) + '</span></div>').join('')
+    : '<div class="vacio">No hay compras ni recuentos en ' + MESES[mes] + '.</div>') + '</div>';
+  html += '<div class="acciones"><button class="btn principal" data-accion="pdf-stock"' + (filas.length ? '' : ' disabled') + '>Guardar PDF del mes</button></div>' +
+    '<p class="nota">«Coste de lo consumido» usa el último precio de compra de cada producto. Para que salga, hacen falta dos recuentos en el mes.</p>';
+  $('stockContenido').innerHTML = html;
+}
+
+function imprimirInformeStock() {
+  const anio = mesStock.getFullYear(), mes = mesStock.getMonth();
+  const filas = informeStock(anio, mes);
+  const nombreMes = MESES[mes] + ' ' + anio;
+  const gasto = filas.reduce((s, f) => s + f.gastado, 0);
+  const consumido = filas.reduce((s, f) => s + (f.costeConsumo || 0), 0);
+  const compras = comprasDelMes(anio, mes).sort((a, b) => a.ts - b.ts);
+  const zona = $('zonaImprimir');
+  zona.className = 'informe';
+  zona.innerHTML = '<div class="inf"><div class="inf-marca">Kumi Kitchen · Miss Sushi · Cocina</div>' +
+    '<h1>Stock y compras · ' + nombreMes + '</h1>' +
+    '<p class="inf-sub">Del 1 al ' + new Date(anio, mes + 1, 0).getDate() + ' de ' + MESES[mes] + ' de ' + anio + ' · Generado el ' + hoy.getDate() + '/' + (hoy.getMonth() + 1) + '/' + hoy.getFullYear() + '</p>' +
+    '<table><thead><tr><th>Producto</th><th class="n">Comprado</th><th class="n">Gastado</th><th class="n">Consumido</th><th class="n">Coste consumo</th></tr></thead><tbody>' +
+    filas.map((f) => '<tr><td>' + escapar(f.p.nombre) + '</td><td class="n">' + cantidadTxt(f.comprado, f.p) + '</td><td class="n">' + euros.format(f.gastado) + '</td><td class="n">' +
+      (f.conConsumo ? cantidadTxt(f.consumo, f.p) : '—') + '</td><td class="n">' + (f.costeConsumo != null ? euros.format(f.costeConsumo) : '—') + '</td></tr>').join('') +
+    '<tr class="suma"><td>Total</td><td class="n"></td><td class="n">' + euros.format(gasto) + '</td><td class="n"></td><td class="n">' + euros.format(consumido) + '</td></tr></tbody></table>' +
+    '<p class="inf-nota">El consumo se calcula entre recuentos: lo que había + lo que se compró − lo que quedaba. El coste del consumo usa el último precio de compra.</p>' +
+    (compras.length ? '<div class="inf-persona"><h2><span>Compras del mes</span><span>' + euros.format(gasto) + '</span></h2><table><thead><tr><th>Fecha</th><th>Producto</th><th>Proveedor</th><th class="n">Cantidad</th><th class="n">Importe</th></tr></thead><tbody>' +
+      compras.map((c) => { const p = producto(c.p) || { nombre: '¿?', unidad: '' }; return '<tr><td>' + fechaCorta(c.ts) + '</td><td>' + escapar(p.nombre) + '</td><td>' + escapar(c.proveedor || '—') + '</td><td class="n">' + cantidadTxt(c.cant, p) + '</td><td class="n">' + euros.format(c.coste) + '</td></tr>'; }).join('') +
+      '</tbody></table></div>' : '') +
+    '<div class="inf-firmas"><div>Responsable de cocina</div><div>Revisado</div></div></div>';
+  fuentesListas().then(() => imprimir('Stock ' + nombreMes + ' - Kumi Kitchen'));
+}
+
+// --- Ventanas del stock (producto y compra) ---
+function abrirPanel(html) { $('panel').innerHTML = '<div class="asa"></div>' + html; $('panelFondo').hidden = false; }
+function cerrarPanel() { $('panelFondo').hidden = true; }
+$('panelFondo').addEventListener('click', (e) => { if (e.target === $('panelFondo')) cerrarPanel(); });
+document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && !$('panelFondo').hidden) cerrarPanel(); });
+function opcionesLista(lista, actual) { return lista.map((x) => '<option' + (x === actual ? ' selected' : '') + '>' + x + '</option>').join(''); }
+
+function abrirProducto(id) {
+  const p = id ? producto(id) : { nombre: '', unidad: 'kg', categoria: 'Otros', minimo: null, precio: null };
+  const historial = id ? stock().compras.filter((c) => c.p === id).map((c) => ({ ts: c.ts, txt: 'Compra ' + cantidadTxt(c.cant, p) + ' · ' + euros.format(c.coste) }))
+    .concat(stock().recuentos.filter((r) => r.p === id).map((r) => ({ ts: r.ts, txt: 'Recuento: ' + cantidadTxt(r.cant, p) }))).sort((a, b) => b.ts - a.ts).slice(0, 6) : [];
+  abrirPanel('<h3>' + (id ? 'Editar producto' : 'Nuevo producto') + '</h3><p class="sub">&nbsp;</p>' +
+    '<label class="campo"><span>Nombre</span><input id="fNombre" value="' + escapar(p.nombre) + '" placeholder="Ej.: Salmón"></label>' +
+    '<div class="campos-2"><label class="campo"><span>Unidad</span><select id="fUnidad">' + opcionesLista(UNIDADES, p.unidad) + '</select></label>' +
+    '<label class="campo"><span>Categoría</span><select id="fCategoria">' + opcionesLista(CATEGORIAS, p.categoria) + '</select></label></div>' +
+    '<div class="campos-2"><label class="campo"><span>Mínimo para pedir</span><input id="fMinimo" class="numero" inputmode="decimal" value="' + (p.minimo != null ? cifra.format(p.minimo) : '') + '" placeholder="—"></label>' +
+    '<label class="campo"><span>Precio por unidad (€)</span><input id="fPrecio" class="numero" inputmode="decimal" value="' + (p.precio != null ? String(p.precio).replace('.', ',') : '') + '" placeholder="—"></label></div>' +
+    '<p class="pista-campo">El precio se actualiza solo cada vez que apuntas una compra.</p>' +
+    (historial.length ? '<div class="grupo-stock">Últimos movimientos</div><div class="historial">' + historial.map((h) => '<div><span>' + fechaCorta(h.ts) + '</span><span>' + h.txt + '</span></div>').join('') + '</div>' : '') +
+    '<div class="acciones"><button class="btn principal" data-accion="guardar-producto" data-id="' + (id || '') + '">Guardar</button>' +
+    '<button class="btn secundario" data-accion="cerrar-panel">Cancelar</button>' +
+    (id ? '<button class="btn texto" data-accion="archivar-producto" data-id="' + id + '">Quitar este producto</button>' : '') + '</div>');
+  if (!id) setTimeout(() => $('fNombre').focus(), 250);
+}
+
+function abrirCompra() {
+  const activos = productosActivos();
+  const hoyISO = claveSemana(new Date());
+  abrirPanel('<h3>Apuntar compra</h3><p class="sub">Lo que ha llegado y lo que ha costado.</p>' +
+    '<label class="campo"><span>Producto</span><select id="cProducto">' +
+    CATEGORIAS.map((cat) => { const de = activos.filter((p) => p.categoria === cat); return de.length ? '<optgroup label="' + cat + '">' + de.map((p) => '<option value="' + p.id + '">' + escapar(p.nombre) + '</option>').join('') + '</optgroup>' : ''; }).join('') +
+    '</select></label>' +
+    '<div class="campos-2"><label class="campo"><span id="cUnidad">Cantidad</span><input id="cCantidad" class="numero" inputmode="decimal" placeholder="—"></label>' +
+    '<label class="campo"><span>Importe total (€)</span><input id="cCoste" class="numero" inputmode="decimal" placeholder="—"></label></div>' +
+    '<p class="pista-campo" id="cPista"></p>' +
+    '<div class="campos-2"><label class="campo"><span>Fecha</span><input id="cFecha" type="date" value="' + hoyISO + '" max="' + hoyISO + '"></label>' +
+    '<label class="campo"><span>Proveedor (opcional)</span><input id="cProveedor" placeholder="—" value="' + escapar(stock().ultimoProveedor || '') + '"></label></div>' +
+    '<div class="acciones"><button class="btn principal" data-accion="guardar-compra">Guardar compra</button>' +
+    '<button class="btn secundario" data-accion="cerrar-panel">Cancelar</button></div>');
+  const pista = () => {
+    const p = producto($('cProducto').value);
+    $('cUnidad').textContent = 'Cantidad (' + p.unidad + ')';
+    const cant = leerNumero($('cCantidad').value);
+    $('cPista').textContent = p.precio ? 'Último precio: ' + euros.format(p.precio) + ' / ' + p.unidad + (cant ? ' → unos ' + euros.format(cant * p.precio) : '') : 'Aún no hay precio de este producto.';
+  };
+  $('cProducto').addEventListener('change', pista);
+  $('cCantidad').addEventListener('input', pista);
+  pista();
+}
+
+function mandarPedido() {
+  const pedir = listaPedir();
+  const texto = 'Pedido Miss Sushi · ' + hoy.getDate() + '/' + (hoy.getMonth() + 1) + '\n' +
+    pedir.map((x) => '• ' + x.p.nombre + ' (quedan ' + cantidadTxt(x.e.cantidad, x.p) + ', mínimo ' + cantidadTxt(x.p.minimo, x.p) + ')').join('\n');
+  if (navigator.share) navigator.share({ text: texto }).catch(() => {});
+  else window.open('https://wa.me/?text=' + encodeURIComponent(texto), '_blank');
+}
+
+function accionStock(b) {
+  const st = stock();
+  const accion = b.dataset.accion;
+  if (accion === 'cargar-tipicos') {
+    PRODUCTOS_SUSHI.forEach(([nombre, unidad, cat]) => st.productos.push({ id: nuevoId(), nombre, unidad, categoria: CATEGORIAS[cat], minimo: null, precio: null }));
+    guardar(); pintarStock(); avisar('Listo. Toca un producto para poner su mínimo');
+  }
+  if (accion === 'nuevo-producto') abrirProducto(null);
+  if (accion === 'recuento') { enRecuento = true; pintarStock(); window.scrollTo(0, 0); }
+  if (accion === 'cancelar-recuento') { enRecuento = false; pintarStock(); }
+  if (accion === 'guardar-recuento') {
+    const ts = Date.now();
+    let n = 0, malos = 0;
+    document.querySelectorAll('[data-recuento]').forEach((c) => {
+      const v = leerNumero(c.value);
+      if (v === null) return;
+      if (Number.isNaN(v)) { malos++; c.style.borderColor = '#d92d20'; return; }
+      st.recuentos.push({ id: nuevoId(), p: c.dataset.recuento, cant: v, ts });
+      n++;
+    });
+    if (malos) { st.recuentos = st.recuentos.filter((r) => r.ts !== ts); avisar('Revisa las cantidades en rojo'); return; }
+    if (!n) { avisar('No has escrito ninguna cantidad'); return; }
+    guardar(); enRecuento = false; pintarStock(); window.scrollTo(0, 0);
+    ofrecerDeshacer('Recuento guardado (' + n + ')', () => { st.recuentos = st.recuentos.filter((r) => r.ts !== ts); });
+  }
+  if (accion === 'nueva-compra') abrirCompra();
+  if (accion === 'mandar-pedido') mandarPedido();
+  if (accion === 'pdf-stock') imprimirInformeStock();
+  if (accion === 'cerrar-panel') cerrarPanel();
+  if (accion === 'guardar-producto') {
+    const nombre = $('fNombre').value.trim();
+    const minimo = leerNumero($('fMinimo').value), precio = leerNumero($('fPrecio').value);
+    if (!nombre) { avisar('Ponle un nombre'); return; }
+    if (Number.isNaN(minimo) || Number.isNaN(precio)) { avisar('Revisa el mínimo o el precio'); return; }
+    const datosP = { nombre, unidad: $('fUnidad').value, categoria: $('fCategoria').value, minimo, precio };
+    if (b.dataset.id) Object.assign(producto(b.dataset.id), datosP);
+    else st.productos.push({ id: nuevoId(), ...datosP });
+    guardar(); cerrarPanel(); pintarStock();
+  }
+  if (accion === 'archivar-producto') {
+    const p = producto(b.dataset.id);
+    if (!confirm('¿Quitar «' + p.nombre + '» de la lista? Sus compras siguen contando en los informes.')) return;
+    p.archivado = true;
+    guardar(); cerrarPanel(); pintarStock();
+    ofrecerDeshacer('Producto quitado', () => { p.archivado = false; });
+  }
+  if (accion === 'guardar-compra') {
+    const p = producto($('cProducto').value);
+    const cant = leerNumero($('cCantidad').value), coste = leerNumero($('cCoste').value);
+    if (!cant) { avisar('Escribe la cantidad'); return; }
+    if (coste === null || Number.isNaN(coste) || Number.isNaN(cant)) { avisar('Escribe el importe total'); return; }
+    const [a, m, d] = $('cFecha').value.split('-').map(Number);
+    // Hoy: la hora exacta, para que quede bien ordenada respecto al último recuento. Otro día: a mediodía.
+    const esHoy = !a || $('cFecha').value === claveSemana(new Date());
+    const fecha = esHoy ? new Date() : new Date(a, m - 1, d, 12);
+    const proveedor = $('cProveedor').value.trim();
+    st.compras.push({ id: nuevoId(), p: p.id, cant, coste, ts: fecha.getTime(), proveedor });
+    if (cant) p.precio = Math.round((coste / cant) * 100) / 100;
+    if (proveedor) st.ultimoProveedor = proveedor;
+    guardar(); cerrarPanel(); pintarStock();
+    avisar('Compra guardada');
+  }
+}
+$('stockContenido').addEventListener('click', (e) => {
+  const mesBtn = e.target.closest('[data-mes-stock]');
+  if (mesBtn) { mesStock = new Date(mesStock.getFullYear(), mesStock.getMonth() + +mesBtn.dataset.mesStock, 1); pintarStock(); return; }
+  const borrar = e.target.closest('[data-borrar-compra]');
+  if (borrar) {
+    const st = stock();
+    const i = st.compras.findIndex((c) => c.id === borrar.dataset.borrarCompra);
+    const [quitada] = st.compras.splice(i, 1);
+    guardar(); pintarStock();
+    ofrecerDeshacer('Compra borrada', () => { st.compras.push(quitada); });
+    return;
+  }
+  const fila = e.target.closest('[data-producto]');
+  if (fila) { abrirProducto(fila.dataset.producto); return; }
+  const b = e.target.closest('[data-accion]');
+  if (b) accionStock(b);
+});
+$('panel').addEventListener('click', (e) => { const b = e.target.closest('[data-accion]'); if (b) accionStock(b); });
 
 // --- Equipo ---
 function pintarEquipo() {
@@ -1026,6 +1640,9 @@ $('equipo').addEventListener('click', (e) => {
   if (b.dataset.quitar) {
     const i = +b.dataset.quitar;
     if (!confirm('¿Quitar a ' + (eq[i].nombre || 'esta persona') + ' del equipo?')) return;
+    // Se guarda su nombre: sus horas de este mes siguen saliendo en el informe para la nómina.
+    datos.bajas = datos.bajas || {};
+    datos.bajas[eq[i].id] = eq[i].nombre;
     eq.splice(i, 1);
   }
   guardar(); pintarEquipo();
@@ -1043,7 +1660,7 @@ function irA(nombre) {
   vista = nombre;
   document.querySelectorAll('.vista').forEach((v) => v.classList.toggle('activa', v.id === 'vista' + nombre[0].toUpperCase() + nombre.slice(1)));
   document.querySelectorAll('nav button').forEach((b) => b.classList.toggle('activo', b.dataset.ir === nombre));
-  $('cabecera').hidden = nombre === 'inicio' || nombre === 'equipo';
+  $('cabecera').hidden = ['inicio', 'equipo', 'horas', 'stock'].includes(nombre);
   $('dias').style.display = nombre === 'rellenar' ? '' : 'none';
   refrescar();
   window.scrollTo(0, 0);
@@ -1061,6 +1678,8 @@ $('semanaSiguiente').addEventListener('click', () => { lunes = sumarDias(lunes, 
 
 function refrescar() {
   if (vista === 'inicio') { pintarInicio(); return; }
+  if (vista === 'horas') { pintarHoras(); return; }
+  if (vista === 'stock') { pintarStock(); return; }
   pintarCabecera();
   if (vista === 'rellenar') pintarDia();
   if (vista === 'cuadro') pintarCuadro();
