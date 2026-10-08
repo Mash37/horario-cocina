@@ -353,6 +353,8 @@
   .historial { font-size: 13px; color: var(--gris); margin: 4px 0 14px; }
   .historial div { display: flex; justify-content: space-between; padding: 4px 0; border-bottom: 1px dashed var(--borde); }
   .btn.texto { background: none; color: #b42318; min-height: 44px; }
+  .copia { background: linear-gradient(135deg, #fff, var(--rosa-suave)); border: 1px solid var(--rosa-medio); }
+  .copia .sub b { color: var(--frambuesa); }
 
   #zonaImprimir { display: none; }
   .inf { font-family: 'Jost', Arial, sans-serif; color: #1f1418; font-size: 11pt; }
@@ -404,6 +406,12 @@
       <h3>Ten Kumi Kitchen como una app</h3>
       <p id="instalarTxt"></p>
       <button class="btn principal" id="btnInstalar" hidden>Instalar en el móvil</button>
+    </div>
+
+    <div class="tarjeta copia" id="tarjetaCopia" hidden>
+      <h3>💾 Guarda una copia</h3>
+      <p class="sub" id="copiaRecordatorio"></p>
+      <div class="acciones" style="margin-top:12px"><button class="btn principal" data-copia="guardar">Guardar copia de seguridad</button></div>
     </div>
 
     <div class="tarjeta">
@@ -518,6 +526,17 @@
       <button class="btn secundario" id="btnAnadir">+ Añadir persona</button>
     </div>
     <p class="nota">Los cambios se guardan solos en este móvil.</p>
+
+    <div class="tarjeta copia" style="margin-top:20px">
+      <h3>💾 Copia de seguridad</h3>
+      <p class="sub" id="copiaEstado"></p>
+      <p class="sub">Guarda un archivo con todo (horarios, equipo, incidencias y stock) y mándatelo por WhatsApp o guárdalo en Drive. Si cambias de móvil o se borra la app, lo recuperas con ese archivo.</p>
+      <div class="acciones" style="margin-top:12px">
+        <button class="btn principal" data-copia="guardar">Guardar copia de seguridad</button>
+        <button class="btn secundario" data-copia="recuperar">Recuperar desde una copia</button>
+      </div>
+      <input type="file" id="archivoCopia" accept="application/json,.json" hidden>
+    </div>
   </section>
 </main>
 
@@ -817,6 +836,7 @@ function pintarInicio() {
   $('palabraTxt').textContent = palabra[2];
   $('anio').textContent = ahora.getFullYear();
   pintarStockInicio();
+  pintarRecordatorioCopia();
 
   pintarInstalar();
 }
@@ -1803,8 +1823,72 @@ $('stockContenido').addEventListener('click', (e) => {
 });
 $('panel').addEventListener('click', (e) => { const b = e.target.closest('[data-accion]'); if (b) accionStock(b); });
 
+// --- Copia de seguridad: un archivo con todos los datos de este móvil ---
+const DIAS_RECORDAR_COPIA = 14;
+function hayDatos() {
+  return Object.values(datos.semanas).some(semanaTieneDatos) || (datos.stock && datos.stock.productos.length > 0);
+}
+function textoUltimaCopia() {
+  if (!datos.ultimaCopia) return 'Todavía no has guardado ninguna copia.';
+  const d = new Date(datos.ultimaCopia);
+  const dias = Math.floor((Date.now() - datos.ultimaCopia) / 86400000);
+  return 'Última copia: <b>' + d.getDate() + ' de ' + MESES[d.getMonth()] + '</b>' + (dias === 0 ? ' (hoy)' : dias === 1 ? ' (ayer)' : ' (hace ' + dias + ' días)') + '.';
+}
+function pintarRecordatorioCopia() {
+  const dias = datos.ultimaCopia ? (Date.now() - datos.ultimaCopia) / 86400000 : Infinity;
+  $('tarjetaCopia').hidden = !hayDatos() || dias < DIAS_RECORDAR_COPIA;
+  $('copiaRecordatorio').innerHTML = textoUltimaCopia() + ' Si se rompe o cambias el móvil, con la copia no pierdes nada.';
+}
+async function guardarCopia() {
+  const ahora = new Date();
+  // La copia lleva su propia fecha: al recuperarla, la app sabe cuándo se hizo.
+  const contenido = JSON.stringify({ app: 'kumi-kitchen', version: 1, fecha: ahora.toISOString(), datos: { ...datos, ultimaCopia: ahora.getTime() } }, null, 1);
+  const nombre = 'kumi-kitchen-copia-' + claveSemana(ahora) + '.json';
+  const archivo = new File([contenido], nombre, { type: 'application/json' });
+  let hecho = false;
+  if (navigator.canShare && navigator.canShare({ files: [archivo] })) {
+    try { await navigator.share({ files: [archivo], title: 'Copia de Kumi Kitchen' }); hecho = true; }
+    catch (e) { if (e.name === 'AbortError') return; }
+  }
+  if (!hecho) descargar(archivo);
+  datos.ultimaCopia = ahora.getTime();
+  guardar();
+  refrescar();
+  avisar('Copia guardada: ' + nombre);
+}
+function leerCopia(texto) {
+  let obj;
+  try { obj = JSON.parse(texto); } catch (e) { return null; }
+  const d = obj && obj.app === 'kumi-kitchen' ? obj.datos : obj;
+  if (!d || !Array.isArray(d.equipo) || typeof d.semanas !== 'object') return null;
+  return { datos: d, fecha: obj.fecha ? new Date(obj.fecha) : null };
+}
+$('archivoCopia').addEventListener('change', async (e) => {
+  const archivo = e.target.files[0];
+  e.target.value = '';
+  if (!archivo) return;
+  const copia = leerCopia(await archivo.text());
+  if (!copia) { avisar('Ese archivo no es una copia de Kumi Kitchen'); return; }
+  const cuando = copia.fecha ? ' del ' + copia.fecha.getDate() + ' de ' + MESES[copia.fecha.getMonth()] + ' de ' + copia.fecha.getFullYear() : '';
+  if (!confirm('Se va a cambiar todo lo que hay en este móvil por la copia' + cuando + ' (' + copia.datos.equipo.length + ' personas en el equipo). ¿Seguir?')) return;
+  const antes = datos;
+  // Por si acaso: lo que había queda guardado aparte antes de restaurar.
+  escribirLocal('horario-cocina-antes-de-restaurar', JSON.stringify(antes));
+  datos = copia.datos;
+  guardar();
+  refrescar();
+  ofrecerDeshacer('Copia recuperada', () => { datos = antes; });
+});
+document.addEventListener('click', (e) => {
+  const b = e.target.closest('[data-copia]');
+  if (!b) return;
+  if (b.dataset.copia === 'guardar') guardarCopia();
+  if (b.dataset.copia === 'recuperar') $('archivoCopia').click();
+});
+
 // --- Equipo ---
 function pintarEquipo() {
+  $('copiaEstado').innerHTML = textoUltimaCopia();
   const n = datos.equipo.length;
   $('equipo').innerHTML = datos.equipo.map((p, i) =>
     '<div class="fila-equipo">' + avatar(p) +
