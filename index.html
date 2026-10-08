@@ -180,12 +180,17 @@
   .etiqueta.trabaja { background: var(--rosa-suave); color: var(--frambuesa); }
   .turno { display: flex; align-items: center; gap: 6px; margin-top: 6px; }
   .turno .lbl { width: 58px; font-size: 13px; color: var(--gris); }
-  .turno select {
-    flex: 1; min-width: 0; height: 46px; border-radius: 12px; border: 1px solid var(--borde);
-    background: var(--fondo); padding: 0 8px; font-size: 18px; text-align: center; text-align-last: center;
-    -webkit-appearance: none; appearance: none;
+  .turno input {
+    flex: 1; min-width: 0; width: 0; height: 46px; border-radius: 12px; border: 1px solid var(--borde);
+    background: var(--fondo); padding: 0 8px; font-size: 18px; text-align: center; font-variant-numeric: tabular-nums;
+    -webkit-appearance: none; appearance: none; outline: none;
   }
-  .turno select.lleno { background: var(--rosa-suave); border-color: var(--rosa-medio); color: var(--frambuesa); font-weight: 600; }
+  .turno input::placeholder { color: #c9b5bd; }
+  .turno input::-webkit-calendar-picker-indicator { display: none !important; }
+  .turno input:focus { border-color: var(--rosa); box-shadow: 0 0 0 3px rgba(234, 80, 132, .18); background: var(--blanco); }
+  .turno input.error { border-color: #d92d20; animation: temblor .3s; }
+  @keyframes temblor { 25% { transform: translateX(-4px); } 75% { transform: translateX(4px); } }
+  .turno input.lleno { background: var(--rosa-suave); border-color: var(--rosa-medio); color: var(--frambuesa); font-weight: 600; }
   .turno .a { color: var(--gris); font-size: 13px; }
   .turno .borrar { width: 40px; height: 46px; border: 0; background: none; font-size: 18px; color: #c9b5bd; }
 
@@ -344,6 +349,7 @@
 <div class="aviso" id="aviso"></div>
 <div id="zonaImprimir"><img id="imgImprimir" alt=""></div>
 <canvas id="lienzo" hidden></canvas>
+<datalist id="listaHoras"></datalist>
 
 <script>
 const CLAVE = 'horario-cocina-v1';
@@ -639,8 +645,26 @@ function pintarCabecera() {
 }
 
 // --- Rellenar un día ---
-function opciones(valor) {
-  return '<option value="">—</option>' + HORAS.map((h) => '<option' + (h === valor ? ' selected' : '') + '>' + h + '</option>').join('');
+// Acepta «12», «1234», «12:34», «12.34» o «12h»; devuelve «12:34», '' si está vacío o null si no es una hora.
+function normalizarHora(texto) {
+  const v = texto.trim().toLowerCase().replace(/h$/, '');
+  if (!v) return '';
+  let h, m;
+  const partes = v.split(/[:.,h\s]+/);
+  if (partes.length > 1) { h = partes[0]; m = partes[1] || '0'; }
+  else if (/^\d{1,2}$/.test(v)) { h = v; m = '0'; }
+  else if (/^\d{3}$/.test(v)) { h = v[0]; m = v.slice(1); }
+  else if (/^\d{4}$/.test(v)) { h = v.slice(0, 2); m = v.slice(2); }
+  else return null;
+  if (!/^\d{1,2}$/.test(h) || !/^\d{1,2}$/.test(m)) return null;
+  h = +h === 24 ? 0 : +h;
+  m = +m;
+  if (h > 23 || m > 59) return null;
+  return h + ':' + String(m).padStart(2, '0');
+}
+function casillaHora(p, i, valor, etiqueta) {
+  return '<input type="text" inputmode="numeric" list="listaHoras" autocomplete="off" enterkeyhint="next" placeholder="—" maxlength="5"' +
+    ' data-p="' + p.id + '" data-i="' + i + '" value="' + escapar(valor) + '" class="' + (valor ? 'lleno' : '') + '" aria-label="' + etiqueta + '">';
 }
 function pintarDia() {
   const fecha = sumarDias(lunes, diaActivo);
@@ -655,9 +679,9 @@ function pintarDia() {
     const fila = (n) => {
       const a = t[n * 2], b = t[n * 2 + 1];
       return '<div class="turno"><span class="lbl">Turno ' + (n + 1) + '</span>' +
-        '<select data-p="' + p.id + '" data-i="' + (n * 2) + '" class="' + (a ? 'lleno' : '') + '" aria-label="Entrada turno ' + (n + 1) + '">' + opciones(a) + '</select>' +
+        casillaHora(p, n * 2, a, 'Entrada turno ' + (n + 1)) +
         '<span class="a">a</span>' +
-        '<select data-p="' + p.id + '" data-i="' + (n * 2 + 1) + '" class="' + (b ? 'lleno' : '') + '" aria-label="Salida turno ' + (n + 1) + '">' + opciones(b) + '</select>' +
+        casillaHora(p, n * 2 + 1, b, 'Salida turno ' + (n + 1)) +
         '<button class="borrar" data-p="' + p.id + '" data-turno="' + n + '" aria-label="Borrar turno ' + (n + 1) + '">✕</button></div>';
     };
     const trabaja = t.some(Boolean);
@@ -667,13 +691,48 @@ function pintarDia() {
   }).join('');
 }
 
-$('personas').addEventListener('change', (e) => {
-  const sel = e.target;
-  if (sel.tagName !== 'SELECT') return;
-  turnosDe(semana(), sel.dataset.p, diaActivo)[+sel.dataset.i] = sel.value;
-  guardar();
-  pintarDia();
-  pintarCabecera();
+// Se guarda sin volver a pintar la lista, para no cerrar el teclado mientras se rellena.
+function guardarHora(casilla) {
+  const t = turnosDe(semana(), casilla.dataset.p, diaActivo);
+  const i = +casilla.dataset.i;
+  const valor = normalizarHora(casilla.value);
+  if (valor === null) {
+    casilla.classList.remove('error'); void casilla.offsetWidth; casilla.classList.add('error');
+    avisar('Escribe la hora así: 1234 o 12:34');
+    casilla.value = t[i];
+    return false;
+  }
+  casilla.classList.remove('error');
+  casilla.value = valor;
+  casilla.classList.toggle('lleno', !!valor);
+  if (t[i] !== valor) {
+    t[i] = valor;
+    guardar();
+    const etiqueta = casilla.closest('.persona').querySelector('.etiqueta');
+    const trabaja = t.some(Boolean);
+    etiqueta.classList.toggle('trabaja', trabaja);
+    etiqueta.textContent = trabaja ? textoHoras(minutosTurnos(t)) : 'Libre';
+    pintarCabecera();
+  }
+  return true;
+}
+function siguienteCasilla(casilla) {
+  const todas = [...$('personas').querySelectorAll('input')];
+  const sig = todas[todas.indexOf(casilla) + 1];
+  if (sig) sig.focus(); else casilla.blur();
+}
+$('personas').addEventListener('focusin', (e) => { if (e.target.tagName === 'INPUT') e.target.select(); });
+$('personas').addEventListener('input', (e) => {
+  const c = e.target;
+  if (c.tagName !== 'INPUT') return;
+  // Con 4 cifras («1234») o una hora completa elegida de la lista, pasa sola a la siguiente casilla.
+  if (/^\d{4}$/.test(c.value) || /^\d{1,2}:\d{2}$/.test(c.value)) {
+    if (guardarHora(c)) siguienteCasilla(c); else c.select();
+  }
+});
+$('personas').addEventListener('change', (e) => { if (e.target.tagName === 'INPUT') guardarHora(e.target); });
+$('personas').addEventListener('keydown', (e) => {
+  if (e.target.tagName === 'INPUT' && e.key === 'Enter') { e.preventDefault(); if (guardarHora(e.target)) siguienteCasilla(e.target); }
 });
 $('personas').addEventListener('click', (e) => {
   const btn = e.target.closest('.borrar');
@@ -892,6 +951,7 @@ function escapar(s) {
   return String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 }
 
+$('listaHoras').innerHTML = HORAS.map((h) => '<option value="' + h + '">').join('');
 refrescar();
 
 if ('serviceWorker' in navigator && location.protocol === 'https:') {
