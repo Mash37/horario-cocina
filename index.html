@@ -256,6 +256,19 @@
   .tarjeta-avisos h3 { color: #8a5a00; }
   .tarjeta-avisos ul { margin: 8px 0 0; padding-left: 18px; font-size: 13.5px; line-height: 1.55; color: #5c3d00; }
   .tarjeta-avisos .sub { margin-bottom: 0; }
+  .cobertura { display: flex; flex-wrap: wrap; gap: 8px; margin: -4px 0 12px; }
+  .cobertura:empty { display: none; }
+  .franja { flex: 1; min-width: 140px; border-radius: 14px; padding: 8px 12px; display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 2px 8px; font-size: 14px; }
+  .franja b { font-weight: 600; }
+  .franja span { font-weight: 700; font-variant-numeric: tabular-nums; }
+  .franja small { grid-column: 1 / -1; font-size: 12px; line-height: 1.3; }
+  .franja.ok { background: #f0fbf5; border: 1px solid #bfe8d2; color: #1f7a4d; }
+  .franja.corta { background: #fff3d6; border: 1px solid #f5d38f; color: #8a5a00; }
+  .servicio { border: 1px solid var(--borde); border-radius: 18px; padding: 12px 12px 4px; margin-bottom: 12px; }
+  .contador { display: flex; align-items: center; justify-content: space-between; height: 48px; border: 1px solid var(--borde); border-radius: 12px; background: var(--fondo); padding: 0 4px; }
+  .contador button { width: 40px; height: 40px; border: 0; border-radius: 10px; background: var(--blanco); color: var(--frambuesa); font-size: 22px; font-weight: 600; }
+  .contador b { font-size: 18px; }
+  .tarjeta-avisos .grupo-stock { margin-top: 12px; color: #8a5a00; }
   .tarjeta-ok { border: 1px solid #bfe8d2; background: #f0fbf5; display: flex; gap: 12px; align-items: center; padding: 14px 16px; }
   .tarjeta-ok b { color: #1f7a4d; font-size: 15px; }
   .tarjeta-ok span { display: block; font-size: 12.5px; color: #4b7a63; margin-top: 2px; }
@@ -509,6 +522,7 @@
 <main>
   <section class="vista" id="vistaRellenar">
     <h2 id="tituloDia"></h2>
+    <div class="cobertura" id="coberturaDia"></div>
     <div id="personas"></div>
     <div class="acciones">
       <button class="btn secundario" id="btnRepetirDia" hidden><svg viewBox="0 0 24 24"><rect x="8" y="8" width="13" height="13" rx="2"/><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"/></svg>Repetir todo este día en otros días</button>
@@ -792,6 +806,71 @@ function avisosSemana(lunesSem) {
   });
   return avisos;
 }
+// --- Cobertura por servicio: cuánta gente hay a la vez en cada franja (con faltas y coberturas apuntadas) ---
+const FRANJAS_INICIALES = [
+  { id: 'mediodia', nombre: 'Mediodía', icono: '☀️', desde: '12:00', hasta: '16:00', minimo: 2, dias: [0, 1, 2, 3, 4, 5, 6] },
+  { id: 'noche', nombre: 'Noche', icono: '🌙', desde: '20:00', hasta: '0:00', minimo: 2, dias: [0, 1, 2, 3, 4, 5, 6] },
+];
+function franjas() {
+  if (!datos.franjas) datos.franjas = JSON.parse(JSON.stringify(FRANJAS_INICIALES));
+  return datos.franjas;
+}
+function horaTxt(m) { m = ((m % 1440) + 1440) % 1440; return Math.floor(m / 60) + ':' + String(m % 60).padStart(2, '0'); }
+// Devuelve null si ese día no trabaja nadie (se entiende que el restaurante cierra).
+function coberturaDia(fecha) {
+  const d = (fecha.getDay() + 6) % 7;
+  const ayer = sumarDias(fecha, -1);
+  const ids = new Set([...datos.equipo.map((p) => p.id), ...Object.keys(incidenciasDelDia(fecha)), ...Object.keys(incidenciasDelDia(ayer))]);
+  const intervalos = [];
+  ids.forEach((id) => {
+    tramosReales(fecha, id).forEach((t) => intervalos.push(t));
+    // Lo que alguien trabaja después de medianoche del día anterior también cuenta (madrugada).
+    tramosReales(ayer, id).forEach(([a, b]) => { if (b > 1440) intervalos.push([a - 1440, b - 1440]); });
+  });
+  if (!intervalos.some(([a, b]) => b > 0 && a < 1440)) return null;
+  return franjas().filter((f) => f.minimo > 0 && f.dias.includes(d) && tramo(f.desde, f.hasta)).map((f) => {
+    const [fa, fb] = tramo(f.desde, f.hasta);
+    const puntos = new Set([fa, fb]);
+    intervalos.forEach(([a, b]) => { if (a > fa && a < fb) puntos.add(a); if (b > fa && b < fb) puntos.add(b); });
+    const orden = [...puntos].sort((x, y) => x - y);
+    let min = Infinity;
+    const cortos = [];
+    for (let i = 0; i < orden.length - 1; i++) {
+      const ini = orden[i], fin = orden[i + 1], medio = (ini + fin) / 2;
+      const n = intervalos.filter(([a, b]) => a <= medio && b > medio).length;
+      min = Math.min(min, n);
+      if (n >= f.minimo) continue;
+      const ult = cortos[cortos.length - 1];
+      if (ult && ult[1] === ini && ult[2] === n) ult[1] = fin; else cortos.push([ini, fin, n]);
+    }
+    return { f, min: min === Infinity ? 0 : min, cortos, todo: cortos.length === 1 && cortos[0][0] === fa && cortos[0][1] === fb };
+  });
+}
+function detalleCorto(r) {
+  const persona = (n) => n + (n === 1 ? ' persona' : ' personas');
+  return r.todo ? 'todo el servicio con ' + persona(r.cortos[0][2])
+    : r.cortos.map(([a, b, n]) => 'de ' + horaTxt(a) + ' a ' + horaTxt(b) + ', ' + persona(n)).join(' · ');
+}
+function avisosCobertura(lunesSem) {
+  const avisos = [];
+  for (let d = 0; d < 7; d++) {
+    const res = coberturaDia(sumarDias(lunesSem, d));
+    (res || []).forEach((r) => {
+      if (!r.cortos.length) return;
+      avisos.push({ dia: d, texto: DIAS[d][0].toUpperCase() + DIAS[d].slice(1) + ' · ' + r.f.nombre + ': falta gente, ' + detalleCorto(r) + ' (mínimo ' + r.f.minimo + ').' });
+    });
+  }
+  return avisos;
+}
+function pintarCoberturaDia() {
+  const res = coberturaDia(sumarDias(lunes, diaActivo)) || [];
+  $('coberturaDia').innerHTML = res.map((r) => {
+    const ok = !r.cortos.length;
+    return '<div class="franja ' + (ok ? 'ok' : 'corta') + '"><b>' + r.f.icono + ' ' + escapar(r.f.nombre) + '</b><span>' + r.min + '/' + r.f.minimo + (ok ? ' ✓' : ' ⚠️') + '</span>' +
+      (ok ? '' : '<small>' + detalleCorto(r).replace(/^./, (c) => c.toUpperCase()) + '</small>') + '</div>';
+  }).join('');
+}
+
 function htmlAvisosPersona(avisos, id, dia) {
   const suyos = avisos.filter((a) => a.id === id && (a.dia === dia || a.dia === null));
   return suyos.length ? '<div class="avisos-desc">' + suyos.map((a) => '<div>⚠️ ' + escapar(a.texto) + '</div>').join('') + '</div>' : '';
@@ -898,9 +977,9 @@ function pintarInicio() {
   $('proxEstado').innerHTML = listos === 0 ? 'Todavía <b>sin empezar</b>. Lo normal es prepararla el jueves o el viernes.'
     : listos === 7 ? '<b>¡Lista!</b> Todos los días tienen turnos. Ya puedes enviarla.'
     : 'Vas por <b>' + listos + ' de 7 días</b>. ¡Ya casi!';
-  const avisosProx = listos ? avisosSemana(lunesProxima).length : 0;
-  if (avisosProx) $('proxEstado').innerHTML += '<br>⚖️ <b>' + avisosProx + (avisosProx === 1 ? ' aviso de descanso' : ' avisos de descanso') + '</b>: míralos en Cuadro antes de enviarla.';
-  else if (listos) $('proxEstado').innerHTML += '<br>✅ Sin avisos de descanso.';
+  const avisosProx = listos ? avisosSemana(lunesProxima).length + avisosCobertura(lunesProxima).length : 0;
+  if (avisosProx) $('proxEstado').innerHTML += '<br>⚖️ <b>' + avisosProx + (avisosProx === 1 ? ' aviso del horario' : ' avisos del horario') + '</b>: míralos en Cuadro antes de enviarla.';
+  else if (listos) $('proxEstado').innerHTML += '<br>✅ Sin avisos: cobertura y descansos bien.';
 
   const esta = datos.semanas[claveSemana(lunesEsta)];
   let botones = '<button class="btn principal" data-accion="preparar">' + (listos ? 'Seguir con el horario' : 'Preparar el horario') + '</button>';
@@ -973,10 +1052,11 @@ function pintarCabecera() {
 
   const sem = datos.semanas[clave] || {};
   const avisos = avisosSemana(lunes);
+  const cobertura = avisosCobertura(lunes);
   $('dias').innerHTML = DIAS_CORTOS.map((letra, i) => {
     const fecha = sumarDias(lunes, i);
     const trabajan = datos.equipo.filter((p) => sem[p.id] && sem[p.id][i].some(Boolean)).length;
-    const clases = (i === diaActivo ? 'activo' : '') + (avisos.some((a) => a.dia === i) ? ' con-aviso' : '');
+    const clases = (i === diaActivo ? 'activo' : '') + (avisos.some((a) => a.dia === i) || cobertura.some((a) => a.dia === i) ? ' con-aviso' : '');
     return '<button data-dia="' + i + '" class="' + clases + '">' +
       '<span>' + letra + '</span><b>' + fecha.getDate() + '</b><i>' + (trabajan ? '●'.repeat(Math.min(trabajan, 3)) : '') + '</i></button>';
   }).join('');
@@ -1036,6 +1116,7 @@ function pintarDia() {
       fila(0) + fila(1) + pie + '</div>';
   }).join('');
   actualizarRepetirDia();
+  pintarCoberturaDia();
 }
 function actualizarRepetirDia() {
   const sem = semana();
@@ -1063,6 +1144,7 @@ function guardarHora(casilla) {
     casilla.closest('.persona').querySelector('.repetir').hidden = !trabaja;
     const avisos = avisosSemana(lunes);
     document.querySelectorAll('[data-avisos]').forEach((c) => { c.innerHTML = htmlAvisosPersona(avisos, c.dataset.avisos, diaActivo); });
+    pintarCoberturaDia();
     actualizarRepetirDia();
     pintarCabecera();
   }
@@ -1360,12 +1442,16 @@ function fuentesListas() {
 }
 async function pintarCuadro() {
   const avisos = avisosSemana(lunes);
-  $('avisosCuadro').innerHTML = avisos.length
-    ? '<div class="tarjeta tarjeta-avisos"><h3>⚖️ ' + avisos.length + (avisos.length === 1 ? ' aviso de descanso' : ' avisos de descanso') + '</h3>' +
-      '<p class="sub">Revísalo antes de enviarlo. Son las reglas generales del Estatuto; tu convenio puede tener otras.</p><ul>' +
-      avisos.map((a) => '<li>' + escapar(a.texto) + '</li>').join('') + '</ul></div>'
+  const cobertura = avisosCobertura(lunes);
+  const total = avisos.length + cobertura.length;
+  const lista = (xs) => '<ul>' + xs.map((a) => '<li>' + escapar(a.texto) + '</li>').join('') + '</ul>';
+  $('avisosCuadro').innerHTML = total
+    ? '<div class="tarjeta tarjeta-avisos"><h3>⚖️ ' + total + (total === 1 ? ' aviso del horario' : ' avisos del horario') + '</h3>' +
+      '<p class="sub">Revísalo antes de enviarlo.</p>' +
+      (cobertura.length ? '<div class="grupo-stock">Cobertura de los servicios</div>' + lista(cobertura) : '') +
+      (avisos.length ? '<div class="grupo-stock">Descansos</div><p class="sub">Reglas generales del Estatuto; tu convenio puede tener otras.</p>' + lista(avisos) : '') + '</div>'
     : semanaTieneDatos(datos.semanas[claveSemana(lunes)])
-      ? '<div class="tarjeta tarjeta-ok"><i>✅</i><div><b>Sin avisos de descanso</b><span>Revisé descansos de 12 h, día y medio libre, 9 h al día y 40 h a la semana.</span></div></div>'
+      ? '<div class="tarjeta tarjeta-ok"><i>✅</i><div><b>Sin avisos</b><span>Revisé la gente de cada servicio y los descansos (12 h, día y medio libre, 9 h al día y 40 h a la semana).</span></div></div>'
       : '';
   await fuentesListas();
   $('cuadroImg').src = dibujarCuadro().toDataURL('image/png');
@@ -2005,6 +2091,7 @@ function abrirMas() {
     '</div><div class="grupo-stock">Más</div><div class="accesos">' +
     acceso('horas', '🕒', 'Horas del mes', 'Informe en PDF para la nómina', vista === 'horas') +
     acceso('equipo', '👥', 'Tu equipo', datos.equipo.length + (datos.equipo.length === 1 ? ' persona' : ' personas'), vista === 'equipo') +
+    acceso('servicios', '🍽️', 'Servicios y mínimos', franjas().map((f) => f.nombre + ' ' + f.minimo).join(' · ') || 'Sin servicios') +
     '</div><div class="grupo-stock">Tus datos</div><div class="accesos">' +
     acceso('guardar-copia', '💾', 'Guardar copia', textoUltimaCopia().replace(/<[^>]+>/g, '')) +
     acceso('recuperar-copia', '📂', 'Recuperar copia', 'Desde un archivo guardado') +
@@ -2015,6 +2102,7 @@ $('panel').addEventListener('click', (e) => {
   const b = e.target.closest('[data-mas]');
   if (!b) return;
   const que = b.dataset.mas;
+  if (que === 'servicios') { abrirServicios(); return; }
   const navega = ['horas', 'equipo', 'recuento', 'compra'].includes(que);
   cerrarPanel(navega);
   if (que === 'horas' || que === 'equipo') irA(que);
@@ -2027,6 +2115,58 @@ $('panel').addEventListener('click', (e) => {
   }
   if (que === 'guardar-copia') guardarCopia();
   if (que === 'recuperar-copia') $('archivoCopia').click();
+});
+
+// --- Ventana «Servicios y mínimos» ---
+let serviciosUI = null;
+function abrirServicios() {
+  serviciosUI = JSON.parse(JSON.stringify(franjas()));
+  pintarServicios();
+}
+function pintarServicios() {
+  abrirPanel('<h3>Servicios y mínimos</h3><p class="sub">Cuánta gente tiene que haber, como mínimo, en cada servicio. Con 0 no se revisa.</p>' +
+    serviciosUI.map((f, i) => '<div class="servicio">' +
+      '<div class="campos-2"><label class="campo"><span>Servicio</span><input data-sv="nombre" data-i="' + i + '" value="' + escapar(f.nombre) + '"></label>' +
+      '<div class="campo"><span>Mínimo de personas</span><div class="contador"><button data-sv-menos="' + i + '" aria-label="Menos">−</button><b>' + f.minimo + '</b><button data-sv-mas="' + i + '" aria-label="Más">+</button></div></div></div>' +
+      '<div class="campos-2"><label class="campo"><span>Desde</span><input type="time" step="60" data-sv="desde" data-i="' + i + '" value="' + aCasilla(f.desde) + '"></label>' +
+      '<label class="campo"><span>Hasta</span><input type="time" step="60" data-sv="hasta" data-i="' + i + '" value="' + aCasilla(f.hasta) + '"></label></div>' +
+      '<div class="grupo-stock">Días con este servicio</div><div class="chips-inc">' +
+      DIAS_CORTOS.map((l, d) => '<button data-sv-dia="' + i + '" data-d="' + d + '" class="' + (f.dias.includes(d) ? 'sel' : '') + '">' + l + '</button>').join('') + '</div>' +
+      '<button class="btn texto" data-sv-quitar="' + i + '">Quitar este servicio</button></div>').join('') +
+    '<div class="acciones"><button class="btn secundario" data-sv-anadir>+ Añadir servicio</button>' +
+    '<button class="btn principal" data-sv-guardar>Guardar</button><button class="btn secundario" data-sv-cerrar>Cancelar</button></div>');
+}
+$('panel').addEventListener('input', (e) => {
+  const c = e.target;
+  if (!serviciosUI || !c.dataset.sv) return;
+  const f = serviciosUI[+c.dataset.i];
+  if (c.dataset.sv === 'nombre') f.nombre = c.value;
+  else f[c.dataset.sv] = normalizarHora(c.value || '') || '';
+});
+$('panel').addEventListener('click', (e) => {
+  if (!serviciosUI) return;
+  const b = e.target.closest('button');
+  if (!b) return;
+  const d = b.dataset;
+  if (d.svMenos !== undefined) serviciosUI[+d.svMenos].minimo = Math.max(0, serviciosUI[+d.svMenos].minimo - 1);
+  else if (d.svMas !== undefined) serviciosUI[+d.svMas].minimo = Math.min(30, serviciosUI[+d.svMas].minimo + 1);
+  else if (d.svDia !== undefined) {
+    const f = serviciosUI[+d.svDia], dia = +d.d;
+    f.dias = f.dias.includes(dia) ? f.dias.filter((x) => x !== dia) : f.dias.concat(dia).sort();
+  } else if (d.svQuitar !== undefined) serviciosUI.splice(+d.svQuitar, 1);
+  else if (d.svAnadir !== undefined) serviciosUI.push({ id: nuevoId(), nombre: 'Servicio', icono: '🍽️', desde: '13:00', hasta: '16:00', minimo: 2, dias: [0, 1, 2, 3, 4, 5, 6] });
+  else if (d.svCerrar !== undefined) { serviciosUI = null; cerrarPanel(); return; }
+  else if (d.svGuardar !== undefined) {
+    const mal = serviciosUI.find((f) => !tramo(f.desde, f.hasta));
+    if (mal) { avisar('Revisa las horas de «' + (mal.nombre || 'Servicio') + '»'); return; }
+    serviciosUI.forEach((f) => { f.nombre = f.nombre.trim() || 'Servicio'; });
+    datos.franjas = serviciosUI;
+    serviciosUI = null;
+    guardar(); cerrarPanel(); refrescar();
+    avisar('Servicios guardados');
+    return;
+  } else return;
+  pintarServicios();
 });
 
 // --- Equipo ---
@@ -2139,7 +2279,7 @@ history.replaceState({ vista: 'inicio', nivel: 0 }, '');
 window.addEventListener('popstate', (e) => {
   const st = e.state || { vista: 'inicio', nivel: 0 };
   if (!st.capa) {
-    if (!$('panelFondo').hidden) { $('panelFondo').hidden = true; incUI = null; }
+    if (!$('panelFondo').hidden) { $('panelFondo').hidden = true; incUI = null; serviciosUI = null; }
     if (!$('hojaFondo').hidden) { $('hojaFondo').hidden = true; repetir = null; }
   }
   const salirDeRecuento = enRecuento && !st.recuento;
