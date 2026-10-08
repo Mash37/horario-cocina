@@ -1,7 +1,7 @@
 // Primero intenta la red (para recibir mejoras); sin conexión, sirve lo guardado.
-const CACHE = 'horario-v2';
+const CACHE = 'brigada-v3';
 const ARCHIVOS = ['./', './index.html', './manifest.webmanifest', './icon-180.png', './icon-192.png', './icon-512.png',
-  './fuentes/YesevaOne-400.woff2', './fuentes/Poppins-400.woff2', './fuentes/Poppins-500.woff2', './fuentes/Poppins-600.woff2', './fuentes/Poppins-700.woff2'];
+  './fuentes/PlayfairDisplay-Italic.woff2', './fuentes/GreatVibes.woff2', './fuentes/Jost.woff2'];
 
 self.addEventListener('install', (e) => {
   e.waitUntil(caches.open(CACHE).then((c) => c.addAll(ARCHIVOS)));

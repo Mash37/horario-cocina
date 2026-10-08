@@ -8,21 +8,20 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="Horario">
+<meta name="apple-mobile-web-app-title" content="Brigada">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="icon-180.png">
 <link rel="icon" href="icon-192.png">
-<title>Horario cocina</title>
+<title>Brigada</title>
 <style>
-  @font-face { font-family: 'Yeseva One'; font-weight: 400; font-display: swap; src: url(fuentes/YesevaOne-400.woff2) format('woff2'); }
-  @font-face { font-family: 'Poppins'; font-weight: 400; font-display: swap; src: url(fuentes/Poppins-400.woff2) format('woff2'); }
-  @font-face { font-family: 'Poppins'; font-weight: 500; font-display: swap; src: url(fuentes/Poppins-500.woff2) format('woff2'); }
-  @font-face { font-family: 'Poppins'; font-weight: 600; font-display: swap; src: url(fuentes/Poppins-600.woff2) format('woff2'); }
-  @font-face { font-family: 'Poppins'; font-weight: 700; font-display: swap; src: url(fuentes/Poppins-700.woff2) format('woff2'); }
+  @font-face { font-family: 'Playfair Display'; font-style: italic; font-weight: 400 900; font-display: swap; src: url(fuentes/PlayfairDisplay-Italic.woff2) format('woff2'); }
+  @font-face { font-family: 'Great Vibes'; font-weight: 400; font-display: swap; src: url(fuentes/GreatVibes.woff2) format('woff2'); }
+  @font-face { font-family: 'Jost'; font-weight: 100 900; font-display: swap; src: url(fuentes/Jost.woff2) format('woff2'); }
 
   :root {
     --rosa: #ea5084;
     --frambuesa: #881546;
+    --frambuesa-oscuro: #5c0d2f;
     --rosa-medio: #f4c3d3;
     --rosa-suave: #fce8ef;
     --tinta: #1f1418;
@@ -30,142 +29,182 @@
     --borde: #f1dfe6;
     --fondo: #fff8fa;
     --blanco: #ffffff;
-    --titulo: 'Yeseva One', Georgia, serif;
+    --verde: #2fb37a;
+    --titulo: 'Playfair Display', Georgia, serif;
+    --firma: 'Great Vibes', 'Snell Roundhand', cursive;
   }
   * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
   html, body { margin: 0; }
   body {
-    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    font-family: 'Jost', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     background: var(--fondo); color: var(--tinta); font-size: 16px;
     padding-bottom: calc(80px + env(safe-area-inset-bottom));
   }
   button, select, input { font: inherit; color: inherit; }
   button { cursor: pointer; }
+  .t { font-family: var(--titulo); font-style: italic; font-weight: 600; }
 
-  /* Inicio */
+  /* ---------- Inicio ---------- */
   .portada {
     position: relative; overflow: hidden; color: #fff;
     background:
-      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='24' viewBox='0 0 48 24'%3E%3Cg fill='none' stroke='%23ffffff' stroke-opacity='.13' stroke-width='1.5'%3E%3Ccircle cx='24' cy='24' r='22'/%3E%3Ccircle cx='24' cy='24' r='15'/%3E%3Ccircle cx='24' cy='24' r='8'/%3E%3Ccircle cx='0' cy='24' r='22'/%3E%3Ccircle cx='0' cy='24' r='15'/%3E%3Ccircle cx='0' cy='24' r='8'/%3E%3Ccircle cx='48' cy='24' r='22'/%3E%3Ccircle cx='48' cy='24' r='15'/%3E%3Ccircle cx='48' cy='24' r='8'/%3E%3C/g%3E%3C/svg%3E"),
-      linear-gradient(160deg, var(--rosa) 0%, #c22b63 55%, var(--frambuesa) 100%);
-    padding: calc(22px + env(safe-area-inset-top)) 20px 64px;
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='24' viewBox='0 0 48 24'%3E%3Cg fill='none' stroke='%23ffffff' stroke-opacity='.11' stroke-width='1.4'%3E%3Ccircle cx='24' cy='24' r='22'/%3E%3Ccircle cx='24' cy='24' r='15'/%3E%3Ccircle cx='24' cy='24' r='8'/%3E%3Ccircle cx='0' cy='24' r='22'/%3E%3Ccircle cx='0' cy='24' r='15'/%3E%3Ccircle cx='0' cy='24' r='8'/%3E%3Ccircle cx='48' cy='24' r='22'/%3E%3Ccircle cx='48' cy='24' r='15'/%3E%3Ccircle cx='48' cy='24' r='8'/%3E%3C/g%3E%3C/svg%3E"),
+      radial-gradient(120% 90% at 85% 10%, #f472a0 0%, transparent 55%),
+      linear-gradient(165deg, var(--rosa) 0%, #c22b63 50%, var(--frambuesa) 85%, var(--frambuesa-oscuro) 100%);
+    padding: calc(18px + env(safe-area-inset-top)) 22px 78px;
   }
-  .portada .marca { font-size: 11px; letter-spacing: .22em; text-transform: uppercase; opacity: .85; font-weight: 600; }
-  .portada h1 { font-family: var(--titulo); font-weight: 400; font-size: 32px; line-height: 1.1; margin: 14px 0 6px; max-width: 70%; }
-  .portada .fecha { font-size: 15px; opacity: .9; }
-  .portada .fecha::first-letter { text-transform: uppercase; }
-  .maki { position: absolute; right: -18px; top: calc(28px + env(safe-area-inset-top)); width: 120px; height: 120px; opacity: .95; }
+  .barra-sup { display: flex; align-items: baseline; justify-content: space-between; }
+  .logo-txt { font-family: var(--firma); font-size: 34px; line-height: 1; }
+  .marca { font-size: 11px; letter-spacing: .24em; text-transform: uppercase; opacity: .85; font-weight: 500; }
+  .saludo { margin-top: 26px; position: relative; z-index: 1; }
+  .saludo .t { font-size: 24px; font-weight: 500; opacity: .95; display: block; }
+  .saludo .nombre { font-family: var(--firma); font-size: 64px; line-height: .95; display: block; margin-top: 2px; text-shadow: 0 2px 18px rgba(92, 13, 47, .35); }
+  .fecha { font-size: 15px; opacity: .9; margin-top: 8px; letter-spacing: .02em; }
+  .fecha::first-letter { text-transform: uppercase; }
+  .maki { position: absolute; right: -26px; top: calc(70px + env(safe-area-inset-top)); width: 150px; height: 150px; animation: girar 60s linear infinite; }
+  @keyframes girar { to { transform: rotate(360deg); } }
+  @media (prefers-reduced-motion: reduce) { .maki, .pulso::after { animation: none !important; } }
 
-  .tablero { padding: 0 14px; margin-top: -40px; position: relative; max-width: 720px; margin-left: auto; margin-right: auto; }
+  .ahora {
+    position: absolute; left: 22px; bottom: 26px; display: inline-flex; align-items: center; gap: 10px;
+    background: rgba(255,255,255,.16); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+    border: 1px solid rgba(255,255,255,.25); padding: 7px 14px 7px 10px; border-radius: 99px; font-size: 14px; font-weight: 500;
+  }
+  .pulso { position: relative; width: 10px; height: 10px; border-radius: 50%; background: #c9b5bd; }
+  .pulso.vivo { background: #5ee6a8; }
+  .pulso.vivo::after { content: ''; position: absolute; inset: -4px; border-radius: 50%; border: 2px solid #5ee6a8; animation: latido 1.8s ease-out infinite; }
+  @keyframes latido { from { opacity: .9; transform: scale(.6); } to { opacity: 0; transform: scale(1.6); } }
+
+  .tablero { padding: 0 14px; margin: -14px auto 0; position: relative; max-width: 720px; }
   .tarjeta {
-    background: var(--blanco); border-radius: 20px; padding: 16px; margin-bottom: 14px;
-    box-shadow: 0 6px 24px rgba(136, 21, 70, .08), 0 1px 2px rgba(136, 21, 70, .06);
+    background: var(--blanco); border-radius: 22px; padding: 18px 16px; margin-bottom: 14px;
+    box-shadow: 0 8px 28px rgba(136, 21, 70, .08), 0 1px 2px rgba(136, 21, 70, .06);
   }
-  .tarjeta h3 { margin: 0 0 2px; font-family: var(--titulo); font-weight: 400; font-size: 20px; color: var(--frambuesa); }
-  .tarjeta .sub { font-size: 13px; color: var(--gris); margin-bottom: 12px; }
-  .vacio { font-size: 14px; color: var(--gris); padding: 6px 0 2px; }
+  .tarjeta h3 { margin: 0; font-family: var(--titulo); font-style: italic; font-weight: 600; font-size: 22px; color: var(--frambuesa); }
+  .tarjeta .sub { font-size: 13px; color: var(--gris); margin: 2px 0 14px; }
+  .vacio { font-size: 14px; color: var(--gris); padding: 4px 0; }
 
-  .hoy-fila { display: flex; justify-content: space-between; align-items: center; gap: 10px; padding: 9px 0; border-top: 1px solid var(--borde); }
-  .hoy-fila:first-child { border-top: 0; }
-  .hoy-fila b { font-weight: 600; font-size: 15px; }
-  .hoy-fila span { font-size: 14px; color: var(--frambuesa); text-align: right; font-variant-numeric: tabular-nums; }
+  .instalar { background: linear-gradient(135deg, #2b1a21, var(--frambuesa-oscuro)); color: #fff; position: relative; }
+  .instalar h3 { color: #fff; }
+  .instalar p { margin: 6px 0 14px; font-size: 14px; opacity: .9; line-height: 1.45; }
+  .instalar .cerrar { position: absolute; right: 8px; top: 8px; width: 36px; height: 36px; border: 0; background: none; color: #fff; opacity: .6; font-size: 18px; }
+  .instalar .btn.principal { box-shadow: none; }
+  .ico-compartir { display: inline-block; vertical-align: -3px; width: 16px; height: 18px; }
 
-  .progreso { display: flex; gap: 6px; margin: 4px 0 6px; }
-  .progreso div { flex: 1; text-align: center; }
-  .progreso i { display: block; height: 8px; border-radius: 99px; background: var(--rosa-suave); margin-bottom: 4px; }
-  .progreso .ok i { background: var(--rosa); }
-  .progreso span { font-size: 11px; color: var(--gris); }
-  .estado { font-size: 14px; margin: 8px 0 12px; }
+  .avatar {
+    width: 30px; height: 30px; border-radius: 50%; flex: none; display: inline-grid; place-items: center;
+    color: #fff; font-size: 12px; font-weight: 600; letter-spacing: .02em;
+  }
+
+  /* Línea de tiempo del servicio */
+  .linea { position: relative; }
+  .fila-linea { display: grid; grid-template-columns: 108px 1fr; align-items: center; gap: 8px; height: 38px; }
+  .fila-linea .quien { display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; min-width: 0; }
+  .fila-linea .quien span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .pista { position: relative; height: 22px; background: var(--rosa-suave); border-radius: 8px; }
+  .tramo {
+    position: absolute; top: 0; bottom: 0; border-radius: 8px; color: #fff; font-size: 10.5px; font-weight: 600;
+    display: flex; align-items: center; justify-content: center; white-space: nowrap; overflow: hidden;
+    background: linear-gradient(90deg, var(--rosa), #c22b63);
+  }
+  .tramo.noche { background: linear-gradient(90deg, #c22b63, var(--frambuesa)); }
+  .horas-eje { position: relative; height: 18px; margin-left: 116px; font-size: 10.5px; color: var(--gris); }
+  .horas-eje span { position: absolute; transform: translateX(-50%); }
+  .ya { position: absolute; top: -6px; bottom: 16px; width: 2px; background: var(--tinta); border-radius: 2px; pointer-events: none; }
+  .ya::before { content: 'ahora'; position: absolute; top: -14px; left: 50%; transform: translateX(-50%); font-size: 10px; font-weight: 600; background: var(--tinta); color: #fff; padding: 1px 6px; border-radius: 99px; }
+  .libran { margin-top: 12px; padding-top: 12px; border-top: 1px dashed var(--borde); font-size: 13px; color: var(--gris); display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+  .chip { background: #f5eff2; color: var(--tinta); padding: 3px 10px; border-radius: 99px; font-size: 12.5px; font-weight: 500; }
+
+  /* Semana que viene */
+  .resumen { display: flex; gap: 16px; align-items: center; margin-bottom: 14px; }
+  .anillo { position: relative; width: 86px; height: 86px; flex: none; }
+  .anillo svg { transform: rotate(-90deg); }
+  .anillo .cifra { position: absolute; inset: 0; display: grid; place-content: center; text-align: center; line-height: 1; }
+  .anillo .cifra b { font-family: var(--titulo); font-style: italic; font-size: 28px; color: var(--frambuesa); }
+  .anillo .cifra small { font-size: 11px; color: var(--gris); margin-top: 2px; }
+  .barras-dias { flex: 1; display: flex; gap: 6px; align-items: flex-end; height: 72px; }
+  .barras-dias div { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; height: 100%; gap: 4px; }
+  .barras-dias i { width: 100%; max-width: 22px; border-radius: 6px 6px 3px 3px; background: var(--rosa-suave); min-height: 6px; }
+  .barras-dias .ok i { background: linear-gradient(180deg, var(--rosa), var(--frambuesa)); }
+  .barras-dias span { font-size: 11px; color: var(--gris); }
+  .barras-dias em { font-style: normal; font-size: 10px; font-weight: 600; color: var(--frambuesa); height: 12px; }
+  .estado { font-size: 14px; margin: 0 0 14px; color: var(--gris); }
   .estado b { color: var(--frambuesa); }
 
-  .horas-fila { display: grid; grid-template-columns: 96px 1fr 52px; align-items: center; gap: 8px; padding: 5px 0; font-size: 14px; }
-  .horas-fila b { font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .horas-fila { display: grid; grid-template-columns: 30px 78px 1fr 46px; align-items: center; gap: 8px; padding: 5px 0; font-size: 14px; }
+  .horas-fila b { font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 13px; }
   .horas-fila .barra { height: 10px; background: var(--rosa-suave); border-radius: 99px; overflow: hidden; }
   .horas-fila .barra i { display: block; height: 100%; background: linear-gradient(90deg, var(--rosa), var(--frambuesa)); border-radius: 99px; }
   .horas-fila span { text-align: right; color: var(--gris); font-variant-numeric: tabular-nums; }
-  .firma { text-align: center; font-family: var(--titulo); color: var(--rosa); font-size: 15px; margin: 18px 0 6px; opacity: .8; }
 
-  /* Cabecera con la semana */
+  .palabra { text-align: center; background: linear-gradient(180deg, var(--blanco), var(--rosa-suave)); }
+  .palabra .kicker { font-size: 11px; letter-spacing: .22em; text-transform: uppercase; color: var(--gris); }
+  .palabra .jp { font-size: 30px; margin: 10px 0 0; color: var(--frambuesa); letter-spacing: .08em; }
+  .palabra .romaji { font-family: var(--titulo); font-style: italic; font-size: 24px; margin: 2px 0 6px; }
+  .palabra p { margin: 0; font-size: 14px; color: var(--gris); }
+  .firma { text-align: center; color: var(--gris); font-size: 12px; letter-spacing: .14em; text-transform: uppercase; margin: 22px 0 8px; }
+  .firma b { font-family: var(--firma); font-size: 24px; letter-spacing: 0; text-transform: none; color: var(--rosa); font-weight: 400; vertical-align: -3px; }
+
+  /* ---------- Cabecera con la semana ---------- */
   header.cabecera {
     position: sticky; top: 0; z-index: 10; color: #fff;
-    background: linear-gradient(160deg, var(--rosa), var(--frambuesa));
+    background: linear-gradient(165deg, var(--rosa), var(--frambuesa));
     padding: calc(10px + env(safe-area-inset-top)) 12px 10px;
   }
   .semana { display: flex; align-items: center; gap: 8px; }
-  .semana button {
-    width: 44px; height: 44px; border-radius: 14px; border: 0; color: #fff;
-    background: rgba(255,255,255,.18); font-size: 22px; font-weight: 600;
-  }
+  .semana button { width: 44px; height: 44px; border-radius: 14px; border: 0; color: #fff; background: rgba(255,255,255,.18); font-size: 22px; font-weight: 500; }
   .semana .titulo { flex: 1; text-align: center; line-height: 1.25; }
-  .semana .titulo small { display: block; font-size: 11px; letter-spacing: .12em; text-transform: uppercase; opacity: .85; }
-  .semana .titulo b { font-family: var(--titulo); font-weight: 400; font-size: 20px; }
-
+  .semana .titulo small { display: block; font-size: 11px; letter-spacing: .14em; text-transform: uppercase; opacity: .85; }
+  .semana .titulo b { font-family: var(--titulo); font-style: italic; font-weight: 600; font-size: 21px; }
   .dias { display: flex; gap: 6px; margin-top: 10px; }
-  .dias button {
-    flex: 1; border: 0; border-radius: 12px; padding: 6px 0 5px; color: #fff;
-    background: rgba(255,255,255,.14); line-height: 1.1;
-  }
+  .dias button { flex: 1; border: 0; border-radius: 12px; padding: 6px 0 5px; color: #fff; background: rgba(255,255,255,.14); line-height: 1.1; }
   .dias button span { display: block; font-size: 11px; opacity: .85; }
-  .dias button b { font-size: 17px; font-weight: 600; }
-  .dias button i { display: block; height: 8px; font-style: normal; font-size: 10px; line-height: 8px; }
+  .dias button b { font-size: 18px; font-weight: 600; }
+  .dias button i { display: block; height: 8px; font-style: normal; font-size: 9px; line-height: 8px; letter-spacing: 1px; }
   .dias button.activo { background: var(--blanco); color: var(--frambuesa); box-shadow: 0 2px 8px rgba(0,0,0,.15); }
 
   main { padding: 14px; max-width: 720px; margin: 0 auto; }
   .vista { display: none; }
   .vista.activa { display: block; }
-
-  h2 { font-family: var(--titulo); font-weight: 400; font-size: 22px; color: var(--frambuesa); margin: 4px 2px 12px; }
+  h2 { font-family: var(--titulo); font-style: italic; font-weight: 600; font-size: 26px; color: var(--frambuesa); margin: 4px 2px 12px; }
   h2::first-letter { text-transform: uppercase; }
 
-  /* Tarjeta por persona */
-  .persona {
-    background: var(--blanco); border: 1px solid var(--borde); border-radius: 18px;
-    padding: 12px 12px 10px; margin-bottom: 10px;
-  }
-  .persona .nombre { display: flex; align-items: center; justify-content: space-between; font-weight: 600; margin-bottom: 4px; }
+  .persona { background: var(--blanco); border: 1px solid var(--borde); border-radius: 18px; padding: 12px 12px 10px; margin-bottom: 10px; }
+  .persona .nombre { display: flex; align-items: center; gap: 8px; font-weight: 600; margin-bottom: 4px; }
+  .persona .nombre .etiqueta { margin-left: auto; }
   .etiqueta { font-size: 12px; font-weight: 500; padding: 3px 10px; border-radius: 99px; background: #f3eef0; color: var(--gris); }
   .etiqueta.trabaja { background: var(--rosa-suave); color: var(--frambuesa); }
   .turno { display: flex; align-items: center; gap: 6px; margin-top: 6px; }
   .turno .lbl { width: 58px; font-size: 13px; color: var(--gris); }
   .turno select {
     flex: 1; min-width: 0; height: 46px; border-radius: 12px; border: 1px solid var(--borde);
-    background: var(--fondo); padding: 0 8px; font-size: 17px; text-align: center; text-align-last: center;
+    background: var(--fondo); padding: 0 8px; font-size: 18px; text-align: center; text-align-last: center;
     -webkit-appearance: none; appearance: none;
   }
   .turno select.lleno { background: var(--rosa-suave); border-color: var(--rosa-medio); color: var(--frambuesa); font-weight: 600; }
   .turno .a { color: var(--gris); font-size: 13px; }
   .turno .borrar { width: 40px; height: 46px; border: 0; background: none; font-size: 18px; color: #c9b5bd; }
 
-  /* Botones */
   .acciones { display: grid; gap: 10px; margin: 16px 0; }
   .tarjeta .acciones { margin: 0; }
-  .btn {
-    display: block; width: 100%; min-height: 52px; border-radius: 16px; border: 0;
-    font-weight: 600; font-size: 16px; padding: 12px;
-  }
-  .btn.principal { background: linear-gradient(135deg, var(--rosa), #c22b63); color: #fff; box-shadow: 0 4px 14px rgba(234, 80, 132, .35); }
+  .btn { display: block; width: 100%; min-height: 52px; border-radius: 16px; border: 0; font-weight: 600; font-size: 16.5px; padding: 12px; letter-spacing: .01em; }
+  .btn.principal { background: linear-gradient(135deg, var(--rosa), #c22b63); color: #fff; box-shadow: 0 6px 16px rgba(234, 80, 132, .35); }
   .btn.secundario { background: var(--blanco); border: 1px solid var(--rosa-medio); color: var(--frambuesa); }
   .btn.peligro { background: var(--blanco); border: 1px solid #f0c9c9; color: #b42318; }
+  .btn:active { transform: scale(.985); }
   .nota { font-size: 13px; color: var(--gris); text-align: center; margin: 4px 0 0; }
 
   .cuadro-img { width: 100%; background: #fff; border: 1px solid var(--borde); border-radius: 14px; display: block; }
 
-  /* Equipo */
   .fila-equipo { display: flex; gap: 6px; align-items: center; margin-bottom: 8px; }
-  .fila-equipo input {
-    flex: 1; min-width: 0; height: 48px; border-radius: 12px; border: 1px solid var(--borde);
-    background: var(--blanco); padding: 0 14px; font-size: 16px; font-weight: 500; text-transform: uppercase;
-  }
-  .fila-equipo button {
-    width: 44px; height: 48px; border-radius: 12px; border: 1px solid var(--borde); background: var(--blanco); font-size: 17px; color: var(--frambuesa);
-  }
+  .fila-equipo input { flex: 1; min-width: 0; height: 48px; border-radius: 12px; border: 1px solid var(--borde); background: var(--blanco); padding: 0 14px; font-size: 16px; font-weight: 500; text-transform: uppercase; }
+  .fila-equipo button { width: 44px; height: 48px; border-radius: 12px; border: 1px solid var(--borde); background: var(--blanco); font-size: 17px; color: var(--frambuesa); }
   .fila-equipo button:disabled { opacity: .3; }
 
-  /* Navegación inferior */
   nav {
     position: fixed; left: 0; right: 0; bottom: 0; z-index: 10; display: flex;
-    background: rgba(255,255,255,.96); border-top: 1px solid var(--borde);
-    padding-bottom: env(safe-area-inset-bottom); backdrop-filter: blur(8px);
+    background: rgba(255,255,255,.94); border-top: 1px solid var(--borde);
+    padding-bottom: env(safe-area-inset-bottom); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
   }
   nav button { flex: 1; border: 0; background: none; padding: 9px 0 10px; font-size: 12px; color: var(--gris); }
   nav svg { display: block; margin: 0 auto 3px; width: 24px; height: 24px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
@@ -192,8 +231,8 @@
 
 <section class="vista activa" id="vistaInicio">
   <div class="portada">
-    <div class="marca">Miss Sushi · Cocina</div>
-    <h1 id="saludo">Hola, Mara</h1>
+    <div class="barra-sup"><span class="logo-txt">Brigada</span><span class="marca">Miss Sushi · Cocina</span></div>
+    <div class="saludo"><span class="t" id="saludo">Hola,</span><span class="nombre">Mara</span></div>
     <div class="fecha" id="fechaHoy"></div>
     <svg class="maki" viewBox="0 0 120 120" aria-hidden="true">
       <circle cx="60" cy="60" r="54" fill="#1f1418"/>
@@ -203,26 +242,48 @@
       <circle cx="33" cy="42" r="2" fill="#f1d9e1"/><circle cx="85" cy="38" r="2" fill="#f1d9e1"/>
       <circle cx="88" cy="80" r="2" fill="#f1d9e1"/><circle cx="36" cy="84" r="2" fill="#f1d9e1"/>
     </svg>
+    <div class="ahora"><span class="pulso" id="pulso"></span><span id="ahoraTxt"></span></div>
   </div>
+
   <div class="tablero">
-    <div class="tarjeta">
-      <h3>Hoy en cocina</h3>
-      <div class="sub" id="hoySub"></div>
-      <div id="hoyLista"></div>
+    <div class="tarjeta instalar" id="tarjetaInstalar" hidden>
+      <button class="cerrar" id="cerrarInstalar" aria-label="Cerrar">✕</button>
+      <h3>Ten Brigada como una app</h3>
+      <p id="instalarTxt"></p>
+      <button class="btn principal" id="btnInstalar" hidden>Instalar en el móvil</button>
     </div>
+
+    <div class="tarjeta">
+      <h3>El servicio de hoy</h3>
+      <div class="sub" id="hoySub"></div>
+      <div id="hoyLinea"></div>
+    </div>
+
     <div class="tarjeta">
       <h3>Semana que viene</h3>
       <div class="sub" id="proxSub"></div>
-      <div class="progreso" id="proxProgreso"></div>
+      <div class="resumen">
+        <div class="anillo" id="proxAnillo"></div>
+        <div class="barras-dias" id="proxBarras"></div>
+      </div>
       <div class="estado" id="proxEstado"></div>
       <div class="acciones" id="proxAcciones"></div>
     </div>
+
     <div class="tarjeta">
-      <h3>Horas de la semana que viene</h3>
-      <div class="sub">Suma de turnos por persona</div>
+      <h3>Horas de cada uno</h3>
+      <div class="sub">Semana que viene, sumando todos los turnos</div>
       <div id="horasLista"></div>
     </div>
-    <div class="firma">Hecho con cariño para Mara Bastidas</div>
+
+    <div class="tarjeta palabra">
+      <div class="kicker">Palabra del día</div>
+      <div class="jp" id="palabraJp"></div>
+      <div class="romaji" id="palabraRomaji"></div>
+      <p id="palabraTxt"></p>
+    </div>
+
+    <div class="firma">© <span id="anio">2026</span> · Brigada by <b>Mash</b></div>
   </div>
 </section>
 
@@ -259,7 +320,7 @@
   </section>
 
   <section class="vista" id="vistaEquipo">
-    <h2>Tu equipo</h2>
+    <h2>Tu brigada</h2>
     <div id="equipo"></div>
     <div class="acciones">
       <button class="btn secundario" id="btnAnadir">+ Añadir persona</button>
@@ -272,7 +333,7 @@
   <button data-ir="inicio" class="activo"><svg viewBox="0 0 24 24"><path d="M3 11l9-7 9 7"/><path d="M5 10v10h14V10"/><path d="M10 20v-6h4v6"/></svg>Inicio</button>
   <button data-ir="rellenar"><svg viewBox="0 0 24 24"><path d="M4 20h4L19 9l-4-4L4 16z"/><path d="M13.5 6.5l4 4"/></svg>Rellenar</button>
   <button data-ir="cuadro"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="15" rx="2"/><path d="M3 10h18M8 3v4M16 3v4M9 10v10M15 10v10"/></svg>Cuadro</button>
-  <button data-ir="equipo"><svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.6-3.6 3.3-5.5 6.5-5.5s5.9 1.9 6.5 5.5"/><circle cx="17" cy="9" r="2.5"/><path d="M17 14c2.4 0 4 1.5 4.5 4"/></svg>Equipo</button>
+  <button data-ir="equipo"><svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.6-3.6 3.3-5.5 6.5-5.5s5.9 1.9 6.5 5.5"/><circle cx="17" cy="9" r="2.5"/><path d="M17 14c2.4 0 4 1.5 4.5 4"/></svg>Brigada</button>
 </nav>
 
 <div class="aviso" id="aviso"></div>
@@ -281,11 +342,27 @@
 
 <script>
 const CLAVE = 'horario-cocina-v1';
+const CLAVE_INSTALAR = 'brigada-instalar-cerrado';
 const DIAS = ['lunes', 'martes', 'miércoles', 'jueves', 'viernes', 'sábado', 'domingo'];
 const DIAS_CORTOS = ['L', 'M', 'X', 'J', 'V', 'S', 'D'];
 const MESES = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
 const MESES_CORTOS = ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sept', 'oct', 'nov', 'dic'];
 const EQUIPO_INICIAL = ['MARA', 'SHEENA', 'MAHJOUB', 'RAÚL', 'DANI', 'ALEJANDRO', 'MARI'];
+const COLORES = ['#d63a72', '#881546', '#b0245a', '#6d1238', '#c4416f', '#9c1c50', '#e0527f', '#5c0d2f'];
+const PALABRAS = [
+  ['板前', 'Itamae', 'El cocinero que corta y sirve frente al cliente.'],
+  ['お任せ', 'Omakase', '«Lo dejo en tus manos»: el menú lo elige el chef.'],
+  ['シャリ', 'Shari', 'El arroz del sushi, el alma de cada pieza.'],
+  ['ネタ', 'Neta', 'Lo que va encima del arroz: pescado, verdura…'],
+  ['ガリ', 'Gari', 'El jengibre encurtido que limpia el paladar.'],
+  ['旨味', 'Umami', 'El quinto sabor: sabroso, profundo, redondo.'],
+  ['和食', 'Washoku', 'La cocina tradicional japonesa.'],
+  ['改善', 'Kaizen', 'Mejorar un poquito cada día.'],
+  ['頑張って', 'Ganbatte', '¡Ánimo, tú puedes con este servicio!'],
+  ['お疲れ様', 'Otsukaresama', '«Buen trabajo»: se dice al acabar el turno.'],
+  ['いただきます', 'Itadakimasu', 'Gracias por la comida, antes de empezar.'],
+  ['一期一会', 'Ichigo ichie', 'Cada servicio es único y no se repite.'],
+];
 
 // Horas cada media hora empezando a las 6:00, para que las de cierre (0:00, 1:00…) queden al final.
 const HORAS = [];
@@ -309,6 +386,8 @@ function guardar() {
   try { localStorage.setItem(CLAVE, JSON.stringify(datos)); }
   catch (e) { avisar('No se pudo guardar en este móvil'); }
 }
+function leerLocal(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
+function escribirLocal(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
 if (navigator.storage && navigator.storage.persist) navigator.storage.persist().catch(() => {});
 
 // --- Fechas ---
@@ -350,65 +429,121 @@ function semanaTieneDatos(sem) {
 }
 function aMinutos(h) { const [a, b] = h.split(':'); return +a * 60 + +b; }
 // Un turno que acaba a las 0:00 o más tarde cruza la medianoche.
-function minutosTurno(entrada, salida) {
-  if (!entrada || !salida) return 0;
-  let m = aMinutos(salida) - aMinutos(entrada);
-  if (m <= 0) m += 24 * 60;
-  return m;
+function tramo(entrada, salida) {
+  if (!entrada || !salida) return null;
+  const a = aMinutos(entrada);
+  let b = aMinutos(salida);
+  if (b <= a) b += 24 * 60;
+  return [a, b];
+}
+function minutosTurnos(t) {
+  return [tramo(t[0], t[1]), tramo(t[2], t[3])].reduce((s, x) => s + (x ? x[1] - x[0] : 0), 0);
 }
 function textoHoras(min) {
   const h = min / 60;
   return (Number.isInteger(h) ? h : h.toFixed(1).replace('.', ',')) + ' h';
 }
-function textoTurnos(t) {
-  const partes = [];
-  if (t[0] || t[1]) partes.push((t[0] || '?') + '–' + (t[1] || '?'));
-  if (t[2] || t[3]) partes.push((t[2] || '?') + '–' + (t[3] || '?'));
-  return partes.join(' · ');
+// Dos letras; si dos personas empiezan igual (MARA, MARI), se usa la primera y la última.
+function iniciales(nombre) {
+  const n = nombre.trim().toUpperCase() || '?';
+  const base = (p) => { const t = p.trim().toUpperCase(); return t.slice(0, 2); };
+  const repetida = datos.equipo.filter((p) => base(p.nombre) === base(n)).length > 1;
+  return repetida ? n[0] + n[n.length - 1] : base(n);
+}
+function avatar(p) {
+  const i = Math.max(0, datos.equipo.indexOf(p));
+  return '<span class="avatar" style="background:' + COLORES[i % COLORES.length] + '">' + escapar(iniciales(p.nombre)) + '</span>';
 }
 
 // --- Inicio ---
 function pintarInicio() {
-  const h = hoy.getHours();
-  $('saludo').textContent = (h < 6 ? 'Buenas noches' : h < 14 ? 'Buenos días' : h < 21 ? 'Buenas tardes' : 'Buenas noches') + ', Mara';
-  const diaHoy = (hoy.getDay() + 6) % 7;
-  $('fechaHoy').textContent = DIAS[diaHoy] + ', ' + hoy.getDate() + ' de ' + MESES[hoy.getMonth()];
+  const ahora = new Date();
+  const h = ahora.getHours();
+  $('saludo').textContent = (h < 6 ? 'Buenas noches,' : h < 14 ? 'Buenos días,' : h < 21 ? 'Buenas tardes,' : 'Buenas noches,');
+  $('fechaHoy').textContent = DIAS[(ahora.getDay() + 6) % 7] + ', ' + ahora.getDate() + ' de ' + MESES[ahora.getMonth()];
 
-  const esta = datos.semanas[claveSemana(lunesEsta)];
-  $('hoySub').textContent = DIAS[diaHoy][0].toUpperCase() + DIAS[diaHoy].slice(1) + ' ' + hoy.getDate();
-  const deHoy = datos.equipo
-    .map((p) => ({ p, t: esta && esta[p.id] ? esta[p.id][diaHoy] : null }))
-    .filter((x) => x.t && x.t.some(Boolean));
-  $('hoyLista').innerHTML = deHoy.length
-    ? deHoy.map((x) => '<div class="hoy-fila"><b>' + escapar(x.p.nombre.toUpperCase()) + '</b><span>' + textoTurnos(x.t) + '</span></div>').join('')
-    : '<div class="vacio">Aún no hay horario para hoy.</div>';
+  // Hasta las 6:00 sigue contando el servicio de la noche anterior.
+  const diaServicio = new Date(ahora.getTime() - 6 * 3600 * 1000);
+  const idxServicio = (diaServicio.getDay() + 6) % 7;
+  const semServicio = datos.semanas[claveSemana(lunesDe(diaServicio))];
+  let minAhora = h * 60 + ahora.getMinutes();
+  if (h < 6) minAhora += 24 * 60;
+
+  const filas = datos.equipo.map((p) => {
+    const t = semServicio && semServicio[p.id] ? semServicio[p.id][idxServicio] : null;
+    return { p, tramos: t ? [tramo(t[0], t[1]), tramo(t[2], t[3])].filter(Boolean) : [] };
+  });
+  const trabajan = filas.filter((f) => f.tramos.length);
+  const enCocina = trabajan.filter((f) => f.tramos.some(([a, b]) => minAhora >= a && minAhora < b));
+
+  $('pulso').classList.toggle('vivo', enCocina.length > 0);
+  $('ahoraTxt').textContent = enCocina.length
+    ? (enCocina.length === 1 ? '1 persona' : enCocina.length + ' personas') + ' en cocina ahora'
+    : trabajan.length ? 'Ahora no hay nadie de turno' : 'Hoy no hay turnos apuntados';
+
+  $('hoySub').textContent = (DIAS[idxServicio][0].toUpperCase() + DIAS[idxServicio].slice(1)) + ' ' + diaServicio.getDate() +
+    (trabajan.length ? ' · ' + trabajan.length + ' de turno' : '');
+  if (!trabajan.length) {
+    $('hoyLinea').innerHTML = '<div class="vacio">Aún no hay horario para hoy. Cuando lo rellenes, aquí verás quién entra y a qué hora.</div>';
+  } else {
+    const todos = trabajan.flatMap((f) => f.tramos);
+    const ini = Math.floor(Math.min(...todos.map((x) => x[0]), 12 * 60) / 60) * 60;
+    const fin = Math.ceil(Math.max(...todos.map((x) => x[1]), 24 * 60) / 60) * 60;
+    const pos = (m) => ((m - ini) / (fin - ini)) * 100;
+    const paso = fin - ini > 12 * 60 ? 240 : 120;
+    let eje = '';
+    for (let m = ini; m <= fin; m += paso) eje += '<span style="left:' + pos(m) + '%">' + ((m / 60) % 24) + 'h</span>';
+    const raya = minAhora >= ini && minAhora <= fin
+      ? '<div class="ya" style="left:calc(116px + (100% - 116px) * ' + (pos(minAhora) / 100) + ')"></div>' : '';
+    $('hoyLinea').innerHTML = '<div class="linea">' + raya +
+      trabajan.map((f) => '<div class="fila-linea"><div class="quien">' + avatar(f.p) + '<span>' + escapar(f.p.nombre.toUpperCase()) + '</span></div><div class="pista">' +
+        f.tramos.map(([a, b]) => {
+          const corta = (m) => { m %= 1440; return Math.floor(m / 60) + (m % 60 ? ':' + String(m % 60).padStart(2, '0') : ''); };
+          const txt = corta(a) + '–' + corta(b);
+          return '<div class="tramo' + (a >= 17 * 60 ? ' noche' : '') + '" style="left:' + pos(a) + '%;width:' + (pos(b) - pos(a)) + '%">' + ((b - a) >= 180 ? txt : '') + '</div>';
+        }).join('') + '</div></div>').join('') +
+      '<div class="horas-eje">' + eje + '</div></div>';
+    const libres = filas.filter((f) => !f.tramos.length);
+    if (libres.length) $('hoyLinea').innerHTML += '<div class="libran">Libran: ' + libres.map((f) => '<span class="chip">' + escapar(f.p.nombre.toUpperCase()) + '</span>').join('') + '</div>';
+  }
 
   const prox = datos.semanas[claveSemana(lunesProxima)];
   $('proxSub').textContent = 'Del ' + rango(lunesProxima, true);
-  let listos = 0;
-  $('proxProgreso').innerHTML = DIAS_CORTOS.map((l, d) => {
-    const ok = !!prox && datos.equipo.some((p) => prox[p.id] && prox[p.id][d].some(Boolean));
-    if (ok) listos++;
-    return '<div class="' + (ok ? 'ok' : '') + '"><i></i><span>' + l + '</span></div>';
-  }).join('');
-  $('proxEstado').innerHTML = listos === 0 ? 'Todavía <b>sin empezar</b>.'
-    : listos === 7 ? '<b>¡Lista!</b> Todos los días tienen turnos.'
-    : '<b>' + listos + ' de 7 días</b> con turnos.';
+  const porDia = DIAS_CORTOS.map((_, d) => datos.equipo.filter((p) => prox && prox[p.id] && prox[p.id][d].some(Boolean)).length);
+  const listos = porDia.filter(Boolean).length;
+  const maxDia = Math.max(...porDia, 1);
+  $('proxBarras').innerHTML = DIAS_CORTOS.map((l, d) =>
+    '<div class="' + (porDia[d] ? 'ok' : '') + '"><em>' + (porDia[d] || '') + '</em><i style="height:' + (porDia[d] ? 14 + (porDia[d] / maxDia) * 40 : 6) + 'px"></i><span>' + l + '</span></div>').join('');
+  const r = 36, circ = 2 * Math.PI * r;
+  $('proxAnillo').innerHTML =
+    '<svg width="86" height="86" viewBox="0 0 86 86"><defs><linearGradient id="gAnillo" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ea5084"/><stop offset="1" stop-color="#881546"/></linearGradient></defs>' +
+    '<circle cx="43" cy="43" r="' + r + '" fill="none" stroke="#fce8ef" stroke-width="9"/>' +
+    '<circle cx="43" cy="43" r="' + r + '" fill="none" stroke="url(#gAnillo)" stroke-width="9" stroke-linecap="round" stroke-dasharray="' + circ + '" stroke-dashoffset="' + (circ * (1 - listos / 7)) + '"/></svg>' +
+    '<div class="cifra"><b>' + listos + '/7</b><small>días</small></div>';
+  $('proxEstado').innerHTML = listos === 0 ? 'Todavía <b>sin empezar</b>. Lo normal es prepararla el jueves o el viernes.'
+    : listos === 7 ? '<b>¡Lista!</b> Todos los días tienen turnos. Ya puedes enviarla.'
+    : 'Vas por <b>' + listos + ' de 7 días</b>. ¡Ya casi!';
 
+  const esta = datos.semanas[claveSemana(lunesEsta)];
   let botones = '<button class="btn principal" data-accion="preparar">' + (listos ? 'Seguir con el horario' : 'Preparar el horario') + '</button>';
   if (!listos && semanaTieneDatos(esta)) botones += '<button class="btn secundario" data-accion="copiar">Empezar copiando esta semana</button>';
   if (listos) botones += '<button class="btn secundario" data-accion="enviar">Enviar al equipo</button>';
   $('proxAcciones').innerHTML = botones;
 
-  const horas = datos.equipo.map((p) => {
-    const dias = prox && prox[p.id];
-    const min = dias ? dias.reduce((s, t) => s + minutosTurno(t[0], t[1]) + minutosTurno(t[2], t[3]), 0) : 0;
-    return { p, min };
-  });
+  const horas = datos.equipo.map((p) => ({ p, min: prox && prox[p.id] ? prox[p.id].reduce((s, t) => s + minutosTurnos(t), 0) : 0 }));
   const max = Math.max(...horas.map((x) => x.min), 1);
-  $('horasLista').innerHTML = horas.length && horas.some((x) => x.min)
-    ? horas.map((x) => '<div class="horas-fila"><b>' + escapar(x.p.nombre.toUpperCase()) + '</b><div class="barra"><i style="width:' + (x.min / max * 100) + '%"></i></div><span>' + textoHoras(x.min) + '</span></div>').join('')
+  $('horasLista').innerHTML = horas.some((x) => x.min)
+    ? horas.map((x) => '<div class="horas-fila">' + avatar(x.p) + '<b>' + escapar(x.p.nombre.toUpperCase()) + '</b><div class="barra"><i style="width:' + (x.min / max * 100) + '%"></i></div><span>' + textoHoras(x.min) + '</span></div>').join('')
     : '<div class="vacio">Aparecerán cuando rellenes la semana.</div>';
+
+  const inicioAno = new Date(ahora.getFullYear(), 0, 0);
+  const palabra = PALABRAS[Math.floor((ahora - inicioAno) / 86400000) % PALABRAS.length];
+  $('palabraJp').textContent = palabra[0];
+  $('palabraRomaji').textContent = palabra[1];
+  $('palabraTxt').textContent = palabra[2];
+  $('anio').textContent = ahora.getFullYear();
+
+  pintarInstalar();
 }
 $('proxAcciones').addEventListener('click', (e) => {
   const b = e.target.closest('button');
@@ -423,6 +558,33 @@ $('proxAcciones').addEventListener('click', (e) => {
   diaActivo = 0;
   irA('rellenar');
 });
+
+// --- Instalar como app ---
+let peticionInstalar = null;
+const yaInstalada = () => matchMedia('(display-mode: standalone)').matches || navigator.standalone === true;
+const esIphone = /iphone|ipad|ipod/i.test(navigator.userAgent);
+const esAndroid = /android/i.test(navigator.userAgent);
+window.addEventListener('beforeinstallprompt', (e) => { e.preventDefault(); peticionInstalar = e; pintarInstalar(); });
+window.addEventListener('appinstalled', () => { peticionInstalar = null; pintarInstalar(); avisar('¡Brigada instalada!'); });
+function pintarInstalar() {
+  const mostrar = !yaInstalada() && !leerLocal(CLAVE_INSTALAR) && (peticionInstalar || esIphone || esAndroid);
+  $('tarjetaInstalar').hidden = !mostrar;
+  if (!mostrar) return;
+  $('btnInstalar').hidden = !peticionInstalar;
+  $('instalarTxt').innerHTML = peticionInstalar
+    ? 'Instálala y aparecerá en tu móvil con su icono, como cualquier otra app. Funciona sin internet.'
+    : esIphone
+      ? 'En Safari, toca <svg class="ico-compartir" viewBox="0 0 16 18" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M8 11V1M4.5 4.5L8 1l3.5 3.5"/><path d="M3 7H2v10h12V7h-1"/></svg> <b>Compartir</b> y luego <b>«Añadir a pantalla de inicio»</b>. Tendrás su icono como cualquier app y funcionará sin internet.'
+      : 'En Chrome, abre el menú <b>⋮</b> y toca <b>«Instalar app»</b> o <b>«Añadir a pantalla de inicio»</b>.';
+}
+$('btnInstalar').addEventListener('click', async () => {
+  if (!peticionInstalar) return;
+  peticionInstalar.prompt();
+  await peticionInstalar.userChoice.catch(() => {});
+  peticionInstalar = null;
+  pintarInstalar();
+});
+$('cerrarInstalar').addEventListener('click', () => { escribirLocal(CLAVE_INSTALAR, '1'); pintarInstalar(); });
 
 // --- Cabecera ---
 function pintarCabecera() {
@@ -448,7 +610,7 @@ function pintarDia() {
   $('tituloDia').textContent = DIAS[diaActivo] + ' ' + fecha.getDate() + ' de ' + MESES[fecha.getMonth()];
   const sem = semana();
   if (!datos.equipo.length) {
-    $('personas').innerHTML = '<p class="nota">Añade a tu equipo en la pestaña «Equipo».</p>';
+    $('personas').innerHTML = '<p class="nota">Añade a tu equipo en la pestaña «Brigada».</p>';
     return;
   }
   $('personas').innerHTML = datos.equipo.map((p) => {
@@ -462,8 +624,8 @@ function pintarDia() {
         '<button class="borrar" data-p="' + p.id + '" data-turno="' + n + '" aria-label="Borrar turno ' + (n + 1) + '">✕</button></div>';
     };
     const trabaja = t.some(Boolean);
-    return '<div class="persona"><div class="nombre">' + escapar(p.nombre.toUpperCase()) +
-      '<span class="etiqueta' + (trabaja ? ' trabaja' : '') + '">' + (trabaja ? 'Trabaja' : 'Libre') + '</span></div>' +
+    return '<div class="persona"><div class="nombre">' + avatar(p) + escapar(p.nombre.toUpperCase()) +
+      '<span class="etiqueta' + (trabaja ? ' trabaja' : '') + '">' + (trabaja ? textoHoras(minutosTurnos(t)) : 'Libre') + '</span></div>' +
       fila(0) + fila(1) + '</div>';
   }).join('');
 }
@@ -493,17 +655,17 @@ function dibujarCuadro() {
   const ctx = c.getContext('2d');
   const sem = datos.semanas[claveSemana(lunes)] || {};
   const equipo = datos.equipo;
-  const ESC = 2, M = 24, TIT = 70, NOM = 190, COL = 82, CAB = 44, FIL = 38;
+  const ESC = 2, M = 24, TIT = 74, NOM = 190, COL = 82, CAB = 44, FIL = 38;
   const ancho = M * 2 + NOM + COL * 14;
   const alto = M * 2 + TIT + CAB + Math.max(equipo.length, 1) * FIL * 2;
   c.width = ancho * ESC; c.height = alto * ESC;
   ctx.setTransform(ESC, 0, 0, ESC, 0, 0);
   ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, ancho, alto);
 
-  const fuente = 'Poppins, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif';
+  const fuente = 'Jost, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif';
   ctx.textBaseline = 'middle';
   ctx.fillStyle = '#881546'; ctx.textAlign = 'left';
-  ctx.font = '400 28px "Yeseva One", Georgia, serif';
+  ctx.font = 'italic 700 30px "Playfair Display", Georgia, serif';
   ctx.fillText('Horario · semana del ' + rango(lunes, true) + ' ' + sumarDias(lunes, 6).getFullYear(), M, M + TIT / 2 - 8);
 
   const x0 = M, y0 = M + TIT, xd = x0 + NOM, yp = y0 + CAB;
@@ -516,23 +678,23 @@ function dibujarCuadro() {
   ctx.fillStyle = '#1f1418';
   for (let d = 0; d < 7; d++) {
     const x = xd + d * COL * 2;
-    ctx.font = '600 18px ' + fuente;
+    ctx.font = '600 19px ' + fuente;
     ctx.textAlign = 'left'; ctx.fillText(DIAS[d], x + 8, y0 + CAB / 2 + 1);
     ctx.textAlign = 'right'; ctx.fillText(String(sumarDias(lunes, d).getDate()), x + COL * 2 - 8, y0 + CAB / 2 + 1);
   }
 
   equipo.forEach((p, i) => {
     const y = yp + i * FIL * 2;
-    ctx.font = '600 17px ' + fuente; ctx.textAlign = 'center';
+    ctx.font = '600 18px ' + fuente; ctx.textAlign = 'center';
     ctx.fillText(p.nombre.toUpperCase(), x0 + NOM / 2, y + FIL + 1, NOM - 12);
     const dias = sem[p.id];
     if (!dias) return;
-    ctx.font = '500 19px ' + fuente; ctx.textAlign = 'right';
+    ctx.font = '500 20px ' + fuente; ctx.textAlign = 'right';
     for (let d = 0; d < 7; d++) {
       dias[d].forEach((h, k) => {
         if (!h) return;
         const col = k % 2, fila = Math.floor(k / 2);
-        ctx.fillText(h, xd + (d * 2 + col + 1) * COL - 8, y + fila * FIL + FIL / 2 + 2);
+        ctx.fillText(h, xd + (d * 2 + col + 1) * COL - 8, y + fila * FIL + FIL / 2 + 1);
       });
     }
   });
@@ -550,13 +712,13 @@ function dibujarCuadro() {
 
   return c;
 }
-// La imagen usa las tipografías de la marca: hay que esperar a que estén cargadas antes de dibujar.
+// La imagen usa las tipografías de la app: hay que esperar a que estén cargadas antes de dibujar.
 function fuentesListas() {
   if (!document.fonts) return Promise.resolve();
   return Promise.all([
-    document.fonts.load('28px "Yeseva One"'),
-    document.fonts.load('600 18px Poppins'),
-    document.fonts.load('500 19px Poppins'),
+    document.fonts.load('italic 700 30px "Playfair Display"'),
+    document.fonts.load('600 19px Jost'),
+    document.fonts.load('500 20px Jost'),
   ]).catch(() => {});
 }
 async function pintarCuadro() {
@@ -617,7 +779,7 @@ $('btnLimpiar').addEventListener('click', () => {
 function pintarEquipo() {
   const n = datos.equipo.length;
   $('equipo').innerHTML = datos.equipo.map((p, i) =>
-    '<div class="fila-equipo">' +
+    '<div class="fila-equipo">' + avatar(p) +
       '<input value="' + escapar(p.nombre) + '" data-i="' + i + '" aria-label="Nombre">' +
       '<button data-subir="' + i + '" ' + (i === 0 ? 'disabled' : '') + ' aria-label="Subir">↑</button>' +
       '<button data-bajar="' + i + '" ' + (i === n - 1 ? 'disabled' : '') + ' aria-label="Bajar">↓</button>' +
@@ -629,6 +791,7 @@ $('equipo').addEventListener('input', (e) => {
   datos.equipo[+e.target.dataset.i].nombre = e.target.value.trim();
   guardar();
 });
+$('equipo').addEventListener('change', (e) => { if (e.target.tagName === 'INPUT') pintarEquipo(); });
 $('equipo').addEventListener('click', (e) => {
   const b = e.target.closest('button');
   if (!b) return;
@@ -678,6 +841,8 @@ function refrescar() {
   if (vista === 'cuadro') pintarCuadro();
   if (vista === 'equipo') pintarEquipo();
 }
+// El inicio muestra quién está en cocina «ahora»: se actualiza cada minuto.
+setInterval(() => { if (vista === 'inicio') pintarInicio(); }, 60000);
 
 let temporizador;
 function avisar(texto) {
