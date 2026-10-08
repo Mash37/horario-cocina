@@ -1,5 +1,5 @@
 // Primero intenta la red (para recibir mejoras); sin conexión, sirve lo guardado.
-const CACHE = 'kumi-v6';
+const CACHE = 'kumi-v7';
 const ARCHIVOS = ['./', './index.html', './manifest.webmanifest', './icon-180.png', './icon-192.png', './icon-512.png',
   './fuentes/PlayfairDisplay-Italic.woff2', './fuentes/GreatVibes.woff2', './fuentes/Jost.woff2'];
 
@@ -15,8 +15,9 @@ self.addEventListener('activate', (e) => {
 
 self.addEventListener('fetch', (e) => {
   if (e.request.method !== 'GET') return;
+  // «no-cache» pregunta siempre al servidor: sin él, el móvil se queda hasta 10 minutos con la versión anterior.
   e.respondWith(
-    fetch(e.request)
+    fetch(e.request, { cache: 'no-cache' })
       .then((r) => {
         const copia = r.clone();
         caches.open(CACHE).then((c) => c.put(e.request, copia));

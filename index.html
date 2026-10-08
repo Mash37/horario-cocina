@@ -182,14 +182,13 @@
   .turno .lbl { width: 58px; font-size: 13px; color: var(--gris); }
   .turno input {
     flex: 1; min-width: 0; width: 0; height: 46px; border-radius: 12px; border: 1px solid var(--borde);
-    background: var(--fondo); padding: 0 8px; font-size: 18px; text-align: center; font-variant-numeric: tabular-nums;
+    background: var(--fondo); padding: 0 2px; font-size: 16px; text-align: center; font-variant-numeric: tabular-nums;
     -webkit-appearance: none; appearance: none; outline: none;
   }
-  .turno input::placeholder { color: #c9b5bd; }
-  .turno input::-webkit-calendar-picker-indicator { display: none !important; }
+  .turno input::-webkit-calendar-picker-indicator { display: none; }
+  .turno input::-webkit-date-and-time-value { text-align: center; }
+  .turno input:not(.lleno)::-webkit-datetime-edit { color: #c9b5bd; }
   .turno input:focus { border-color: var(--rosa); box-shadow: 0 0 0 3px rgba(234, 80, 132, .18); background: var(--blanco); }
-  .turno input.error { border-color: #d92d20; animation: temblor .3s; }
-  @keyframes temblor { 25% { transform: translateX(-4px); } 75% { transform: translateX(4px); } }
   .turno input.lleno { background: var(--rosa-suave); border-color: var(--rosa-medio); color: var(--frambuesa); font-weight: 600; }
   .turno .a { color: var(--gris); font-size: 13px; }
   .turno .borrar { width: 40px; height: 46px; border: 0; background: none; font-size: 18px; color: #c9b5bd; }
@@ -349,7 +348,6 @@
 <div class="aviso" id="aviso"></div>
 <div id="zonaImprimir"><img id="imgImprimir" alt=""></div>
 <canvas id="lienzo" hidden></canvas>
-<datalist id="listaHoras"></datalist>
 
 <script>
 const CLAVE = 'horario-cocina-v1';
@@ -406,13 +404,6 @@ const PALABRAS = [
   ['七転び八起き', 'Nana korobi ya oki', 'Cáete siete veces, levántate ocho.'],
   ['継続は力なり', 'Keizoku wa chikara nari', 'La constancia es fuerza.'],
 ];
-
-// Horas cada media hora empezando a las 6:00, para que las de cierre (0:00, 1:00…) queden al final.
-const HORAS = [];
-for (let i = 0; i < 48; i++) {
-  const min = (6 * 60 + i * 30) % (24 * 60);
-  HORAS.push(Math.floor(min / 60) + ':' + String(min % 60).padStart(2, '0'));
-}
 
 const $ = (id) => document.getElementById(id);
 const nuevoId = () => 'p' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
@@ -662,9 +653,11 @@ function normalizarHora(texto) {
   if (h > 23 || m > 59) return null;
   return h + ':' + String(m).padStart(2, '0');
 }
+// La casilla usa el selector de hora del móvil, que solo entiende «09:30»; los datos guardan «9:30».
+function aCasilla(valor) { return valor ? valor.padStart(5, '0') : ''; }
 function casillaHora(p, i, valor, etiqueta) {
-  return '<input type="text" inputmode="numeric" list="listaHoras" autocomplete="off" enterkeyhint="next" placeholder="—" maxlength="5"' +
-    ' data-p="' + p.id + '" data-i="' + i + '" value="' + escapar(valor) + '" class="' + (valor ? 'lleno' : '') + '" aria-label="' + etiqueta + '">';
+  return '<input type="time" step="60" data-p="' + p.id + '" data-i="' + i + '" value="' + aCasilla(valor) + '"' +
+    ' class="' + (valor ? 'lleno' : '') + '" aria-label="' + etiqueta + '">';
 }
 function pintarDia() {
   const fecha = sumarDias(lunes, diaActivo);
@@ -691,19 +684,16 @@ function pintarDia() {
   }).join('');
 }
 
-// Se guarda sin volver a pintar la lista, para no cerrar el teclado mientras se rellena.
+// Se guarda sin volver a pintar la lista, para no perder el sitio mientras se rellena.
 function guardarHora(casilla) {
   const t = turnosDe(semana(), casilla.dataset.p, diaActivo);
   const i = +casilla.dataset.i;
   const valor = normalizarHora(casilla.value);
   if (valor === null) {
-    casilla.classList.remove('error'); void casilla.offsetWidth; casilla.classList.add('error');
-    avisar('Escribe la hora así: 1234 o 12:34');
-    casilla.value = t[i];
-    return false;
+    avisar('Esa hora no es válida');
+    casilla.value = aCasilla(t[i]);
+    return;
   }
-  casilla.classList.remove('error');
-  casilla.value = valor;
   casilla.classList.toggle('lleno', !!valor);
   if (t[i] !== valor) {
     t[i] = valor;
@@ -714,26 +704,8 @@ function guardarHora(casilla) {
     etiqueta.textContent = trabaja ? textoHoras(minutosTurnos(t)) : 'Libre';
     pintarCabecera();
   }
-  return true;
 }
-function siguienteCasilla(casilla) {
-  const todas = [...$('personas').querySelectorAll('input')];
-  const sig = todas[todas.indexOf(casilla) + 1];
-  if (sig) sig.focus(); else casilla.blur();
-}
-$('personas').addEventListener('focusin', (e) => { if (e.target.tagName === 'INPUT') e.target.select(); });
-$('personas').addEventListener('input', (e) => {
-  const c = e.target;
-  if (c.tagName !== 'INPUT') return;
-  // Con 4 cifras («1234») o una hora completa elegida de la lista, pasa sola a la siguiente casilla.
-  if (/^\d{4}$/.test(c.value) || /^\d{1,2}:\d{2}$/.test(c.value)) {
-    if (guardarHora(c)) siguienteCasilla(c); else c.select();
-  }
-});
 $('personas').addEventListener('change', (e) => { if (e.target.tagName === 'INPUT') guardarHora(e.target); });
-$('personas').addEventListener('keydown', (e) => {
-  if (e.target.tagName === 'INPUT' && e.key === 'Enter') { e.preventDefault(); if (guardarHora(e.target)) siguienteCasilla(e.target); }
-});
 $('personas').addEventListener('click', (e) => {
   const btn = e.target.closest('.borrar');
   if (!btn) return;
@@ -951,7 +923,6 @@ function escapar(s) {
   return String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 }
 
-$('listaHoras').innerHTML = HORAS.map((h) => '<option value="' + h + '">').join('');
 refrescar();
 
 if ('serviceWorker' in navigator && location.protocol === 'https:') {
