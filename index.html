@@ -8,11 +8,11 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="Brigada">
+<meta name="apple-mobile-web-app-title" content="Kumi Kitchen">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="icon-180.png">
 <link rel="icon" href="icon-192.png">
-<title>Brigada</title>
+<title>Kumi Kitchen · horarios de cocina</title>
 <style>
   @font-face { font-family: 'Playfair Display'; font-style: italic; font-weight: 400 900; font-display: swap; src: url(fuentes/PlayfairDisplay-Italic.woff2) format('woff2'); }
   @font-face { font-family: 'Great Vibes'; font-weight: 400; font-display: swap; src: url(fuentes/GreatVibes.woff2) format('woff2'); }
@@ -55,6 +55,7 @@
   }
   .barra-sup { display: flex; align-items: baseline; justify-content: space-between; }
   .logo-txt { font-family: var(--firma); font-size: 34px; line-height: 1; }
+  .logo-txt small { font-family: 'Jost', sans-serif; font-size: 10px; letter-spacing: .3em; text-transform: uppercase; margin-left: 6px; opacity: .85; vertical-align: 4px; }
   .marca { font-size: 11px; letter-spacing: .24em; text-transform: uppercase; opacity: .85; font-weight: 500; }
   .saludo { margin-top: 26px; position: relative; z-index: 1; }
   .saludo .t { font-size: 24px; font-weight: 500; opacity: .95; display: block; }
@@ -168,6 +169,9 @@
   .vista.activa { display: block; }
   h2 { font-family: var(--titulo); font-style: italic; font-weight: 600; font-size: 26px; color: var(--frambuesa); margin: 4px 2px 12px; }
   h2::first-letter { text-transform: uppercase; }
+  .titulo-equipo { margin-bottom: 0; }
+  .jp-equipo { font-family: 'Hiragino Mincho ProN', 'Yu Mincho', 'Noto Serif CJK JP', serif; font-style: normal; color: var(--rosa); margin-right: 4px; }
+  .sub-equipo { margin: 2px 2px 14px; font-size: 14px; color: var(--gris); }
 
   .persona { background: var(--blanco); border: 1px solid var(--borde); border-radius: 18px; padding: 12px 12px 10px; margin-bottom: 10px; }
   .persona .nombre { display: flex; align-items: center; gap: 8px; font-weight: 600; margin-bottom: 4px; }
@@ -231,7 +235,7 @@
 
 <section class="vista activa" id="vistaInicio">
   <div class="portada">
-    <div class="barra-sup"><span class="logo-txt">Brigada</span><span class="marca">Miss Sushi · Cocina</span></div>
+    <div class="barra-sup"><span class="logo-txt">Kumi<small>Kitchen · 組</small></span><span class="marca">Miss Sushi · Cocina</span></div>
     <div class="saludo"><span class="t" id="saludo">Hola,</span><span class="nombre">Mara</span></div>
     <div class="fecha" id="fechaHoy"></div>
     <svg class="maki" viewBox="0 0 120 120" aria-hidden="true">
@@ -248,7 +252,7 @@
   <div class="tablero">
     <div class="tarjeta instalar" id="tarjetaInstalar" hidden>
       <button class="cerrar" id="cerrarInstalar" aria-label="Cerrar">✕</button>
-      <h3>Ten Brigada como una app</h3>
+      <h3>Ten Kumi Kitchen como una app</h3>
       <p id="instalarTxt"></p>
       <button class="btn principal" id="btnInstalar" hidden>Instalar en el móvil</button>
     </div>
@@ -283,7 +287,7 @@
       <p id="palabraTxt"></p>
     </div>
 
-    <div class="firma">© <span id="anio">2026</span> · Brigada by <b>Mash</b></div>
+    <div class="firma">© <span id="anio">2026</span> · Kumi Kitchen by <b>Mash</b></div>
   </div>
 </section>
 
@@ -320,7 +324,8 @@
   </section>
 
   <section class="vista" id="vistaEquipo">
-    <h2>Tu brigada</h2>
+    <h2 class="titulo-equipo"><span class="jp-equipo">仲間</span> Tu equipo</h2>
+    <p class="sub-equipo">El equipo de Miss Sushi</p>
     <div id="equipo"></div>
     <div class="acciones">
       <button class="btn secundario" id="btnAnadir">+ Añadir persona</button>
@@ -333,7 +338,7 @@
   <button data-ir="inicio" class="activo"><svg viewBox="0 0 24 24"><path d="M3 11l9-7 9 7"/><path d="M5 10v10h14V10"/><path d="M10 20v-6h4v6"/></svg>Inicio</button>
   <button data-ir="rellenar"><svg viewBox="0 0 24 24"><path d="M4 20h4L19 9l-4-4L4 16z"/><path d="M13.5 6.5l4 4"/></svg>Rellenar</button>
   <button data-ir="cuadro"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="15" rx="2"/><path d="M3 10h18M8 3v4M16 3v4M9 10v10M15 10v10"/></svg>Cuadro</button>
-  <button data-ir="equipo"><svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.6-3.6 3.3-5.5 6.5-5.5s5.9 1.9 6.5 5.5"/><circle cx="17" cy="9" r="2.5"/><path d="M17 14c2.4 0 4 1.5 4.5 4"/></svg>Brigada</button>
+  <button data-ir="equipo"><svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.6-3.6 3.3-5.5 6.5-5.5s5.9 1.9 6.5 5.5"/><circle cx="17" cy="9" r="2.5"/><path d="M17 14c2.4 0 4 1.5 4.5 4"/></svg>Equipo</button>
 </nav>
 
 <div class="aviso" id="aviso"></div>
@@ -361,7 +366,39 @@ const PALABRAS = [
   ['頑張って', 'Ganbatte', '¡Ánimo, tú puedes con este servicio!'],
   ['お疲れ様', 'Otsukaresama', '«Buen trabajo»: se dice al acabar el turno.'],
   ['いただきます', 'Itadakimasu', 'Gracias por la comida, antes de empezar.'],
+  ['ごちそうさま', 'Gochisōsama', 'Gracias por la comida, al terminar.'],
   ['一期一会', 'Ichigo ichie', 'Cada servicio es único y no se repite.'],
+  ['いらっしゃいませ', 'Irasshaimase', '¡Bienvenidos! Lo que se dice cuando entra un cliente.'],
+  ['仲間', 'Nakama', 'Compañeros: tu equipo, los tuyos.'],
+  ['包丁', 'Hōchō', 'El cuchillo de cocina, el mejor amigo del cocinero.'],
+  ['柳刃', 'Yanagiba', 'El cuchillo largo y fino para cortar sashimi.'],
+  ['出汁', 'Dashi', 'El caldo base de casi toda la cocina japonesa.'],
+  ['海苔', 'Nori', 'El alga que envuelve el maki.'],
+  ['山葵', 'Wasabi', 'El picante verde que va entre el arroz y el pescado.'],
+  ['醤油', 'Shōyu', 'La salsa de soja.'],
+  ['味噌', 'Miso', 'Pasta de soja fermentada, base de la sopa de miso.'],
+  ['握り', 'Nigiri', 'Arroz moldeado a mano con la neta encima.'],
+  ['巻き寿司', 'Makizushi', 'Sushi enrollado con alga: los makis.'],
+  ['手巻き', 'Temaki', 'Un cono de alga relleno, para comer con la mano.'],
+  ['刺身', 'Sashimi', 'Pescado crudo cortado en láminas, sin arroz.'],
+  ['玉子', 'Tamago', 'La tortilla dulce del sushi.'],
+  ['鮪', 'Maguro', 'El atún.'],
+  ['鮭', 'Sake', 'El salmón (no confundir con el licor, 酒).'],
+  ['天ぷら', 'Tempura', 'Rebozado ligero y crujiente.'],
+  ['枝豆', 'Edamame', 'Vainas de soja tierna con sal.'],
+  ['抹茶', 'Matcha', 'Té verde en polvo.'],
+  ['旬', 'Shun', 'El mejor momento de temporada de un ingrediente.'],
+  ['心', 'Kokoro', 'El corazón que pones en cada plato.'],
+  ['職人', 'Shokunin', 'El artesano que pasa la vida perfeccionando su oficio.'],
+  ['匠', 'Takumi', 'Un maestro en lo suyo.'],
+  ['もったいない', 'Mottainai', '¡Qué pena tirarlo! Aprovechar todo, no desperdiciar.'],
+  ['腹八分目', 'Hara hachi bu', 'Comer hasta estar llena al 80 %.'],
+  ['大丈夫', 'Daijōbu', 'Tranquila, todo va bien.'],
+  ['ありがとう', 'Arigatō', 'Gracias.'],
+  ['乾杯', 'Kanpai', '¡Salud! Para brindar al cerrar la semana.'],
+  ['よろしくお願いします', 'Yoroshiku onegaishimasu', '«Cuento contigo»: para empezar el turno juntos.'],
+  ['七転び八起き', 'Nana korobi ya oki', 'Cáete siete veces, levántate ocho.'],
+  ['継続は力なり', 'Keizoku wa chikara nari', 'La constancia es fuerza.'],
 ];
 
 // Horas cada media hora empezando a las 6:00, para que las de cierre (0:00, 1:00…) queden al final.
@@ -565,7 +602,7 @@ const yaInstalada = () => matchMedia('(display-mode: standalone)').matches || na
 const esIphone = /iphone|ipad|ipod/i.test(navigator.userAgent);
 const esAndroid = /android/i.test(navigator.userAgent);
 window.addEventListener('beforeinstallprompt', (e) => { e.preventDefault(); peticionInstalar = e; pintarInstalar(); });
-window.addEventListener('appinstalled', () => { peticionInstalar = null; pintarInstalar(); avisar('¡Brigada instalada!'); });
+window.addEventListener('appinstalled', () => { peticionInstalar = null; pintarInstalar(); avisar('¡Kumi Kitchen instalada!'); });
 function pintarInstalar() {
   const mostrar = !yaInstalada() && !leerLocal(CLAVE_INSTALAR) && (peticionInstalar || esIphone || esAndroid);
   $('tarjetaInstalar').hidden = !mostrar;
@@ -610,7 +647,7 @@ function pintarDia() {
   $('tituloDia').textContent = DIAS[diaActivo] + ' ' + fecha.getDate() + ' de ' + MESES[fecha.getMonth()];
   const sem = semana();
   if (!datos.equipo.length) {
-    $('personas').innerHTML = '<p class="nota">Añade a tu equipo en la pestaña «Brigada».</p>';
+    $('personas').innerHTML = '<p class="nota">Añade a tu equipo en la pestaña «Equipo».</p>';
     return;
   }
   $('personas').innerHTML = datos.equipo.map((p) => {

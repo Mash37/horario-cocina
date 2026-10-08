@@ -1,7 +1,7 @@
 {
-  "name": "Brigada · turnos de cocina",
-  "short_name": "Brigada",
-  "description": "Los turnos de la cocina, en un momento.",
+  "name": "Kumi Kitchen · horarios de cocina",
+  "short_name": "Kumi Kitchen",
+  "description": "Los horarios del equipo de cocina, en un momento.",
   "id": "./",
   "start_url": "./",
   "scope": "./",
