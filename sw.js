@@ -1,5 +1,5 @@
 // Primero intenta la red (para recibir mejoras); sin conexión, sirve lo guardado.
-const CACHE = 'kumi-v19';
+const CACHE = 'kumi-v20';
 const ARCHIVOS = ['./', './index.html', './manifest.webmanifest', './icon-180.png', './icon-192.png', './icon-512.png', './icon-maskable-512.png',
   './fuentes/PlayfairDisplay-Italic.woff2', './fuentes/GreatVibes.woff2', './fuentes/Jost.woff2'];
 
@@ -9,7 +9,7 @@ self.addEventListener('install', (e) => {
 });
 
 self.addEventListener('activate', (e) => {
-  e.waitUntil(caches.keys().then((ks) => Promise.all(ks.filter((k) => k !== CACHE).map((k) => caches.delete(k)))));
+  e.waitUntil(caches.keys().then((ks) => Promise.all(ks.filter((k) => k.startsWith('kumi-v') && k !== CACHE).map((k) => caches.delete(k)))));
   self.clients.claim();
 });
 
