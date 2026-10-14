@@ -374,6 +374,19 @@
   .pedir h3 { color: #fff; }
   .pedir ul { margin: 8px 0 14px; padding-left: 18px; font-size: 14px; line-height: 1.6; opacity: .95; }
   .grupo-stock { font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: var(--gris); margin: 6px 0 4px; }
+  .hoja-scroll { overflow-x: auto; margin: 10px -4px 0; -webkit-overflow-scrolling: touch; }
+  .hoja { border-collapse: separate; border-spacing: 0; font-size: 13px; font-variant-numeric: tabular-nums; }
+  .hoja th, .hoja td { padding: 7px 8px; border-bottom: 1px solid var(--borde); text-align: right; white-space: nowrap; }
+  .hoja th { font-size: 11.5px; font-weight: 600; color: var(--gris); vertical-align: bottom; }
+  .hoja th small { display: block; font-size: 10px; letter-spacing: .08em; color: var(--frambuesa); }
+  .hoja .nombre { position: sticky; left: 0; background: var(--blanco); text-align: left; white-space: normal; min-width: 130px; max-width: 150px; font-size: 12.5px; line-height: 1.25; box-shadow: 1px 0 0 var(--borde); }
+  .hoja .nombre small { color: var(--gris); }
+  .hoja td.nombre[data-producto] { cursor: pointer; }
+  .hoja td.mes { background: var(--rosa-suave); }
+  .hoja td.vacia { color: #c9b5bd; }
+  .fila-fecha { display: flex; gap: 10px; align-items: flex-end; flex-wrap: wrap; margin: 12px 0 4px; }
+  .fila-fecha .campo { margin: 0; }
+  .fila-fecha .chips-inc { margin: 0; }
   .producto { display: flex; align-items: center; gap: 10px; padding: 11px 0; border-top: 1px solid var(--borde); cursor: pointer; }
   .producto:first-of-type { border-top: 0; }
   .producto .info { flex: 1; min-width: 0; }
@@ -579,6 +592,7 @@
     <h2>Stock de cocina</h2>
     <div class="segmento" id="segStock">
       <button data-sub="lista" class="activo">Stock</button>
+      <button data-sub="hoja">Hoja</button>
       <button data-sub="compras">Compras</button>
       <button data-sub="informe">Informe</button>
     </div>
@@ -1725,15 +1739,23 @@ $('btnInforme').addEventListener('click', async () => {
 // --- Stock e inventario ---
 // Modelo de cocina: recuento semanal + compras. Consumo = lo que había + lo que entró − lo que queda.
 const UNIDADES = ['kg', 'g', 'L', 'ud', 'paquete', 'caja', 'bote', 'bandeja', 'manojo'];
-const CATEGORIAS = ['Pescado y marisco', 'Arroz y secos', 'Verdura y fruta', 'Lácteos y huevos', 'Salsas y condimentos', 'Bebidas', 'Envases y limpieza', 'Otros'];
-const PRODUCTOS_SUSHI = [
-  ['Salmón', 'kg', 0], ['Atún', 'kg', 0], ['Langostino', 'kg', 0], ['Pez mantequilla', 'kg', 0], ['Masago', 'kg', 0],
-  ['Arroz de sushi', 'kg', 1], ['Alga nori', 'paquete', 1], ['Sésamo', 'kg', 1], ['Panko', 'kg', 1],
-  ['Aguacate', 'ud', 2], ['Pepino', 'ud', 2], ['Cebollino', 'manojo', 2],
-  ['Queso crema', 'kg', 3],
-  ['Salsa de soja', 'L', 4], ['Vinagre de arroz', 'L', 4], ['Wasabi', 'kg', 4], ['Jengibre encurtido', 'kg', 4], ['Mayonesa japonesa', 'kg', 4], ['Salsa teriyaki', 'L', 4],
-  ['Palillos', 'caja', 6], ['Envases para llevar', 'caja', 6],
+const HOJA = 'Hoja de inventario';
+const CATEGORIAS = [HOJA, 'Pescado y marisco', 'Arroz y secos', 'Verdura y fruta', 'Lácteos y huevos', 'Salsas y condimentos', 'Bebidas', 'Envases y limpieza', 'Otros'];
+// La hoja de papel de Miss Sushi, en el mismo orden.
+const PRODUCTOS_HOJA = [
+  ['Aguacate', 'kg'], ['Alga nori 1000 hojas Gold 10×100 ud', 'ud'], ['Arroz Khao-Tai fragante jazmín', 'kg'], ['Arroz sushi Calrose', 'kg'],
+  ['Atún tiras', 'kg'], ['Brocheta pollo (yakitori) 26 ud', 'ud'], ['Cheesecake choco 36×90 g', 'ud'], ['Cola gambón argentino 1 kg = 60 ud', 'kg'],
+  ['Coulant de choco 36 ud (sin gluten)', 'ud'], ['Ebi fry torpedo caja 200 ud', 'ud'], ['Franui leche', 'ud'], ['Franui negro', 'ud'],
+  ['Fresones', 'kg'], ['Gyoza de cerdo 50 ud por bolsa', 'ud'], ['Gyoza langostino 12×29 ud por bolsa', 'ud'], ['Gyozas pollo curry 12×29 ud por bolsa', 'ud'],
+  ['Gyozas de kale 8×60 ud por bolsa', 'ud'], ['Gyozas de pato 12×29 ud por bolsa', 'ud'], ['Hamburguesa mini 40 ud', 'ud'], ['Helado Cesal té verde', 'ud'],
+  ['Mango', 'kg'], ['Mochi té', 'ud'], ['Mochi choc. cereal', 'ud'], ['Mochi ice yuzu', 'ud'],
+  ['Noodles finos 20×200 g', 'kg'], ['Pechuga pollo corral teriyaki 5,5 kg bolsa', 'kg'], ['Pluma Duroc caja 7 kg aprox.', 'kg'], ['Pollo katsu 26 ud', 'ud'],
+  ['Postre matcha y rosas 18 ud', 'ud'], ['Postre tarrina choco 18 ud', 'ud'], ['Postre tarrina limón 18 ud', 'ud'], ['Salmón 1,2 kg por lomo', 'kg'],
+  ['Salmón dados 0,5 kg por paquete', 'kg'], ['Tarantelo de atún', 'kg'], ['Tartar vacuno 8 kg', 'kg'], ['Udon Kudon 15×4 = 60 ud', 'ud'],
 ];
+// Los productos de ejemplo de antes: solo se retiran los que nunca se contaron ni compraron.
+const EJEMPLOS_ANTIGUOS = ['Salmón', 'Atún', 'Langostino', 'Pez mantequilla', 'Masago', 'Arroz de sushi', 'Alga nori', 'Sésamo', 'Panko', 'Aguacate', 'Pepino',
+  'Cebollino', 'Queso crema', 'Salsa de soja', 'Vinagre de arroz', 'Wasabi', 'Jengibre encurtido', 'Mayonesa japonesa', 'Salsa teriyaki', 'Palillos', 'Envases para llevar'];
 const euros = new Intl.NumberFormat('es-ES', { style: 'currency', currency: 'EUR' });
 const cifra = new Intl.NumberFormat('es-ES', { maximumFractionDigits: 2 });
 let subStock = 'lista';
@@ -1742,15 +1764,26 @@ let mesStock = new Date(hoy.getFullYear(), hoy.getMonth(), 1);
 
 function stock() {
   if (!datos.stock) datos.stock = { productos: [], compras: [], recuentos: [] };
+  if (!datos.stock.hoja) { ponerHoja(datos.stock); guardar(); }
   return datos.stock;
+}
+// Se aplica una sola vez, también a una copia recuperada. No borra nada: lo retirado queda archivado.
+function ponerHoja(st) {
+  const usados = new Set(st.recuentos.map((r) => r.p).concat(st.compras.map((c) => c.p)));
+  st.productos.forEach((p) => { if (!p.archivado && !usados.has(p.id) && EJEMPLOS_ANTIGUOS.includes(p.nombre)) p.archivado = true; });
+  const yaEstan = new Set(st.productos.filter((p) => !p.archivado).map((p) => p.nombre.toLowerCase()));
+  PRODUCTOS_HOJA.forEach(([nombre, unidad]) => {
+    if (!yaEstan.has(nombre.toLowerCase())) st.productos.push({ id: nuevoId(), nombre, unidad, categoria: HOJA, minimo: null, precio: null });
+  });
+  st.hoja = 1;
 }
 function productosActivos() { return stock().productos.filter((p) => !p.archivado); }
 function producto(id) { return stock().productos.find((p) => p.id === id); }
-// Admite «1,5», «1.5» y vacío; devuelve null si está vacío y NaN si no es un número válido.
+// Admite «1,5», «1.5», sumas como «14+3» y vacío; devuelve null si está vacío y NaN si no es un número válido.
 function leerNumero(texto) {
-  const v = String(texto).trim().replace(/\s/g, '').replace(',', '.');
+  const v = String(texto).trim().replace(/\s/g, '').replace(/,/g, '.');
   if (!v) return null;
-  const n = Number(v);
+  const n = v.split('+').reduce((s, x) => s + (x === '' ? NaN : Number(x)), 0);
   return Number.isFinite(n) && n >= 0 ? n : NaN;
 }
 function fechaCorta(ts) { const d = new Date(ts); return DIAS_ABREV[(d.getDay() + 6) % 7] + ' ' + d.getDate() + '/' + (d.getMonth() + 1); }
@@ -1792,6 +1825,7 @@ function pintarStockInicio() {
 function pintarStock() {
   document.querySelectorAll('#segStock button').forEach((b) => b.classList.toggle('activo', b.dataset.sub === subStock));
   if (subStock === 'lista') enRecuento ? pintarRecuento() : pintarListaStock();
+  if (subStock === 'hoja') pintarHoja();
   if (subStock === 'compras') pintarCompras();
   if (subStock === 'informe') pintarInformeStock();
 }
@@ -1817,8 +1851,8 @@ function pintarListaStock() {
   const activos = productosActivos();
   if (!activos.length) {
     $('stockContenido').innerHTML = '<div class="tarjeta"><h3>Aún no hay productos</h3>' +
-      '<p class="sub">Puedes empezar con los productos típicos de una cocina de sushi y ajustarlos después.</p>' +
-      '<div class="acciones"><button class="btn principal" data-accion="cargar-tipicos">Empezar con productos de sushi</button>' +
+      '<p class="sub">Puedes empezar con los productos de la hoja de inventario y ajustarlos después.</p>' +
+      '<div class="acciones"><button class="btn principal" data-accion="cargar-tipicos">Empezar con la hoja de inventario</button>' +
       '<button class="btn secundario" data-accion="nuevo-producto">Añadirlos uno a uno</button></div></div>';
     return;
   }
@@ -1852,7 +1886,10 @@ function pintarListaStock() {
 
 function pintarRecuento() {
   const activos = productosActivos();
-  let html = '<div class="tarjeta"><h3>Recuento de hoy</h3><div class="sub">' + fechaCorta(Date.now()) + ' · Escribe lo que hay ahora. Deja vacío lo que no cuentes.</div>';
+  const hoyISO = claveSemana(new Date());
+  let html = '<div class="tarjeta"><h3>Recuento</h3><div class="sub">Escribe lo que hay. Deja vacío lo que no cuentes. Puedes sumar: «14+3».</div>' +
+    '<div class="fila-fecha"><label class="campo"><span>Fecha</span><input id="rFecha" type="date" value="' + hoyISO + '" max="' + hoyISO + '"></label>' +
+    '<div class="chips-inc" id="rTipo"><button data-tipo="semana" class="sel">Semanal</button><button data-tipo="mes">Fin de mes</button></div></div>';
   CATEGORIAS.forEach((cat) => {
     const deCat = activos.filter((p) => p.categoria === cat);
     if (!deCat.length) return;
@@ -1865,6 +1902,53 @@ function pintarRecuento() {
   html += '</div><div class="acciones"><button class="btn principal" data-accion="guardar-recuento">Guardar recuento</button>' +
     '<button class="btn secundario" data-accion="cancelar-recuento">Cancelar</button></div>';
   $('stockContenido').innerHTML = html;
+}
+
+// Como la hoja de papel: una fila por producto y una columna por día de recuento, el último a la derecha.
+function columnasHoja() {
+  const dias = new Map();
+  stock().recuentos.slice().sort((a, b) => a.ts - b.ts).forEach((r) => {
+    const k = claveSemana(new Date(r.ts));
+    if (!dias.has(k)) dias.set(k, { ts: r.ts, mes: false, valores: {} });
+    const col = dias.get(k);
+    col.valores[r.p] = r.cant;
+    if (r.tipo === 'mes') col.mes = true;
+  });
+  return [...dias.values()];
+}
+function productosEnOrden() {
+  const activos = productosActivos();
+  return CATEGORIAS.flatMap((cat) => activos.filter((p) => p.categoria === cat));
+}
+function pintarHoja() {
+  const cols = columnasHoja();
+  const filas = productosEnOrden();
+  const cabecera = (c) => '<th>' + (c.mes ? '<small>MES</small>' : '') + new Date(c.ts).getDate() + '/' + (new Date(c.ts).getMonth() + 1) + '</th>';
+  let html = '<div class="fila-botones"><button class="btn principal" data-accion="recuento">Hacer recuento</button>' +
+    '<button class="btn secundario" data-accion="nuevo-producto">+ Producto</button></div>';
+  html += '<div class="tarjeta"><h3>Hoja de inventario</h3><div class="sub">' + (cols.length
+    ? 'Cada columna es un recuento. Desliza a la izquierda para ver los anteriores.'
+    : 'Aún no hay recuentos. Toca «Hacer recuento» y aquí irán saliendo las columnas.') + '</div>' +
+    '<div class="hoja-scroll"><table class="hoja"><thead><tr><th class="nombre">Producto</th>' + cols.map(cabecera).join('') + '</tr></thead><tbody>' +
+    filas.map((p) => '<tr><td class="nombre" data-producto="' + p.id + '">' + escapar(p.nombre) + ' <small>' + p.unidad + '</small></td>' +
+      cols.map((c) => c.valores[p.id] == null ? '<td class="vacia' + (c.mes ? ' mes' : '') + '">—</td>' : '<td' + (c.mes ? ' class="mes"' : '') + '>' + cifra.format(c.valores[p.id]) + '</td>').join('') + '</tr>').join('') +
+    '</tbody></table></div></div>' +
+    (cols.length ? '<div class="acciones"><button class="btn secundario" data-accion="pdf-hoja">Guardar PDF de la hoja</button></div>' : '') +
+    '<p class="nota">Toca un producto para cambiarle el nombre o la unidad, o para quitarlo. Las columnas «MES» son inventarios de fin de mes.</p>';
+  $('stockContenido').innerHTML = html;
+  const zona = document.querySelector('.hoja-scroll');
+  zona.scrollLeft = zona.scrollWidth;
+}
+function imprimirHoja() {
+  const cols = columnasHoja().slice(-8);
+  const zona = $('zonaImprimir');
+  zona.className = 'informe';
+  zona.innerHTML = '<div class="inf"><div class="inf-marca">Kumi Mara · Miss Sushi · Cocina</div><h1>Inventario</h1>' +
+    '<p class="inf-sub">Últimos ' + cols.length + ' recuentos · Generado el ' + hoy.getDate() + '/' + (hoy.getMonth() + 1) + '/' + hoy.getFullYear() + '</p>' +
+    '<table><thead><tr><th>Producto</th><th>Unidad</th>' + cols.map((c) => { const d = new Date(c.ts); return '<th class="n">' + d.getDate() + '/' + (d.getMonth() + 1) + (c.mes ? ' (mes)' : '') + '</th>'; }).join('') + '</tr></thead><tbody>' +
+    productosEnOrden().map((p) => '<tr><td>' + escapar(p.nombre) + '</td><td>' + p.unidad + '</td>' + cols.map((c) => '<td class="n">' + (c.valores[p.id] == null ? '' : cifra.format(c.valores[p.id])) + '</td>').join('') + '</tr>').join('') +
+    '</tbody></table><div class="inf-firmas"><div>Responsable de cocina</div><div>Revisado</div></div></div>';
+  fuentesListas().then(() => imprimir('Inventario - Kumi Mara'));
 }
 
 function pintarCompras() {
@@ -1965,7 +2049,7 @@ document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && !$('pane
 function opcionesLista(lista, actual) { return lista.map((x) => '<option' + (x === actual ? ' selected' : '') + '>' + x + '</option>').join(''); }
 
 function abrirProducto(id) {
-  const p = id ? producto(id) : { nombre: '', unidad: 'kg', categoria: 'Otros', minimo: null, precio: null };
+  const p = id ? producto(id) : { nombre: '', unidad: 'kg', categoria: HOJA, minimo: null, precio: null };
   const historial = id ? stock().compras.filter((c) => c.p === id).map((c) => ({ ts: c.ts, txt: 'Compra ' + cantidadTxt(c.cant, p) + ' · ' + euros.format(c.coste) }))
     .concat(stock().recuentos.filter((r) => r.p === id).map((r) => ({ ts: r.ts, txt: 'Recuento: ' + cantidadTxt(r.cant, p) }))).sort((a, b) => b.ts - a.ts).slice(0, 6) : [];
   abrirPanel('<h3>' + (id ? 'Editar producto' : 'Nuevo producto') + '</h3><p class="sub">&nbsp;</p>' +
@@ -2019,20 +2103,25 @@ function accionStock(b) {
   const st = stock();
   const accion = b.dataset.accion;
   if (accion === 'cargar-tipicos') {
-    PRODUCTOS_SUSHI.forEach(([nombre, unidad, cat]) => st.productos.push({ id: nuevoId(), nombre, unidad, categoria: CATEGORIAS[cat], minimo: null, precio: null }));
+    PRODUCTOS_HOJA.forEach(([nombre, unidad]) => st.productos.push({ id: nuevoId(), nombre, unidad, categoria: HOJA, minimo: null, precio: null }));
     guardar(); pintarStock(); avisar('Listo. Toca un producto para poner su mínimo');
   }
   if (accion === 'nuevo-producto') abrirProducto(null);
-  if (accion === 'recuento') { empezarRecuento(); window.scrollTo(0, 0); }
+  if (accion === 'recuento') { subStock = 'lista'; empezarRecuento(); window.scrollTo(0, 0); }
+  if (accion === 'pdf-hoja') imprimirHoja();
   if (accion === 'cancelar-recuento') terminarRecuento();
   if (accion === 'guardar-recuento') {
-    const ts = Date.now();
+    // Hoy: la hora exacta. Otro día (un recuento que se olvidó): a mediodía de ese día.
+    const fechaISO = $('rFecha').value;
+    const [a, m, d] = fechaISO.split('-').map(Number);
+    const ts = !a || fechaISO === claveSemana(new Date()) ? Date.now() : new Date(a, m - 1, d, 12).getTime();
+    const tipo = $('rTipo').querySelector('.sel').dataset.tipo;
     let n = 0, malos = 0;
     document.querySelectorAll('[data-recuento]').forEach((c) => {
       const v = leerNumero(c.value);
       if (v === null) return;
       if (Number.isNaN(v)) { malos++; c.style.borderColor = '#d92d20'; return; }
-      st.recuentos.push({ id: nuevoId(), p: c.dataset.recuento, cant: v, ts });
+      st.recuentos.push({ id: nuevoId(), p: c.dataset.recuento, cant: v, ts, ...(tipo === 'mes' ? { tipo } : {}) });
       n++;
     });
     if (malos) { st.recuentos = st.recuentos.filter((r) => r.ts !== ts); avisar('Revisa las cantidades en rojo'); return; }
@@ -2090,6 +2179,8 @@ $('stockContenido').addEventListener('click', (e) => {
     ofrecerDeshacer('Compra borrada', () => { st.compras.push(quitada); });
     return;
   }
+  const tipo = e.target.closest('[data-tipo]');
+  if (tipo) { tipo.parentNode.querySelectorAll('button').forEach((x) => x.classList.toggle('sel', x === tipo)); return; }
   const fila = e.target.closest('[data-producto]');
   if (fila) { abrirProducto(fila.dataset.producto); return; }
   const b = e.target.closest('[data-accion]');
