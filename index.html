@@ -374,16 +374,17 @@
   .pedir h3 { color: #fff; }
   .pedir ul { margin: 8px 0 14px; padding-left: 18px; font-size: 14px; line-height: 1.6; opacity: .95; }
   .grupo-stock { font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: var(--gris); margin: 6px 0 4px; }
-  .hoja-scroll { overflow-x: auto; margin: 10px -4px 0; -webkit-overflow-scrolling: touch; }
-  .hoja { border-collapse: separate; border-spacing: 0; font-size: 13px; font-variant-numeric: tabular-nums; }
-  .hoja th, .hoja td { padding: 7px 8px; border-bottom: 1px solid var(--borde); text-align: right; white-space: nowrap; }
-  .hoja th { font-size: 11.5px; font-weight: 600; color: var(--gris); vertical-align: bottom; }
-  .hoja th small { display: block; font-size: 10px; letter-spacing: .08em; color: var(--frambuesa); }
-  .hoja .nombre { position: sticky; left: 0; background: var(--blanco); text-align: left; white-space: normal; min-width: 130px; max-width: 150px; font-size: 12.5px; line-height: 1.25; box-shadow: 1px 0 0 var(--borde); }
-  .hoja .nombre small { color: var(--gris); }
-  .hoja td.nombre[data-producto] { cursor: pointer; }
-  .hoja td.mes { background: var(--rosa-suave); }
-  .hoja td.vacia { color: #c9b5bd; }
+  .inv-scroll { overflow-x: auto; margin: 10px -4px 0; -webkit-overflow-scrolling: touch; }
+  .tabla-inv { border-collapse: separate; border-spacing: 0; font-size: 13px; font-variant-numeric: tabular-nums; }
+  .tabla-inv th, .tabla-inv td { padding: 7px 8px; border-bottom: 1px solid var(--borde); text-align: right; white-space: nowrap; }
+  .tabla-inv th { font-size: 11.5px; font-weight: 600; color: var(--gris); vertical-align: bottom; }
+  .tabla-inv th small { display: block; font-size: 10px; letter-spacing: .08em; color: var(--frambuesa); }
+  .tabla-inv .nombre { position: sticky; left: 0; background: var(--blanco); text-align: left; white-space: normal; min-width: 130px; max-width: 150px; font-size: 12.5px; line-height: 1.25; box-shadow: 1px 0 0 var(--borde); }
+  .tabla-inv .nombre small { color: var(--gris); }
+  .tabla-inv td.nombre[data-producto] { cursor: pointer; }
+  .tabla-inv td.mes { background: var(--rosa-suave); }
+  .tabla-inv td.vacia { color: #c9b5bd; }
+  .tabla-inv th[data-columna], .tabla-inv td[data-celda] { cursor: pointer; }
   .fila-fecha { display: flex; gap: 10px; align-items: flex-end; flex-wrap: wrap; margin: 12px 0 4px; }
   .fila-fecha .campo { margin: 0; }
   .fila-fecha .chips-inc { margin: 0; }
@@ -1777,7 +1778,8 @@ function ponerHoja(st) {
   });
   st.hoja = 1;
 }
-function productosActivos() { return stock().productos.filter((p) => !p.archivado); }
+// Siempre por orden alfabético, como la hoja de papel; un producto nuevo cae en su sitio.
+function productosActivos() { return stock().productos.filter((p) => !p.archivado).sort((a, b) => a.nombre.localeCompare(b.nombre, 'es', { sensitivity: 'base' })); }
 function producto(id) { return stock().productos.find((p) => p.id === id); }
 // Admite «1,5», «1.5», sumas como «14+3» y vacío; devuelve null si está vacío y NaN si no es un número válido.
 function leerNumero(texto) {
@@ -1825,7 +1827,7 @@ function pintarStockInicio() {
 function pintarStock() {
   document.querySelectorAll('#segStock button').forEach((b) => b.classList.toggle('activo', b.dataset.sub === subStock));
   if (subStock === 'lista') enRecuento ? pintarRecuento() : pintarListaStock();
-  if (subStock === 'hoja') pintarHoja();
+  if (subStock === 'hoja') pintarHojaInventario();
   if (subStock === 'compras') pintarCompras();
   if (subStock === 'informe') pintarInformeStock();
 }
@@ -1909,7 +1911,7 @@ function columnasHoja() {
   const dias = new Map();
   stock().recuentos.slice().sort((a, b) => a.ts - b.ts).forEach((r) => {
     const k = claveSemana(new Date(r.ts));
-    if (!dias.has(k)) dias.set(k, { ts: r.ts, mes: false, valores: {} });
+    if (!dias.has(k)) dias.set(k, { k, ts: r.ts, mes: false, valores: {} });
     const col = dias.get(k);
     col.valores[r.p] = r.cant;
     if (r.tipo === 'mes') col.mes = true;
@@ -1920,25 +1922,45 @@ function productosEnOrden() {
   const activos = productosActivos();
   return CATEGORIAS.flatMap((cat) => activos.filter((p) => p.categoria === cat));
 }
-function pintarHoja() {
+function pintarHojaInventario() {
   const cols = columnasHoja();
   const filas = productosEnOrden();
-  const cabecera = (c) => '<th>' + (c.mes ? '<small>MES</small>' : '') + new Date(c.ts).getDate() + '/' + (new Date(c.ts).getMonth() + 1) + '</th>';
+  const cabecera = (c) => '<th data-columna="' + c.k + '">' + (c.mes ? '<small>MES</small>' : '') + new Date(c.ts).getDate() + '/' + (new Date(c.ts).getMonth() + 1) + ' ✎</th>';
+  const celda = (c, p) => '<td data-celda="' + c.k + '|' + p.id + '" class="' + (c.valores[p.id] == null ? 'vacia' : '') + (c.mes ? ' mes' : '') + '">' + (c.valores[p.id] == null ? '—' : cifra.format(c.valores[p.id])) + '</td>';
   let html = '<div class="fila-botones"><button class="btn principal" data-accion="recuento">Hacer recuento</button>' +
     '<button class="btn secundario" data-accion="nuevo-producto">+ Producto</button></div>';
   html += '<div class="tarjeta"><h3>Hoja de inventario</h3><div class="sub">' + (cols.length
     ? 'Cada columna es un recuento. Desliza a la izquierda para ver los anteriores.'
     : 'Aún no hay recuentos. Toca «Hacer recuento» y aquí irán saliendo las columnas.') + '</div>' +
-    '<div class="hoja-scroll"><table class="hoja"><thead><tr><th class="nombre">Producto</th>' + cols.map(cabecera).join('') + '</tr></thead><tbody>' +
+    '<div class="inv-scroll"><table class="tabla-inv"><thead><tr><th class="nombre">Producto</th>' + cols.map(cabecera).join('') + '</tr></thead><tbody>' +
     filas.map((p) => '<tr><td class="nombre" data-producto="' + p.id + '">' + escapar(p.nombre) + ' <small>' + p.unidad + '</small></td>' +
-      cols.map((c) => c.valores[p.id] == null ? '<td class="vacia' + (c.mes ? ' mes' : '') + '">—</td>' : '<td' + (c.mes ? ' class="mes"' : '') + '>' + cifra.format(c.valores[p.id]) + '</td>').join('') + '</tr>').join('') +
+      cols.map((c) => celda(c, p)).join('') + '</tr>').join('') +
     '</tbody></table></div></div>' +
     (cols.length ? '<div class="acciones"><button class="btn secundario" data-accion="pdf-hoja">Guardar PDF de la hoja</button></div>' : '') +
-    '<p class="nota">Toca un producto para cambiarle el nombre o la unidad, o para quitarlo. Las columnas «MES» son inventarios de fin de mes.</p>';
+    '<p class="nota">Toca una fecha (✎) para cambiarla o borrar ese recuento; toca una cantidad para corregirla; toca un producto para cambiarle el nombre. Las columnas «MES» son de fin de mes.</p>';
   $('stockContenido').innerHTML = html;
-  const zona = document.querySelector('.hoja-scroll');
+  const zona = document.querySelector('.inv-scroll');
   zona.scrollLeft = zona.scrollWidth;
 }
+function recuentosDelDia(k) { return stock().recuentos.filter((r) => claveSemana(new Date(r.ts)) === k); }
+function abrirColumna(k) {
+  const rs = recuentosDelDia(k), mes = rs.some((r) => r.tipo === 'mes'), hoyISO = claveSemana(new Date());
+  abrirPanel('<h3>Recuento del ' + fechaCorta(rs[0].ts) + '</h3><p class="sub">' + rs.length + (rs.length === 1 ? ' producto contado' : ' productos contados') + '.</p>' +
+    '<label class="campo"><span>Fecha del recuento</span><input id="colFecha" type="date" value="' + k + '" max="' + hoyISO + '"></label>' +
+    '<div class="chips-inc" id="colTipo"><button data-tipo="semana" class="' + (mes ? '' : 'sel') + '">Semanal</button><button data-tipo="mes" class="' + (mes ? 'sel' : '') + '">Fin de mes</button></div>' +
+    '<div class="acciones"><button class="btn principal" data-accion="guardar-columna" data-k="' + k + '">Guardar</button>' +
+    '<button class="btn secundario" data-accion="cerrar-panel">Cancelar</button>' +
+    '<button class="btn texto" data-accion="borrar-columna" data-k="' + k + '">Borrar este recuento</button></div>');
+}
+function abrirCelda(k, pid) {
+  const p = producto(pid), r = recuentosDelDia(k).filter((x) => x.p === pid).sort((a, b) => b.ts - a.ts)[0];
+  abrirPanel('<h3>' + escapar(p.nombre) + '</h3><p class="sub">Recuento del ' + fechaCorta(fechaDeClave(k).getTime()) + '. Déjalo vacío para quitar esta cantidad.</p>' +
+    '<label class="campo"><span>Cantidad (' + p.unidad + ')</span><input id="celCant" class="numero" inputmode="decimal" value="' + (r ? cifra.format(r.cant) : '') + '" placeholder="—"></label>' +
+    '<div class="acciones"><button class="btn principal" data-accion="guardar-celda" data-k="' + k + '" data-p="' + pid + '">Guardar</button>' +
+    '<button class="btn secundario" data-accion="cerrar-panel">Cancelar</button></div>');
+  setTimeout(() => $('celCant').focus(), 250);
+}
+function fechaDeClave(k) { const [a, m, d] = k.split('-').map(Number); return new Date(a, m - 1, d, 12); }
 function imprimirHoja() {
   const cols = columnasHoja().slice(-8);
   const zona = $('zonaImprimir');
@@ -2109,6 +2131,39 @@ function accionStock(b) {
   if (accion === 'nuevo-producto') abrirProducto(null);
   if (accion === 'recuento') { subStock = 'lista'; empezarRecuento(); window.scrollTo(0, 0); }
   if (accion === 'pdf-hoja') imprimirHoja();
+  if (accion === 'guardar-columna') {
+    const k = b.dataset.k, nueva = $('colFecha').value;
+    if (!nueva) { avisar('Elige una fecha'); return; }
+    const tipo = $('colTipo').querySelector('.sel').dataset.tipo;
+    const mover = recuentosDelDia(k);
+    // Si ese día ya tenía otro recuento, manda lo que se mueve: se quita lo repetido del otro.
+    const otros = nueva === k ? [] : recuentosDelDia(nueva).filter((r) => mover.some((m) => m.p === r.p));
+    if (otros.length && !confirm('El ' + fechaCorta(fechaDeClave(nueva).getTime()) + ' ya tiene un recuento. Se juntarán y, en los productos repetidos, se quedará esta cantidad. ¿Seguir?')) return;
+    const antes = JSON.parse(JSON.stringify(st.recuentos));
+    st.recuentos = st.recuentos.filter((r) => !otros.includes(r));
+    const ts = nueva === k ? null : nueva === claveSemana(new Date()) ? Date.now() : fechaDeClave(nueva).getTime();
+    mover.forEach((r) => { if (ts) r.ts = ts; if (tipo === 'mes') r.tipo = 'mes'; else delete r.tipo; });
+    guardar(); cerrarPanel(); pintarStock();
+    ofrecerDeshacer('Recuento cambiado', () => { st.recuentos = antes; });
+  }
+  if (accion === 'borrar-columna') {
+    const quitar = recuentosDelDia(b.dataset.k);
+    if (!confirm('¿Borrar el recuento del ' + fechaCorta(quitar[0].ts) + ' (' + quitar.length + ' productos)?')) return;
+    st.recuentos = st.recuentos.filter((r) => !quitar.includes(r));
+    guardar(); cerrarPanel(); pintarStock();
+    ofrecerDeshacer('Recuento borrado', () => { st.recuentos.push(...quitar); });
+  }
+  if (accion === 'guardar-celda') {
+    const k = b.dataset.k, pid = b.dataset.p, v = leerNumero($('celCant').value);
+    if (Number.isNaN(v)) { avisar('Escribe un número, por ejemplo 2,5'); return; }
+    const delDia = recuentosDelDia(k);
+    const antes = JSON.parse(JSON.stringify(st.recuentos));
+    const mes = delDia.some((r) => r.tipo === 'mes');
+    st.recuentos = st.recuentos.filter((r) => !(r.p === pid && delDia.includes(r)));
+    if (v !== null) st.recuentos.push({ id: nuevoId(), p: pid, cant: v, ts: delDia[0].ts, ...(mes ? { tipo: 'mes' } : {}) });
+    guardar(); cerrarPanel(); pintarStock();
+    ofrecerDeshacer('Cantidad corregida', () => { st.recuentos = antes; });
+  }
   if (accion === 'cancelar-recuento') terminarRecuento();
   if (accion === 'guardar-recuento') {
     // Hoy: la hora exacta. Otro día (un recuento que se olvidó): a mediodía de ese día.
@@ -2181,12 +2236,21 @@ $('stockContenido').addEventListener('click', (e) => {
   }
   const tipo = e.target.closest('[data-tipo]');
   if (tipo) { tipo.parentNode.querySelectorAll('button').forEach((x) => x.classList.toggle('sel', x === tipo)); return; }
+  const col = e.target.closest('[data-columna]');
+  if (col) { abrirColumna(col.dataset.columna); return; }
+  const cel = e.target.closest('[data-celda]');
+  if (cel) { const [k, pid] = cel.dataset.celda.split('|'); abrirCelda(k, pid); return; }
   const fila = e.target.closest('[data-producto]');
   if (fila) { abrirProducto(fila.dataset.producto); return; }
   const b = e.target.closest('[data-accion]');
   if (b) accionStock(b);
 });
-$('panel').addEventListener('click', (e) => { const b = e.target.closest('[data-accion]'); if (b) accionStock(b); });
+$('panel').addEventListener('click', (e) => {
+  const tipo = e.target.closest('#colTipo [data-tipo]');
+  if (tipo) { tipo.parentNode.querySelectorAll('button').forEach((x) => x.classList.toggle('sel', x === tipo)); return; }
+  const b = e.target.closest('[data-accion]');
+  if (b) accionStock(b);
+});
 
 // --- Copia de seguridad: un archivo con todos los datos de este móvil ---
 function textoUltimaCopia() {
