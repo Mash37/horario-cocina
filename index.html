@@ -1885,7 +1885,8 @@ function pintarListaStock() {
   if (pedir.length) {
     html += '<div class="tarjeta pedir"><h3>🛒 ' + pedir.length + (pedir.length === 1 ? ' producto por pedir' : ' productos por pedir') + '</h3><ul>' +
       pedir.map((x) => '<li><b>' + escapar(x.p.nombre) + '</b>: quedan ' + cantidadTxt(x.e.cantidad, x.p) + ' (mínimo ' + cantidadTxt(x.p.minimo, x.p) + ')</li>').join('') +
-      '</ul><button class="btn principal" data-accion="mandar-pedido">Mandar la lista al proveedor</button></div>';
+      '</ul><div class="acciones"><button class="btn principal" data-accion="enviar-pedido-pdf">Enviar PDF del pedido</button>' +
+      '<button class="btn secundario" data-accion="mandar-pedido">Enviar por mensaje</button></div></div>';
   }
   html += '<div class="fila-botones"><button class="btn principal" data-accion="recuento">Hacer recuento</button>' +
     '<button class="btn secundario" data-accion="nuevo-producto">+ Producto</button></div>';
@@ -2138,9 +2139,134 @@ function abrirCompra() {
 function mandarPedido() {
   const pedir = listaPedir();
   const texto = 'Pedido Miss Sushi · ' + hoy.getDate() + '/' + (hoy.getMonth() + 1) + '\n' +
-    pedir.map((x) => '• ' + x.p.nombre + ' (quedan ' + cantidadTxt(x.e.cantidad, x.p) + ', mínimo ' + cantidadTxt(x.p.minimo, x.p) + ')').join('\n');
+    pedir.map((x) => '• ' + x.p.nombre + ': pedir ' + cantidadTxt(cantidadSugerida(x.p, x.e.cantidad), x.p) + ' (quedan ' + cantidadTxt(x.e.cantidad, x.p) + ')').join('\n');
   if (navigator.share) navigator.share({ text: texto }).catch(() => {});
   else window.open('https://wa.me/?text=' + encodeURIComponent(texto), '_blank');
+}
+
+// ---------- Pedido al proveedor en PDF ----------
+// Cuánto pedir: lo que falta para llegar al doble del mínimo; en enteros si la unidad no se parte.
+const ENTERAS = ['ud', 'paquete', 'caja', 'bote', 'bandeja', 'manojo', 'barril', 'docena', 'rollo'];
+function cantidadSugerida(p, quedan) {
+  if (p.minimo == null) return 0;
+  const falta = Math.max(0, p.minimo * 2 - quedan);
+  return ENTERAS.includes(p.unidad) ? Math.ceil(falta) : Math.ceil(falta * 2) / 2;
+}
+function pedidoSugerido() {
+  const filas = listaPedir().map(({ p, e }) => {
+    const quedan = e.cantidad || 0, pedir = cantidadSugerida(p, quedan);
+    return { p, quedan, pedir, importe: p.precio != null ? pedir * p.precio : null };
+  });
+  const conImporte = filas.filter((f) => f.importe != null);
+  return { filas, total: conImporte.length ? conImporte.reduce((t, f) => t + f.importe, 0) : null };
+}
+// PDF mínimo hecho a mano: una imagen JPEG por página, a tamaño A4. Sin librerías.
+function pdfDeImagenes(paginas) {
+  const A4 = [595.28, 841.89];
+  const bytes = (t) => new TextEncoder().encode(t);
+  const partes = [], posiciones = [];
+  let largo = 0;
+  const poner = (b) => { partes.push(b); largo += b.length; };
+  const objeto = (n, ...cuerpo) => { posiciones[n] = largo; poner(bytes(n + ' 0 obj\n')); cuerpo.forEach(poner); poner(bytes('\nendobj\n')); };
+  poner(bytes('%PDF-1.4\n%âãÏÓ\n'));
+  objeto(1, bytes('<< /Type /Catalog /Pages 2 0 R >>'));
+  objeto(2, bytes('<< /Type /Pages /Kids [' + paginas.map((_, i) => (3 + i * 3) + ' 0 R').join(' ') + '] /Count ' + paginas.length + ' >>'));
+  paginas.forEach((pg, i) => {
+    const n = 3 + i * 3;
+    objeto(n, bytes('<< /Type /Page /Parent 2 0 R /MediaBox [0 0 ' + A4[0] + ' ' + A4[1] + '] /Resources << /XObject << /Im' + i + ' ' + (n + 1) + ' 0 R >> >> /Contents ' + (n + 2) + ' 0 R >>'));
+    objeto(n + 1, bytes('<< /Type /XObject /Subtype /Image /Width ' + pg.ancho + ' /Height ' + pg.alto + ' /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /DCTDecode /Length ' + pg.jpeg.length + ' >>\nstream\n'), pg.jpeg, bytes('\nendstream'));
+    const dibujo = 'q ' + A4[0] + ' 0 0 ' + A4[1] + ' 0 0 cm /Im' + i + ' Do Q';
+    objeto(n + 2, bytes('<< /Length ' + dibujo.length + ' >>\nstream\n' + dibujo + '\nendstream'));
+  });
+  const total = 3 + paginas.length * 3, xref = largo;
+  poner(bytes('xref\n0 ' + total + '\n0000000000 65535 f \n' + posiciones.slice(1).map((x) => String(x).padStart(10, '0') + ' 00000 n \n').join('') +
+    'trailer\n<< /Size ' + total + ' /Root 1 0 R >>\nstartxref\n' + xref + '\n%%EOF\n'));
+  const salida = new Uint8Array(largo);
+  let i = 0;
+  partes.forEach((b) => { salida.set(b, i); i += b.length; });
+  return salida;
+}
+function hojaPedido(fecha, filas, cuantos, num, de, total) {
+  const ANCHO = 1240, ALTO = 1754, IZQ = 90, DER = 1150, FILA = 50;
+  const COL = { quedan: 640, minimo: 800, pedir: 960, importe: DER - 12 };
+  const TINTA = '#1f1418', GRIS = '#7a6970', TITULO = '#b0135f', CABECERA = '#ffd3e1';
+  const c = document.createElement('canvas');
+  c.width = ANCHO; c.height = ALTO;
+  const g = c.getContext('2d');
+  const recortar = (t, max) => { if (g.measureText(t).width <= max) return t; while (t.length > 1 && g.measureText(t + '…').width > max) t = t.slice(0, -1); return t + '…'; };
+  g.fillStyle = '#ffffff'; g.fillRect(0, 0, ANCHO, ALTO);
+  g.fillStyle = TITULO; g.font = '600 22px Jost, Arial, sans-serif';
+  g.fillText('KUMI MARA · MISS SUSHI · COCINA', IZQ, 120);
+  g.font = 'italic 700 58px "Playfair Display", Georgia, serif';
+  g.fillText('Pedido · ' + fecha, IZQ, 200);
+  g.fillStyle = GRIS; g.font = '400 26px Jost, Arial, sans-serif';
+  g.fillText(cuantos + (cuantos === 1 ? ' producto' : ' productos') + ' por debajo del mínimo' + (de > 1 ? ' · Hoja ' + num + ' de ' + de : ''), IZQ, 250);
+  g.fillStyle = CABECERA; g.fillRect(IZQ, 300, DER - IZQ, 56);
+  g.fillStyle = TINTA; g.font = '600 24px Jost, Arial, sans-serif';
+  g.textAlign = 'left'; g.fillText('Producto', IZQ + 16, 337);
+  g.textAlign = 'right';
+  g.fillText('Quedan', COL.quedan, 337); g.fillText('Mínimo', COL.minimo, 337); g.fillText('Pedir', COL.pedir, 337); g.fillText('Importe aprox.', COL.importe, 337);
+  let y = 356;
+  filas.forEach((f) => {
+    g.textAlign = 'left'; g.fillStyle = TINTA; g.font = '400 26px Jost, Arial, sans-serif';
+    g.fillText(recortar(f.p.nombre, COL.quedan - 150 - IZQ), IZQ + 16, y + 34);
+    g.textAlign = 'right';
+    g.fillText(cantidadTxt(f.quedan, f.p), COL.quedan, y + 34);
+    g.fillText(cantidadTxt(f.p.minimo || 0, f.p), COL.minimo, y + 34);
+    g.font = '600 26px Jost, Arial, sans-serif';
+    g.fillText(cantidadTxt(f.pedir, f.p), COL.pedir, y + 34);
+    g.font = '400 26px Jost, Arial, sans-serif';
+    g.fillText(f.importe != null ? euros.format(f.importe) : '—', COL.importe, y + 34);
+    y += FILA;
+    g.strokeStyle = '#ead6dd'; g.lineWidth = 1.5; g.beginPath(); g.moveTo(IZQ, y); g.lineTo(DER, y); g.stroke();
+  });
+  if (num === de) {
+    y += 20;
+    if (total != null) {
+      g.strokeStyle = TINTA; g.lineWidth = 3; g.beginPath(); g.moveTo(IZQ, y); g.lineTo(DER, y); g.stroke();
+      g.fillStyle = TINTA; g.font = '600 28px Jost, Arial, sans-serif';
+      g.textAlign = 'left'; g.fillText('Total aproximado', IZQ + 16, y + 44);
+      g.textAlign = 'right'; g.fillText(euros.format(total), COL.importe, y + 44);
+      y += 60;
+    }
+    g.textAlign = 'left'; g.fillStyle = GRIS; g.font = '400 21px Jost, Arial, sans-serif';
+    g.fillText('«Pedir» es lo que falta para llegar al doble del mínimo.', IZQ, y + 50);
+    g.fillText('El importe usa el precio guardado de cada producto y es orientativo.', IZQ, y + 80);
+    const firmas = Math.min(y + 220, ALTO - 90);
+    g.strokeStyle = TINTA; g.lineWidth = 1.5;
+    g.beginPath(); g.moveTo(IZQ, firmas); g.lineTo(560, firmas); g.moveTo(680, firmas); g.lineTo(DER, firmas); g.stroke();
+    g.fillStyle = TINTA; g.font = '400 24px Jost, Arial, sans-serif';
+    g.fillText('Pedido por', IZQ, firmas + 34); g.fillText('Recibido', 680, firmas + 34);
+  }
+  return c;
+}
+async function archivoPedido() {
+  const { filas, total } = pedidoSugerido();
+  if (!filas.length) return null;
+  await fuentesListas();
+  const dia = new Date();
+  const fecha = dia.getDate() + ' de ' + MESES[dia.getMonth()] + ' de ' + dia.getFullYear();
+  const trozos = [];
+  for (let i = 0; i < filas.length; i += 20) trozos.push(filas.slice(i, i + 20));
+  const paginas = await Promise.all(trozos.map(async (t, i) => {
+    const c = hojaPedido(fecha, t, filas.length, i + 1, trozos.length, total);
+    const blob = await new Promise((ok, mal) => c.toBlob((b) => (b ? ok(b) : mal(new Error('Sin imagen'))), 'image/jpeg', 0.92));
+    return { jpeg: new Uint8Array(await blob.arrayBuffer()), ancho: c.width, alto: c.height };
+  }));
+  const nombre = 'pedido-' + dia.getFullYear() + '-' + String(dia.getMonth() + 1).padStart(2, '0') + '-' + String(dia.getDate()).padStart(2, '0') + '.pdf';
+  return new File([pdfDeImagenes(paginas)], nombre, { type: 'application/pdf' });
+}
+// Abre «Compartir» con el PDF (WhatsApp, correo…); si el móvil no sabe compartir archivos, lo descarga.
+async function enviarPedidoPdf() {
+  const archivo = await archivoPedido();
+  if (!archivo) return;
+  if (navigator.canShare && navigator.canShare({ files: [archivo] })) {
+    try { await navigator.share({ files: [archivo], title: 'Pedido Miss Sushi' }); }
+    catch (e) { if (e.name !== 'AbortError') throw e; }
+  } else {
+    descargar(archivo);
+    avisar('Pedido guardado en descargas');
+  }
 }
 
 function accionStock(b) {
@@ -2208,6 +2334,7 @@ function accionStock(b) {
   }
   if (accion === 'nueva-compra') abrirCompra();
   if (accion === 'mandar-pedido') mandarPedido();
+  if (accion === 'enviar-pedido-pdf') enviarPedidoPdf().catch(() => avisar('No se pudo crear el PDF del pedido'));
   if (accion === 'pdf-stock') imprimirInformeStock();
   if (accion === 'cerrar-panel') cerrarPanel();
   if (accion === 'guardar-producto') {
