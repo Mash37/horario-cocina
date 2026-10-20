@@ -403,6 +403,9 @@
   .fila-recuento b { font-weight: 600; font-size: 14.5px; }
   .fila-recuento small { display: block; font-size: 11.5px; color: var(--gris); }
   .fila-recuento span { font-size: 13px; color: var(--gris); }
+  .fila-recuento input.dudoso { border-color: #f59e0b; background: #fff8e6; }
+  .foto-recuento { margin: 12px 0 4px; display: grid; gap: 6px; }
+  .foto-recuento .resultado { background: #fff8e6; border: 1px solid #f5d48b; color: #6b4b00; border-radius: 12px; padding: 10px 12px; font-size: 13.5px; line-height: 1.45; }
   .numero { height: 44px; width: 100%; border-radius: 12px; border: 1px solid var(--borde); background: var(--fondo); text-align: center; font-size: 17px; font-variant-numeric: tabular-nums; outline: none; }
   .numero:focus { border-color: var(--rosa); background: var(--blanco); box-shadow: 0 0 0 3px rgba(255, 77, 141, .18); }
   .compra { display: grid; grid-template-columns: 1fr auto 36px; gap: 8px; align-items: center; padding: 9px 0; border-top: 1px solid var(--borde); font-size: 14px; }
@@ -1909,10 +1912,68 @@ function pintarListaStock() {
   $('stockContenido').innerHTML = html;
 }
 
+// ---------- Recuento desde una foto ----------
+// Dirección del lector (kumi-lector, un Cloudflare Worker con la clave de Anthropic). Vacía: la opción no aparece.
+const LECTOR_URL = '';
+const LADO_MAX_FOTO = 1600;
+
+async function fotoReducida(archivo) {
+  const imagen = await createImageBitmap(archivo);
+  const escala = Math.min(1, LADO_MAX_FOTO / Math.max(imagen.width, imagen.height));
+  const c = document.createElement('canvas');
+  c.width = Math.round(imagen.width * escala); c.height = Math.round(imagen.height * escala);
+  c.getContext('2d').drawImage(imagen, 0, 0, c.width, c.height);
+  const blob = await new Promise((ok, mal) => c.toBlob((b) => (b ? ok(b) : mal(new Error('Sin imagen'))), 'image/jpeg', 0.85));
+  const bytes = new Uint8Array(await blob.arrayBuffer());
+  let bin = '';
+  for (let i = 0; i < bytes.length; i += 0x8000) bin += String.fromCharCode(...bytes.subarray(i, i + 0x8000));
+  return btoa(bin);
+}
+
+async function rellenarDesdeFoto(archivo) {
+  const boton = $('rFotoBtn'), resultado = $('rFotoResultado');
+  boton.disabled = true; boton.textContent = 'Leyendo la foto…';
+  resultado.hidden = true;
+  try {
+    const productos = productosActivos().map((p) => ({ id: p.id, nombre: p.nombre, unidad: p.unidad }));
+    const r = await fetch(LECTOR_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ imagen: await fotoReducida(archivo), tipo: 'image/jpeg', productos }) });
+    const datos = await r.json().catch(() => ({}));
+    if (!r.ok) throw new Error(datos.error || 'No se pudo leer la foto');
+    let leidos = 0, dudosos = 0;
+    (datos.lecturas || []).forEach((l) => {
+      const campo = document.querySelector('[data-recuento="' + CSS.escape(l.id) + '"]');
+      if (!campo || !l.leido) return;
+      campo.value = cifra.format(l.cantidad);
+      campo.classList.toggle('dudoso', !!l.dudoso);
+      campo.title = l.dudoso ? 'No se leía bien: revísalo' : '';
+      leidos++; if (l.dudoso) dudosos++;
+    });
+    const hoyISO = claveSemana(new Date());
+    if (/^\d{4}-\d{2}-\d{2}$/.test(datos.fecha || '') && datos.fecha <= hoyISO) $('rFecha').value = datos.fecha;
+    resultado.textContent = leidos
+      ? (leidos === 1 ? 'Se ha leído 1 producto. ' : 'Se han leído ' + leidos + ' productos. ') + (dudosos === 1 ? 'Revisa el marcado en naranja. ' : dudosos ? 'Revisa los ' + dudosos + ' marcados en naranja. ' : '') + 'Comprueba los números antes de guardar.' + (datos.notas ? ' Nota: ' + datos.notas : '')
+      : 'No se ha leído ninguna cantidad. Prueba con otra foto, con más luz y la hoja entera, o rellénalo a mano.';
+    resultado.hidden = false;
+  } catch (e) {
+    avisar(e.message || 'No se pudo leer la foto');
+  } finally {
+    boton.disabled = false; boton.textContent = '📷 Rellenar desde una foto';
+  }
+}
+document.addEventListener('change', (e) => {
+  if (e.target.id === 'rFoto' && e.target.files && e.target.files[0]) { rellenarDesdeFoto(e.target.files[0]); e.target.value = ''; }
+});
+document.addEventListener('input', (e) => {
+  if (e.target.classList && e.target.classList.contains('dudoso')) { e.target.classList.remove('dudoso'); e.target.title = ''; }
+});
+
 function pintarRecuento() {
   const activos = productosActivos();
   const hoyISO = claveSemana(new Date());
   let html = '<div class="tarjeta"><h3>Recuento</h3><div class="sub">Escribe lo que hay. Deja vacío lo que no cuentes. Puedes sumar: «14+3».</div>' +
+    (LECTOR_URL ? '<div class="foto-recuento"><button class="btn secundario" data-accion="recuento-foto" id="rFotoBtn">📷 Rellenar desde una foto</button>' +
+      '<p class="pista-campo">Haz una foto a la hoja de inventario rellenada a mano. Los números se ponen solos y los revisas antes de guardar.</p>' +
+      '<div class="resultado" id="rFotoResultado" hidden></div><input type="file" id="rFoto" accept="image/*" hidden></div>' : '') +
     '<div class="fila-fecha"><label class="campo"><span>Fecha</span><input id="rFecha" type="date" value="' + hoyISO + '" max="' + hoyISO + '"></label>' +
     '<div class="chips-inc" id="rTipo"><button data-tipo="semana" class="sel">Semanal</button><button data-tipo="mes">Fin de mes</button></div></div>';
   CATEGORIAS.forEach((cat) => {
@@ -2312,6 +2373,7 @@ function accionStock(b) {
     guardar(); cerrarPanel(); pintarStock();
     ofrecerDeshacer('Cantidad corregida', () => { st.recuentos = antes; });
   }
+  if (accion === 'recuento-foto') $('rFoto').click();
   if (accion === 'cancelar-recuento') terminarRecuento();
   if (accion === 'guardar-recuento') {
     // Hoy: la hora exacta. Otro día (un recuento que se olvidó): a mediodía de ese día.
