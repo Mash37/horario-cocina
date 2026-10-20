@@ -405,6 +405,11 @@
   .fila-recuento span { font-size: 13px; color: var(--gris); }
   .fila-recuento input.dudoso { border-color: #f59e0b; background: #fff8e6; }
   .foto-recuento { margin: 12px 0 4px; display: grid; gap: 6px; }
+  #rLista [hidden], #rNuevos[hidden], #rVerTodos[hidden] { display: none; }
+  .fila-recuento.nueva { grid-template-columns: 1fr 96px 88px; }
+  .fila-recuento .nuevo-nombre { width: 100%; font: inherit; font-size: 14px; font-weight: 600; padding: 6px 8px; border: 1px solid var(--borde); border-radius: 8px; background: transparent; color: inherit; }
+  .fila-recuento .nuevo-si { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--gris); margin-bottom: 4px; }
+  .fila-recuento select { font: inherit; font-size: 13px; padding: 6px 4px; border: 1px solid var(--borde); border-radius: 8px; background: transparent; color: inherit; }
   .foto-recuento .resultado { background: #fff8e6; border: 1px solid #f5d48b; color: #6b4b00; border-radius: 12px; padding: 10px 12px; font-size: 13.5px; line-height: 1.45; }
   .numero { height: 44px; width: 100%; border-radius: 12px; border: 1px solid var(--borde); background: var(--fondo); text-align: center; font-size: 17px; font-variant-numeric: tabular-nums; outline: none; }
   .numero:focus { border-color: var(--rosa); background: var(--blanco); box-shadow: 0 0 0 3px rgba(255, 77, 141, .18); }
@@ -1930,62 +1935,126 @@ async function fotoReducida(archivo) {
   return btoa(bin);
 }
 
-async function rellenarDesdeFoto(archivo) {
+// Productos de la foto que aún no están en la lista: se pueden añadir al guardar el recuento.
+let nuevosFoto = [];
+// Tres decimales: en kilos, «5.920» son 5,920 kg y no se puede perder el gramo.
+const cifraFoto = new Intl.NumberFormat('es-ES', { maximumFractionDigits: 3 });
+const normalizarNombre = (t) => t.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-z0-9]+/g, ' ').trim();
+
+async function leerFoto(archivo, productos) {
+  const r = await fetch(LECTOR_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ imagen: await fotoReducida(archivo), tipo: 'image/jpeg', productos }) });
+  const datos = await r.json().catch(() => ({}));
+  if (!r.ok) throw new Error(datos.error || 'No se pudo leer la foto');
+  return datos;
+}
+
+async function rellenarDesdeFoto(archivos) {
   const boton = $('rFotoBtn'), resultado = $('rFotoResultado');
-  boton.disabled = true; boton.textContent = 'Leyendo la foto…';
+  boton.disabled = true; boton.textContent = archivos.length > 1 ? 'Leyendo ' + archivos.length + ' fotos…' : 'Leyendo la foto…';
   resultado.hidden = true;
   try {
-    const productos = productosActivos().map((p) => ({ id: p.id, nombre: p.nombre, unidad: p.unidad }));
-    const r = await fetch(LECTOR_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ imagen: await fotoReducida(archivo), tipo: 'image/jpeg', productos }) });
-    const datos = await r.json().catch(() => ({}));
-    if (!r.ok) throw new Error(datos.error || 'No se pudo leer la foto');
+    const activos = productosActivos();
+    const productos = activos.map((p) => ({ id: p.id, nombre: p.nombre, unidad: p.unidad }));
+    const porNombre = new Map(activos.map((p) => [normalizarNombre(p.nombre), p]));
+    // Varias hojas a la vez: se leen en paralelo, no una detrás de otra.
+    const lecturas = await Promise.allSettled(archivos.map((f) => leerFoto(f, productos)));
+    const bien = lecturas.filter((x) => x.status === 'fulfilled').map((x) => x.value);
+    if (!bien.length) throw lecturas[0].reason;
     let leidos = 0, dudosos = 0;
-    (datos.lecturas || []).forEach((l) => {
-      const campo = document.querySelector('[data-recuento="' + CSS.escape(l.id) + '"]');
-      if (!campo || !l.leido) return;
-      campo.value = cifra.format(l.cantidad);
-      campo.classList.toggle('dudoso', !!l.dudoso);
-      campo.title = l.dudoso ? 'No se leía bien: revísalo' : '';
-      leidos++; if (l.dudoso) dudosos++;
+    const enFoto = new Set();
+    bien.forEach((datos) => {
+      const filas = datos.filas || (datos.lecturas || []).map((l) => ({ ...l, nombre: '' }));
+      filas.forEach((f) => {
+        const p = (f.id && producto(f.id) && !producto(f.id).archivado ? producto(f.id) : null) || porNombre.get(normalizarNombre(f.nombre || ''));
+        if (p) {
+          enFoto.add(p.id);
+          const campo = document.querySelector('[data-recuento="' + CSS.escape(p.id) + '"]');
+          if (!campo || !f.leido) return;
+          campo.value = cifraFoto.format(f.cantidad);
+          campo.classList.toggle('dudoso', !!f.dudoso);
+          campo.title = f.dudoso ? 'No se leía bien: revísalo' : '';
+          leidos++; if (f.dudoso) dudosos++;
+          return;
+        }
+        if (!f.nombre) return;
+        const clave = normalizarNombre(f.nombre);
+        const previo = nuevosFoto.find((n) => normalizarNombre(n.nombre) === clave);
+        const fila = { nombre: f.nombre, unidad: UNIDADES.includes(f.unidad) ? f.unidad : 'ud', cantidad: f.leido ? f.cantidad : null, dudoso: !!f.dudoso && f.leido, precio: f.precio > 0 ? f.precio : null };
+        if (previo) Object.assign(previo, fila); else nuevosFoto.push(fila);
+        if (f.leido) { leidos++; if (f.dudoso) dudosos++; }
+      });
+      const hoyISO = claveSemana(new Date());
+      if (/^\d{4}-\d{2}-\d{2}$/.test(datos.fecha || '') && datos.fecha <= hoyISO) $('rFecha').value = datos.fecha;
     });
-    const hoyISO = claveSemana(new Date());
-    if (/^\d{4}-\d{2}-\d{2}$/.test(datos.fecha || '') && datos.fecha <= hoyISO) $('rFecha').value = datos.fecha;
-    resultado.textContent = leidos
-      ? (leidos === 1 ? 'Se ha leído 1 producto. ' : 'Se han leído ' + leidos + ' productos. ') + (dudosos === 1 ? 'Revisa el marcado en naranja. ' : dudosos ? 'Revisa los ' + dudosos + ' marcados en naranja. ' : '') + 'Comprueba los números antes de guardar.' + (datos.notas ? ' Nota: ' + datos.notas : '')
-      : 'No se ha leído ninguna cantidad. Prueba con otra foto, con más luz y la hoja entera, o rellénalo a mano.';
+    pintarNuevosFoto();
+    filtrarPorFoto(enFoto);
+    const notas = bien.map((d) => d.notas).filter(Boolean).join(' ');
+    const fallidas = lecturas.length - bien.length;
+    resultado.textContent = (leidos
+      ? (leidos === 1 ? 'Se ha leído 1 cantidad. ' : 'Se han leído ' + leidos + ' cantidades. ') +
+        (nuevosFoto.length ? (nuevosFoto.length === 1 ? '1 producto de la foto no estaba en tu lista: está arriba y se añade al guardar si tiene cantidad. ' : nuevosFoto.length + ' productos de la foto no estaban en tu lista: están arriba y se añaden al guardar los que tengan cantidad. ') : '') +
+        (dudosos === 1 ? 'Revisa el marcado en naranja. ' : dudosos ? 'Revisa los ' + dudosos + ' marcados en naranja. ' : '') + 'Comprueba los números antes de guardar.'
+      : 'No se ha leído ninguna cantidad. Prueba con otra foto, con más luz y la hoja entera, o rellénalo a mano.') +
+      (fallidas ? ' ' + (fallidas === 1 ? 'Una foto no se pudo leer.' : fallidas + ' fotos no se pudieron leer.') : '') + (notas ? ' Nota: ' + notas : '');
     resultado.hidden = false;
   } catch (e) {
     avisar(e.message || 'No se pudo leer la foto');
   } finally {
-    boton.disabled = false; boton.textContent = '📷 Rellenar desde una foto';
+    boton.disabled = false; boton.textContent = '📷 Rellenar desde fotos';
   }
 }
+
+function pintarNuevosFoto() {
+  const caja = $('rNuevos');
+  if (!nuevosFoto.length) { caja.hidden = true; caja.innerHTML = ''; return; }
+  caja.hidden = false;
+  caja.innerHTML = '<div class="grupo-stock">De la foto, nuevos en tu lista</div>' + nuevosFoto.map((n, i) =>
+    '<div class="fila-recuento nueva"><div><label class="nuevo-si"><input type="checkbox" data-nuevo-si="' + i + '" checked> Añadir</label>' +
+    '<input class="nuevo-nombre" data-nuevo-nombre="' + i + '" value="' + escapar(n.nombre) + '" aria-label="Nombre del producto nuevo"></div>' +
+    '<input class="numero' + (n.dudoso ? ' dudoso' : '') + '" inputmode="decimal" data-nuevo="' + i + '" value="' + (n.cantidad == null ? '' : cifraFoto.format(n.cantidad)) + '" placeholder="—" aria-label="Cantidad de ' + escapar(n.nombre) + '">' +
+    '<select data-nuevo-unidad="' + i + '" aria-label="Unidad de ' + escapar(n.nombre) + '">' + opcionesLista(UNIDADES, n.unidad) + '</select></div>').join('');
+}
+
+// Tras leer, se ven solo los productos que salen en la foto; el resto queda a un toque.
+function filtrarPorFoto(enFoto) {
+  const filas = [...document.querySelectorAll('#rLista .fila-recuento')];
+  if (!enFoto.size) return;
+  filas.forEach((f) => { f.hidden = !enFoto.has(f.dataset.p) && !f.querySelector('input').value; });
+  document.querySelectorAll('#rLista .grupo-recuento').forEach((g) => { g.hidden = !g.querySelector('.fila-recuento:not([hidden])'); });
+  const ocultos = filas.filter((f) => f.hidden).length;
+  const ver = $('rVerTodos');
+  ver.hidden = !ocultos;
+  ver.textContent = 'Ver también ' + (ocultos === 1 ? 'el producto que no sale' : 'los ' + ocultos + ' productos que no salen') + ' en la foto';
+}
+
 document.addEventListener('change', (e) => {
-  if (e.target.id === 'rFoto' && e.target.files && e.target.files[0]) { rellenarDesdeFoto(e.target.files[0]); e.target.value = ''; }
+  if (e.target.id === 'rFoto' && e.target.files && e.target.files.length) { rellenarDesdeFoto([...e.target.files]); e.target.value = ''; }
 });
 document.addEventListener('input', (e) => {
   if (e.target.classList && e.target.classList.contains('dudoso')) { e.target.classList.remove('dudoso'); e.target.title = ''; }
 });
 
 function pintarRecuento() {
+  nuevosFoto = [];
   const activos = productosActivos();
   const hoyISO = claveSemana(new Date());
   let html = '<div class="tarjeta"><h3>Recuento</h3><div class="sub">Escribe lo que hay. Deja vacío lo que no cuentes. Puedes sumar: «14+3».</div>' +
-    (LECTOR_URL ? '<div class="foto-recuento"><button class="btn secundario" data-accion="recuento-foto" id="rFotoBtn">📷 Rellenar desde una foto</button>' +
-      '<p class="pista-campo">Haz una foto a la hoja de inventario rellenada a mano. Los números se ponen solos y los revisas antes de guardar.</p>' +
-      '<div class="resultado" id="rFotoResultado" hidden></div><input type="file" id="rFoto" accept="image/*" hidden></div>' : '') +
+    (LECTOR_URL ? '<div class="foto-recuento"><button class="btn secundario" data-accion="recuento-foto" id="rFotoBtn">📷 Rellenar desde fotos</button>' +
+      '<p class="pista-campo">Haz una foto a cada hoja de inventario rellenada a mano (puedes elegir varias). Los números se ponen solos y los revisas antes de guardar.</p>' +
+      '<div class="resultado" id="rFotoResultado" hidden></div><input type="file" id="rFoto" accept="image/*" multiple hidden></div>' : '') +
     '<div class="fila-fecha"><label class="campo"><span>Fecha</span><input id="rFecha" type="date" value="' + hoyISO + '" max="' + hoyISO + '"></label>' +
-    '<div class="chips-inc" id="rTipo"><button data-tipo="semana" class="sel">Semanal</button><button data-tipo="mes">Fin de mes</button></div></div>';
+    '<div class="chips-inc" id="rTipo"><button data-tipo="semana" class="sel">Semanal</button><button data-tipo="mes">Fin de mes</button></div></div>' +
+    '<div id="rNuevos" hidden></div><div id="rLista">';
   CATEGORIAS.forEach((cat) => {
     const deCat = activos.filter((p) => p.categoria === cat);
     if (!deCat.length) return;
-    html += '<div class="grupo-stock">' + cat + '</div>' + deCat.map((p) => {
+    html += '<div class="grupo-recuento"><div class="grupo-stock">' + cat + '</div>' + deCat.map((p) => {
       const e = estadoProducto(p);
-      return '<div class="fila-recuento"><div><b>' + escapar(p.nombre) + '</b><small>' + (e.cantidad == null ? 'sin datos' : 'antes: ' + cantidadTxt(e.cantidad, p)) + '</small></div>' +
+      return '<div class="fila-recuento" data-p="' + p.id + '"><div><b>' + escapar(p.nombre) + '</b><small>' + (e.cantidad == null ? 'sin datos' : 'antes: ' + cantidadTxt(e.cantidad, p)) + '</small></div>' +
         '<input class="numero" inputmode="decimal" data-recuento="' + p.id + '" placeholder="—" aria-label="Cantidad de ' + escapar(p.nombre) + '"><span>' + p.unidad + '</span></div>';
-    }).join('');
+    }).join('') + '</div>';
   });
-  html += '</div><div class="acciones"><button class="btn principal" data-accion="guardar-recuento">Guardar recuento</button>' +
+  html += '</div><button class="btn texto" data-accion="recuento-ver-todos" id="rVerTodos" hidden></button></div><div class="acciones"><button class="btn principal" data-accion="guardar-recuento">Guardar recuento</button>' +
     '<button class="btn secundario" data-accion="cancelar-recuento">Cancelar</button></div>';
   $('stockContenido').innerHTML = html;
 }
@@ -2374,6 +2443,10 @@ function accionStock(b) {
     ofrecerDeshacer('Cantidad corregida', () => { st.recuentos = antes; });
   }
   if (accion === 'recuento-foto') $('rFoto').click();
+  if (accion === 'recuento-ver-todos') {
+    document.querySelectorAll('#rLista [hidden]').forEach((x) => { x.hidden = false; });
+    b.hidden = true;
+  }
   if (accion === 'cancelar-recuento') terminarRecuento();
   if (accion === 'guardar-recuento') {
     // Hoy: la hora exacta. Otro día (un recuento que se olvidó): a mediodía de ese día.
@@ -2382,6 +2455,22 @@ function accionStock(b) {
     const ts = !a || fechaISO === claveSemana(new Date()) ? Date.now() : new Date(a, m - 1, d, 12).getTime();
     const tipo = $('rTipo').querySelector('.sel').dataset.tipo;
     let n = 0, malos = 0;
+    const creados = [];
+    document.querySelectorAll('[data-nuevo]').forEach((c) => {
+      const i = c.dataset.nuevo;
+      if (!document.querySelector('[data-nuevo-si="' + i + '"]').checked) return;
+      const v = leerNumero(c.value);
+      if (v === null) return;
+      if (Number.isNaN(v)) { malos++; c.style.borderColor = '#d92d20'; return; }
+      const nombre = document.querySelector('[data-nuevo-nombre="' + i + '"]').value.trim();
+      if (!nombre) { malos++; return; }
+      const ya = productosActivos().find((p) => normalizarNombre(p.nombre) === normalizarNombre(nombre));
+      const p = ya || { id: nuevoId(), nombre, unidad: document.querySelector('[data-nuevo-unidad="' + i + '"]').value, categoria: HOJA, minimo: null, precio: nuevosFoto[i].precio };
+      if (!ya) { st.productos.push(p); creados.push(p.id); }
+      st.recuentos.push({ id: nuevoId(), p: p.id, cant: v, ts, ...(tipo === 'mes' ? { tipo } : {}) });
+      n++;
+    });
+    const quitarCreados = () => { st.productos = st.productos.filter((p) => !creados.includes(p.id)); };
     document.querySelectorAll('[data-recuento]').forEach((c) => {
       const v = leerNumero(c.value);
       if (v === null) return;
@@ -2389,10 +2478,10 @@ function accionStock(b) {
       st.recuentos.push({ id: nuevoId(), p: c.dataset.recuento, cant: v, ts, ...(tipo === 'mes' ? { tipo } : {}) });
       n++;
     });
-    if (malos) { st.recuentos = st.recuentos.filter((r) => r.ts !== ts); avisar('Revisa las cantidades en rojo'); return; }
+    if (malos) { st.recuentos = st.recuentos.filter((r) => r.ts !== ts); quitarCreados(); avisar('Revisa las cantidades en rojo'); return; }
     if (!n) { avisar('No has escrito ninguna cantidad'); return; }
     guardar(); terminarRecuento(); window.scrollTo(0, 0);
-    ofrecerDeshacer('Recuento guardado (' + n + ')', () => { st.recuentos = st.recuentos.filter((r) => r.ts !== ts); });
+    ofrecerDeshacer('Recuento guardado (' + n + ')' + (creados.length ? ' · ' + creados.length + ' productos nuevos' : ''), () => { st.recuentos = st.recuentos.filter((r) => r.ts !== ts); quitarCreados(); });
   }
   if (accion === 'nueva-compra') abrirCompra();
   if (accion === 'mandar-pedido') mandarPedido();
