@@ -453,6 +453,14 @@
   .ing input.numero { text-align: right; }
   .ing button { border: 0; background: none; color: #c9b5bd; font-size: 17px; height: 40px; }
   .ing-pie { font-size: 12.5px; color: var(--gris); margin: 2px 2px 12px; }
+  .ing-bloque { border-bottom: 1px dashed var(--borde); padding-bottom: 8px; margin-bottom: 8px; }
+  .ing-extra { display: grid; grid-template-columns: 1fr auto; gap: 6px; }
+  .ing-extra input { height: 36px; border-radius: 10px; border: 1px solid var(--borde); background: var(--fondo); padding: 0 8px; font-size: 14px; width: 100%; min-width: 0; }
+  .ing-alg { border: 1px solid var(--borde); background: var(--blanco); color: var(--gris); border-radius: 10px; padding: 0 10px; font-size: 12.5px; max-width: 170px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .ing-alg.con { color: var(--frambuesa); border-color: var(--rosa-medio); font-weight: 600; }
+  .ing-alg.sug:not(.con) { background: #fff7e0; border-color: #f5d48b; color: #6b4b00; }
+  .ing-chips { margin-top: 8px; }
+  .alergenos button.fijo { opacity: .85; }
   .foto-ficha { display: flex; gap: 10px; align-items: center; margin-bottom: 12px; }
   .foto-ficha img { width: 64px; height: 64px; object-fit: cover; border-radius: 12px; border: 1px solid var(--borde); }
   .pista-campo { font-size: 12px; color: var(--gris); margin: -6px 2px 12px; }
@@ -511,13 +519,21 @@
     #zonaImprimir img { width: 100%; }
     @page matriz { size: A4 landscape; margin: 10mm; }
     #zonaImprimir.matriz { page: matriz; }
-    #zonaImprimir img.ficha-foto { width: 52mm; height: 52mm; object-fit: cover; float: right; margin: 0 0 6mm 8mm; border-radius: 4mm; }
   }
   .inf .ficha-alg { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; margin-bottom: 12px; }
   .inf .ficha-alg div { border: 1px solid #ead6dd; border-radius: 6px; padding: 4px 2px; text-align: center; font-size: 8.5pt; line-height: 1.2; color: #b9a9af; }
   .inf .ficha-alg div.si { background: #b0135f; color: #fff; border-color: #b0135f; font-weight: 600; }
   .inf .ficha-alg div.trazas { border: 1.5px dashed #b0135f; color: #b0135f; font-weight: 600; }
   .inf .ficha-txt { white-space: pre-line; margin: 0 0 12px; line-height: 1.45; }
+  .ficha-ms .ficha-cab { display: flex; justify-content: space-between; gap: 8mm; align-items: flex-start; margin-bottom: 4mm; }
+  .ficha-ms .ficha-titulo { font-family: 'Jost', Arial, sans-serif; font-style: normal; text-transform: uppercase; font-size: 22pt; letter-spacing: .02em; color: #1f1418; line-height: 1.15; }
+  #zonaImprimir img.ficha-foto-ms { width: 80mm; height: 56mm; object-fit: cover; border-radius: 3mm; flex: none; }
+  #zonaImprimir img.ficha-foto-ms.chica { width: 52mm; height: 38mm; }
+  .inf table.ficha-ing td { border: 1px solid #ead6dd; }
+  .inf table.ficha-ing td.alg-txt { font-size: 9pt; text-transform: uppercase; color: #b0135f; font-weight: 600; }
+  .ficha-ms .ficha-servicio { display: flex; justify-content: space-between; align-items: center; gap: 8mm; }
+  .ficha-ms .ficha-servicio b { display: block; font-size: 12pt; }
+  .ficha-ms .ficha-servicio span { font-size: 12pt; }
   .inf .ficha-sec { break-inside: avoid; margin-top: 10px; }
   .inf table.matriz th { font-size: 7.5pt; text-align: center; padding: 4px 2px; vertical-align: bottom; }
   .inf table.matriz th:first-child { text-align: left; font-size: 9pt; }
@@ -2649,10 +2665,19 @@ function costeFicha(f) {
   const total = costes.reduce((s, c) => s + (c || 0), 0);
   return { total, porRacion: f.raciones > 0 ? total / f.raciones : total, completo: costes.every((c) => c != null), alguno: costes.some((c) => c != null) };
 }
-function alergenosSugeridos(f) {
-  const texto = ' ' + f.ingredientes.map((i) => sinTildes(i.nombre)).join(' | ') + ' ';
-  return ALERGENOS.filter(([k]) => !f.alergenos[k] && PISTAS_ALERGENOS[k].some((w) => texto.includes(w))).map(([k]) => k);
+// Alérgenos que el nombre de un ingrediente hace pensar que tiene y aún no están marcados en él.
+function alergenosSugeridos(ing) {
+  const texto = ' ' + sinTildes(ing.nombre) + ' ';
+  return ALERGENOS.filter(([k]) => !(ing.alg || []).includes(k) && PISTAS_ALERGENOS[k].some((w) => texto.includes(w))).map(([k]) => k);
 }
+// Lo que lleva el plato: «si» si algún ingrediente lo tiene o se marcó a mano; «trazas» si se marcó como puede contener.
+function alergenosPlato(f) {
+  const res = {};
+  f.ingredientes.forEach((i) => (i.alg || []).forEach((k) => { res[k] = 'si'; }));
+  Object.entries(f.alergenos || {}).forEach(([k, v]) => { if (!res[k]) res[k] = v; });
+  return res;
+}
+const deIngredientes = (f, k) => f.ingredientes.filter((i) => (i.alg || []).includes(k)).map((i) => i.nombre);
 const nombreAlergeno = (k) => (ALERGENOS.find((a) => a[0] === k) || [k, k])[1];
 
 function pintarFichas() {
@@ -2667,11 +2692,12 @@ function pintarFichas() {
     if (!deCat.length) return;
     html += '<div class="tarjeta"><div class="grupo-stock">' + cat + '</div>' + deCat.map((f) => {
       const c = costeFicha(f);
-      const algs = ALERGENOS.filter(([k]) => f.alergenos[k]);
+      const pa = alergenosPlato(f);
+      const algs = ALERGENOS.filter(([k]) => pa[k]);
       return '<div class="ficha-fila" data-ficha="' + f.id + '"><div><b>' + escapar(f.nombre) + '</b><small>' +
         (f.raciones ? f.raciones + (f.raciones === 1 ? ' ración' : ' raciones') : '') + (f.ingredientes.length ? ' · ' + f.ingredientes.length + ' ingredientes' : '') + '</small></div>' +
         '<span class="importe">' + (c.alguno ? euros.format(c.porRacion) + (c.completo ? '' : '*') : '') + '</span>' +
-        '<div class="alg-mini">' + (algs.length ? algs.map(([k, n]) => '<span' + (f.alergenos[k] === 'trazas' ? ' class="trazas" title="Puede contener"' : '') + '>' + n + '</span>').join('')
+        '<div class="alg-mini">' + (algs.length ? algs.map(([k, n]) => '<span' + (pa[k] === 'trazas' ? ' class="trazas" title="Puede contener"' : '') + '>' + n + '</span>').join('')
           : f.sinAlergenos ? '<span class="sin">Sin alérgenos</span>' : '<span class="trazas">Alérgenos sin revisar</span>') + '</div></div>';
     }).join('') + '</div>';
   });
@@ -2680,38 +2706,56 @@ function pintarFichas() {
 }
 
 let fichaUI = null;
+let ingAbierto = -1;
 function abrirFicha(id) {
   const f = id ? fichas().find((x) => x.id === id) : null;
-  fichaUI = f ? JSON.parse(JSON.stringify(f)) : { id: null, nombre: '', categoria: CATEGORIAS_FICHA[1], raciones: 1, ingredientes: [{ nombre: '', cant: null, unidad: 'g' }], elaboracion: '', emplatado: '', conservacion: '', alergenos: {}, sinAlergenos: false, foto: '' };
+  fichaUI = f ? JSON.parse(JSON.stringify(f)) : { id: null, nombre: '', categoria: CATEGORIAS_FICHA[1], raciones: 1, ingredientes: [{ nombre: '', cant: null, unidad: 'g', prep: '', alg: [] }], elaboracion: '', emplatado: '', vajilla: '', envase: '', conservacion: '', alergenos: {}, sinAlergenos: false, foto: '', fotoEmplatado: '' };
+  ingAbierto = -1;
   pintarFicha();
   if (!id) setTimeout(() => { const n = $('fiNombre'); if (n) n.focus(); }, 250);
 }
 function pintarFicha() {
   const f = fichaUI;
-  const sug = alergenosSugeridos(f);
   const c = costeFicha(f);
+  const pa = alergenosPlato(f);
+  const foto = (campo, txt) => '<div class="foto-ficha">' + (f[campo] ? '<img src="' + f[campo] + '" alt="' + txt + '">' : '') +
+    '<button class="btn secundario chico" data-ficha-accion="foto" data-campo="' + campo + '">' + (f[campo] ? 'Cambiar ' : '📷 ') + txt.toLowerCase() + '</button>' +
+    (f[campo] ? '<button class="btn texto" data-ficha-accion="quitar-foto" data-campo="' + campo + '">Quitar</button>' : '') + '</div>';
   abrirPanel('<h3>' + (f.id ? 'Ficha técnica' : 'Nueva ficha') + '</h3><p class="sub">&nbsp;</p>' +
-    '<label class="campo"><span>Plato</span><input id="fiNombre" data-fi="nombre" value="' + escapar(f.nombre) + '" placeholder="Ej.: Uramaki de salmón"></label>' +
+    '<label class="campo"><span>Plato</span><input id="fiNombre" data-fi="nombre" value="' + escapar(f.nombre) + '" placeholder="Ej.: Dorayaki Lotus y chocolate negro"></label>' +
     '<div class="campos-2"><label class="campo"><span>Categoría</span><select data-fi="categoria">' + opcionesLista(CATEGORIAS_FICHA, f.categoria) + '</select></label>' +
     '<label class="campo"><span>Raciones que salen</span><input class="numero" inputmode="decimal" data-fi="raciones" value="' + (f.raciones || '') + '"></label></div>' +
-    '<div class="foto-ficha">' + (f.foto ? '<img src="' + f.foto + '" alt="Foto del plato">' : '') +
-    '<button class="btn secundario chico" data-ficha-accion="foto">' + (f.foto ? 'Cambiar foto' : '📷 Foto del plato') + '</button>' +
-    (f.foto ? '<button class="btn texto" data-ficha-accion="quitar-foto">Quitar</button>' : '') + '</div>' +
-    '<div class="grupo-stock">Ingredientes</div>' +
+    foto('foto', 'Foto del plato') +
+    '<div class="grupo-stock">Ingredientes y alérgenos</div>' +
     '<datalist id="dlFicha">' + productosActivos().map((p) => '<option value="' + escapar(p.nombre) + '">').join('') + '</datalist>' +
-    f.ingredientes.map((i, n) => '<div class="ing"><input list="dlFicha" data-ing="nombre" data-n="' + n + '" value="' + escapar(i.nombre) + '" placeholder="Ingrediente" aria-label="Ingrediente">' +
-      '<input class="numero" inputmode="decimal" data-ing="cant" data-n="' + n + '" value="' + (i.cant != null ? cifra.format(i.cant) : '') + '" placeholder="—" aria-label="Cantidad">' +
-      '<select data-ing="unidad" data-n="' + n + '" aria-label="Unidad">' + opcionesLista(UNIDADES_FICHA, i.unidad) + '</select>' +
-      '<button data-ficha-accion="quitar-ing" data-n="' + n + '" aria-label="Quitar ingrediente">✕</button></div>').join('') +
+    f.ingredientes.map((i, n) => {
+      const alg = i.alg || [], sug = alergenosSugeridos(i);
+      return '<div class="ing-bloque"><div class="ing"><input list="dlFicha" data-ing="nombre" data-n="' + n + '" value="' + escapar(i.nombre) + '" placeholder="Ingrediente" aria-label="Ingrediente">' +
+        '<input class="numero" inputmode="decimal" data-ing="cant" data-n="' + n + '" value="' + (i.cant != null ? cifra.format(i.cant) : '') + '" placeholder="—" aria-label="Cantidad">' +
+        '<select data-ing="unidad" data-n="' + n + '" aria-label="Unidad">' + opcionesLista(UNIDADES_FICHA, i.unidad) + '</select>' +
+        '<button data-ficha-accion="quitar-ing" data-n="' + n + '" aria-label="Quitar ingrediente">✕</button></div>' +
+        '<div class="ing-extra"><input data-ing="prep" data-n="' + n + '" value="' + escapar(i.prep || '') + '" placeholder="Preparación (picado, en tiras…)" aria-label="Preparación">' +
+        '<button class="ing-alg' + (alg.length ? ' con' : '') + (sug.length ? ' sug' : '') + '" data-ficha-accion="ver-alg" data-n="' + n + '" aria-expanded="' + (ingAbierto === n) + '">' +
+        (alg.length ? alg.map(nombreAlergeno).join(', ') : sug.length ? '¿Alérgenos? Revisar' : 'Alérgenos: ninguno') + '</button></div>' +
+        (ingAbierto === n ? '<div class="ing-chips">' +
+          (sug.length ? '<div class="sugeridos">Por el nombre, revisa: <b>' + sug.map(nombreAlergeno).join(', ') + '</b>. Confírmalo con la etiqueta. <button class="btn secundario chico" data-ficha-accion="sugeridos" data-n="' + n + '">Marcarlos</button></div>' : '') +
+          '<div class="alergenos">' + ALERGENOS.map(([k, nom, ico]) => '<button data-ing-alg="' + k + '" data-n="' + n + '" class="' + (alg.includes(k) ? 'si' : '') + '" aria-pressed="' + alg.includes(k) + '"><i>' + ico + '</i>' + nom + '</button>').join('') + '</div></div>' : '') +
+        '</div>';
+    }).join('') +
     '<button class="btn secundario chico" data-ficha-accion="anadir-ing">+ Ingrediente</button>' +
     '<p class="ing-pie" id="fiCoste">' + textoCoste(c, f) + '</p>' +
-    '<div class="grupo-stock">Alérgenos</div><p class="pista-campo" style="margin-top:0">Toca una vez: <b>contiene</b>. Dos veces: <b>puede contener</b> (trazas). Tres: no lo tiene.</p>' +
-    '<div class="alergenos">' + ALERGENOS.map(([k, n, ico]) => '<button data-alg="' + k + '" class="' + (f.alergenos[k] || '') + '" aria-label="' + n + ': ' + (f.alergenos[k] === 'si' ? 'contiene' : f.alergenos[k] === 'trazas' ? 'puede contener' : 'no') + '"><i>' + ico + '</i>' + n +
-      '<em>' + (f.alergenos[k] === 'si' ? 'Contiene' : f.alergenos[k] === 'trazas' ? 'Puede contener' : ' ') + '</em></button>').join('') + '</div>' +
-    (sug.length ? '<div class="sugeridos">Por los ingredientes, revisa: <b>' + sug.map(nombreAlergeno).join(', ') + '</b>. Kumi solo sugiere: confírmalo con la etiqueta de cada producto.<br><button class="btn secundario chico" data-ficha-accion="sugeridos">Marcarlos como «contiene»</button></div>' : '') +
-    (Object.keys(f.alergenos).length ? '' : '<label class="sig-ed" style="display:flex;gap:8px;align-items:center;font-size:14px;margin:0 2px 12px"><input type="checkbox" data-fi="sinAlergenos"' + (f.sinAlergenos ? ' checked' : '') + ' style="width:20px;height:20px"> Revisado: no tiene ninguno de los 14</label>') +
+    '<div class="grupo-stock">Alérgenos del plato</div><p class="pista-campo" style="margin-top:0">Los de los ingredientes salen solos. Toca otro para añadirlo: una vez <b>contiene</b>, dos <b>puede contener</b> (trazas), tres lo quita.</p>' +
+    '<div class="alergenos">' + ALERGENOS.map(([k, n, ico]) => {
+      const de = deIngredientes(f, k);
+      return '<button data-alg="' + k + '" class="' + (pa[k] || '') + (de.length ? ' fijo' : '') + '" aria-label="' + n + ': ' + (pa[k] === 'si' ? 'contiene' : pa[k] === 'trazas' ? 'puede contener' : 'no') + '"><i>' + ico + '</i>' + n +
+        '<em>' + (de.length ? 'Por ingrediente' : pa[k] === 'si' ? 'Contiene' : pa[k] === 'trazas' ? 'Puede contener' : ' ') + '</em></button>';
+    }).join('') + '</div>' +
+    (Object.keys(pa).length ? '' : '<label style="display:flex;gap:8px;align-items:center;font-size:14px;margin:0 2px 12px"><input type="checkbox" data-fi="sinAlergenos"' + (f.sinAlergenos ? ' checked' : '') + ' style="width:20px;height:20px"> Revisado: no tiene ninguno de los 14</label>') +
     '<label class="campo"><span>Elaboración</span><textarea data-fi="elaboracion" placeholder="Paso a paso">' + escapar(f.elaboracion) + '</textarea></label>' +
-    '<label class="campo"><span>Emplatado</span><textarea data-fi="emplatado" placeholder="Plato, orden, decoración">' + escapar(f.emplatado) + '</textarea></label>' +
+    '<label class="campo"><span>Emplatado</span><textarea data-fi="emplatado" placeholder="Orden, decoración">' + escapar(f.emplatado) + '</textarea></label>' +
+    '<div class="campos-2"><label class="campo"><span>Vajilla</span><input data-fi="vajilla" value="' + escapar(f.vajilla || '') + '" placeholder="Ej.: Prague rose 21 cm"></label>' +
+    '<label class="campo"><span>Delivery</span><input data-fi="envase" value="' + escapar(f.envase || '') + '" placeholder="Ej.: Ensaladera P 350 ml"></label></div>' +
+    foto('fotoEmplatado', 'Foto en la vajilla') +
     '<label class="campo"><span>Conservación (opcional)</span><textarea data-fi="conservacion" placeholder="Temperatura, vida útil, cómo se guarda">' + escapar(f.conservacion) + '</textarea></label>' +
     '<div class="acciones"><button class="btn principal" data-ficha-accion="guardar">Guardar</button>' +
     '<button class="btn secundario" data-ficha-accion="pdf">PDF de la ficha</button>' +
@@ -2730,7 +2774,7 @@ function guardarFicha() {
   if (f.ingredientes.some((i) => Number.isNaN(i.cant))) { avisar('Revisa las cantidades'); return false; }
   f.nombre = f.nombre.trim();
   f.ingredientes = f.ingredientes.filter((i) => i.nombre.trim());
-  if (Object.keys(f.alergenos).length) f.sinAlergenos = false;
+  if (Object.keys(alergenosPlato(f)).length) f.sinAlergenos = false;
   f.actualizada = Date.now();
   const lista = fichas();
   if (!f.id) { f.id = nuevoId(); lista.push(f); }
@@ -2775,8 +2819,17 @@ $('panel').addEventListener('click', async (e) => {
   if (!fichaUI) return;
   const alg = e.target.closest('[data-alg]');
   if (alg) {
-    const k = alg.dataset.alg, ahora = fichaUI.alergenos[k];
+    const k = alg.dataset.alg, de = deIngredientes(fichaUI, k);
+    if (de.length) { avisar('Lo lleva: ' + de.join(', ') + '. Se quita en el ingrediente'); return; }
+    const ahora = fichaUI.alergenos[k];
     if (!ahora) fichaUI.alergenos[k] = 'si'; else if (ahora === 'si') fichaUI.alergenos[k] = 'trazas'; else delete fichaUI.alergenos[k];
+    const y = $('panel').scrollTop; pintarFicha(); $('panel').scrollTop = y;
+    return;
+  }
+  const ia = e.target.closest('[data-ing-alg]');
+  if (ia) {
+    const ing = fichaUI.ingredientes[+ia.dataset.n], k = ia.dataset.ingAlg;
+    ing.alg = (ing.alg || []).includes(k) ? ing.alg.filter((x) => x !== k) : (ing.alg || []).concat(k);
     const y = $('panel').scrollTop; pintarFicha(); $('panel').scrollTop = y;
     return;
   }
@@ -2784,15 +2837,16 @@ $('panel').addEventListener('click', async (e) => {
   if (!b) return;
   const a = b.dataset.fichaAccion, y = $('panel').scrollTop;
   const repintar = () => { pintarFicha(); $('panel').scrollTop = y; };
-  if (a === 'anadir-ing') { fichaUI.ingredientes.push({ nombre: '', cant: null, unidad: 'g' }); repintar(); const ins = $('panel').querySelectorAll('[data-ing="nombre"]'); ins[ins.length - 1].focus(); }
-  if (a === 'quitar-ing') { fichaUI.ingredientes.splice(+b.dataset.n, 1); repintar(); }
-  if (a === 'sugeridos') { alergenosSugeridos(fichaUI).forEach((k) => { fichaUI.alergenos[k] = 'si'; }); repintar(); }
-  if (a === 'quitar-foto') { fichaUI.foto = ''; repintar(); }
+  if (a === 'ver-alg') { ingAbierto = ingAbierto === +b.dataset.n ? -1 : +b.dataset.n; repintar(); }
+  if (a === 'anadir-ing') { ingAbierto = -1; fichaUI.ingredientes.push({ nombre: '', cant: null, unidad: 'g', prep: '', alg: [] }); repintar(); const ins = $('panel').querySelectorAll('[data-ing="nombre"]'); ins[ins.length - 1].focus(); }
+  if (a === 'quitar-ing') { ingAbierto = -1; fichaUI.ingredientes.splice(+b.dataset.n, 1); repintar(); }
+  if (a === 'sugeridos') { const ing = fichaUI.ingredientes[+b.dataset.n]; ing.alg = (ing.alg || []).concat(alergenosSugeridos(ing)); repintar(); }
+  if (a === 'quitar-foto') { fichaUI[b.dataset.campo] = ''; repintar(); }
   if (a === 'foto') {
     const entrada = document.createElement('input');
     entrada.type = 'file'; entrada.accept = 'image/*';
     entrada.onchange = async () => {
-      try { fichaUI.foto = await fotoFicha(entrada.files[0]); repintar(); }
+      try { fichaUI[b.dataset.campo] = await fotoFicha(entrada.files[0]); repintar(); }
       catch (err) { avisar('No se pudo usar esa foto'); }
     };
     entrada.click();
@@ -2821,20 +2875,25 @@ $('fichasContenido').addEventListener('click', (e) => {
 const fechaLarga = (ts) => { const d = new Date(ts); return d.getDate() + '/' + (d.getMonth() + 1) + '/' + d.getFullYear(); };
 function imprimirFicha(f) {
   const c = costeFicha(f);
+  const pa = alergenosPlato(f);
   const zona = $('zonaImprimir');
   zona.className = 'informe';
   const seccion = (t, txt) => txt && txt.trim() ? '<div class="ficha-sec"><h2><span>' + t + '</span></h2><p class="ficha-txt">' + escapar(txt.trim()) + '</p></div>' : '';
-  zona.innerHTML = '<div class="inf"><div class="inf-marca">Kumi Mara · Miss Sushi · Ficha técnica</div>' +
-    (f.foto ? '<img class="ficha-foto" src="' + f.foto + '" alt="">' : '') +
-    '<h1>' + escapar(f.nombre) + '</h1>' +
-    '<p class="inf-sub">' + escapar(f.categoria) + (f.raciones ? ' · ' + f.raciones + (f.raciones === 1 ? ' ración' : ' raciones') : '') + ' · Actualizada el ' + fechaLarga(f.actualizada || Date.now()) + '</p>' +
-    '<div class="ficha-sec"><h2><span>Alérgenos</span><span>' + (f.sinAlergenos ? 'Sin alérgenos' : '■ contiene · ▢ puede contener') + '</span></h2><div class="ficha-alg">' +
-    ALERGENOS.map(([k, n]) => '<div class="' + (f.alergenos[k] || '') + '">' + n + '</div>').join('') + '</div></div>' +
-    (f.ingredientes.length ? '<div class="ficha-sec" style="clear:both"><h2><span>Ingredientes</span></h2><table><thead><tr><th>Ingrediente</th><th class="n">Cantidad</th><th class="n">Coste</th></tr></thead><tbody>' +
-      f.ingredientes.map((i) => { const ci = costeIngrediente(i); return '<tr><td>' + escapar(i.nombre) + '</td><td class="n">' + (i.cant != null ? cifra.format(i.cant) + ' ' : '') + escapar(i.unidad) + '</td><td class="n">' + (ci != null ? euros.format(ci) : '—') + '</td></tr>'; }).join('') +
-      (c.alguno ? '<tr class="suma"><td>Coste' + (c.completo ? '' : ' (parcial)') + '</td><td class="n">' + (f.raciones > 1 ? euros.format(c.porRacion) + ' / ración' : '') + '</td><td class="n">' + euros.format(c.total) + '</td></tr>' : '') +
+  zona.innerHTML = '<div class="inf ficha-ms"><div class="ficha-cab"><div><div class="inf-marca">Ficha técnica Miss Sushi</div>' +
+    '<h1 class="ficha-titulo">' + escapar(f.nombre) + '</h1>' +
+    '<p class="inf-sub">' + escapar(f.categoria) + (f.raciones ? ' · ' + f.raciones + (f.raciones === 1 ? ' ración' : ' raciones') : '') + ' · Actualizada el ' + fechaLarga(f.actualizada || Date.now()) + '</p></div>' +
+    (f.foto ? '<img class="ficha-foto-ms" src="' + f.foto + '" alt="">' : '') + '</div>' +
+    (f.ingredientes.length ? '<div class="ficha-sec"><h2><span>Ingredientes y alérgenos</span></h2><table class="ficha-ing"><thead><tr><th class="n">Cant.</th><th>Ud</th><th>Ingrediente</th><th>Preparación</th><th>Alérgenos</th>' + (c.alguno ? '<th class="n">Coste</th>' : '') + '</tr></thead><tbody>' +
+      f.ingredientes.map((i) => { const ci = costeIngrediente(i); return '<tr><td class="n">' + (i.cant != null ? cifra.format(i.cant) : '') + '</td><td>' + escapar(i.unidad) + '</td><td>' + escapar(i.nombre) + '</td><td>' + escapar(i.prep || '') + '</td><td class="alg-txt">' + (i.alg || []).map(nombreAlergeno).join(', ') + '</td>' + (c.alguno ? '<td class="n">' + (ci != null ? euros.format(ci) : '—') + '</td>' : '') + '</tr>'; }).join('') +
+      (c.alguno ? '<tr class="suma"><td colspan="5">Coste' + (c.completo ? '' : ' (parcial)') + (f.raciones > 1 ? ' · ' + euros.format(c.porRacion) + ' por ración' : '') + '</td><td class="n">' + euros.format(c.total) + '</td></tr>' : '') +
       '</tbody></table></div>' : '') +
-    seccion('Elaboración', f.elaboracion) + seccion('Emplatado', f.emplatado) + seccion('Conservación', f.conservacion) +
+    '<div class="ficha-sec"><h2><span>Alérgenos del plato</span><span>' + (f.sinAlergenos ? 'Sin alérgenos' : '■ contiene · ▢ puede contener') + '</span></h2><div class="ficha-alg">' +
+    ALERGENOS.map(([k, n]) => '<div class="' + (pa[k] || '') + '">' + n + '</div>').join('') + '</div></div>' +
+    seccion('Elaboración', f.elaboracion) + seccion('Emplatado', f.emplatado) +
+    (f.vajilla || f.envase || f.fotoEmplatado ? '<div class="ficha-sec ficha-servicio"><div><b>Vajilla</b><span>' + escapar(f.vajilla || '—') + '</span></div>' +
+      (f.fotoEmplatado ? '<img class="ficha-foto-ms chica" src="' + f.fotoEmplatado + '" alt="">' : '') +
+      '<div><b>Delivery</b><span>' + escapar(f.envase || '—') + '</span></div></div>' : '') +
+    seccion('Conservación', f.conservacion) +
     '<div class="inf-firmas"><div>Elaborado por</div><div>Revisado</div></div></div>';
   fuentesListas().then(() => imprimir('Ficha ' + f.nombre + ' - Kumi Mara'));
 }
@@ -2847,7 +2906,7 @@ function imprimirMatrizAlergenos() {
     const deCat = lista.filter((f) => (f.categoria || 'Otros') === cat);
     if (!deCat.length) return;
     filas += '<tr class="cat"><td colspan="' + (ALERGENOS.length + 1) + '">' + cat + '</td></tr>' +
-      deCat.map((f) => '<tr><td>' + escapar(f.nombre) + '</td>' + ALERGENOS.map(([k]) => '<td>' + (f.alergenos[k] === 'si' ? '●' : f.alergenos[k] === 'trazas' ? '○' : '') + '</td>').join('') + '</tr>').join('');
+      deCat.map((f) => { const pa = alergenosPlato(f); return '<tr><td>' + escapar(f.nombre) + '</td>' + ALERGENOS.map(([k]) => '<td>' + (pa[k] === 'si' ? '●' : pa[k] === 'trazas' ? '○' : '') + '</td>').join('') + '</tr>'; }).join('');
   });
   zona.innerHTML = '<div class="inf"><div class="inf-marca">Kumi Mara · Miss Sushi</div><h1>Alérgenos de la carta</h1>' +
     '<p class="inf-sub">● contiene · ○ puede contener (trazas) · Actualizado el ' + fechaLarga(Date.now()) + '</p>' +
