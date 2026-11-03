@@ -461,6 +461,20 @@
   .ing-alg.sug:not(.con) { background: #fff7e0; border-color: #f5d48b; color: #6b4b00; }
   .ing-chips { margin-top: 8px; }
   .alergenos button.fijo { opacity: .85; }
+  .montaje-fila { padding: 11px 0; border-top: 1px solid var(--borde); cursor: pointer; }
+  .montaje-fila:first-of-type { border-top: 0; }
+  .montaje-fila b { font-size: 15px; display: block; margin-bottom: 6px; }
+  .tira-mini { display: flex; align-items: center; gap: 4px; overflow-x: auto; }
+  .tira-mini img { width: 44px; height: 44px; object-fit: cover; border-radius: 8px; flex: none; border: 1px solid var(--borde); }
+  .tira-mini img.resultado { border: 2px solid var(--frambuesa); }
+  .tira-mini span { font-size: 11px; background: var(--rosa-suave); color: var(--frambuesa); border-radius: 8px; padding: 4px 6px; flex: none; }
+  .tira-mini i { font-style: normal; color: var(--gris); font-size: 13px; flex: none; }
+  .paso-mo { display: grid; grid-template-columns: 48px 1fr 34px 30px; gap: 6px; align-items: center; margin-bottom: 6px; }
+  .paso-mo input { height: 42px; border-radius: 10px; border: 1px solid var(--borde); background: var(--fondo); padding: 0 8px; font-size: 15px; width: 100%; min-width: 0; }
+  .paso-mo button { border: 0; background: none; color: #c9b5bd; font-size: 17px; height: 40px; }
+  .paso-mo button:disabled { opacity: .3; }
+  .paso-mo .paso-foto { width: 48px; height: 48px; border-radius: 10px; border: 1px dashed var(--rosa-medio); background: var(--blanco); font-size: 18px; padding: 0; overflow: hidden; }
+  .paso-mo .paso-foto img { width: 100%; height: 100%; object-fit: cover; display: block; }
   .foto-ficha { display: flex; gap: 10px; align-items: center; margin-bottom: 12px; }
   .foto-ficha img { width: 64px; height: 64px; object-fit: cover; border-radius: 12px; border: 1px solid var(--borde); }
   .pista-campo { font-size: 12px; color: var(--gris); margin: -6px 2px 12px; }
@@ -534,6 +548,14 @@
   .ficha-ms .ficha-servicio { display: flex; justify-content: space-between; align-items: center; gap: 8mm; }
   .ficha-ms .ficha-servicio b { display: block; font-size: 12pt; }
   .ficha-ms .ficha-servicio span { font-size: 12pt; }
+  .inf .tira { break-inside: avoid; margin: 6mm 0 8mm; }
+  .inf h2.tira-titulo { display: block; text-align: center; text-transform: uppercase; border: 0; font-weight: 500; font-size: 12pt; letter-spacing: .04em; margin-bottom: 2mm; }
+  .inf table.tira-tabla { table-layout: fixed; border-collapse: collapse; }
+  .inf table.tira-tabla td { border: 1px solid #1f1418; padding: 0; vertical-align: bottom; text-align: center; }
+  .inf .tira-img { height: 30mm; display: grid; place-items: center; padding: 1.5mm; }
+  #zonaImprimir .tira-img img { width: auto; max-width: 100%; height: 27mm; object-fit: contain; }
+  .inf .tira-txt { border-top: 1px solid #1f1418; font-size: 9pt; text-transform: uppercase; padding: 1mm; }
+  .inf td.tira-res .tira-txt { border-top: 0; }
   .inf .ficha-sec { break-inside: avoid; margin-top: 10px; }
   .inf table.matriz th { font-size: 7.5pt; text-align: center; padding: 4px 2px; vertical-align: bottom; }
   .inf table.matriz th:first-child { text-align: left; font-size: 9pt; }
@@ -692,6 +714,7 @@
   <section class="vista" id="vistaFichas">
     <button class="volver" data-volver><span>‹</span> Inicio</button>
     <h2>Fichas técnicas</h2>
+    <div class="segmento" id="segFichas"><button data-sub-fichas="fichas" class="activo">Fichas</button><button data-sub-fichas="montaje">Montaje</button></div>
     <div id="fichasContenido"></div>
   </section>
 
@@ -2681,6 +2704,8 @@ const deIngredientes = (f, k) => f.ingredientes.filter((i) => (i.alg || []).incl
 const nombreAlergeno = (k) => (ALERGENOS.find((a) => a[0] === k) || [k, k])[1];
 
 function pintarFichas() {
+  document.querySelectorAll('#segFichas button').forEach((b) => b.classList.toggle('activo', b.dataset.subFichas === subFichas));
+  if (subFichas === 'montaje') { pintarMontajes(); return; }
   const lista = fichas().slice().sort((a, b) => a.nombre.localeCompare(b.nombre, 'es', { sensitivity: 'base' }));
   let html = '<div class="acciones"><button class="btn principal" data-ficha-accion="nueva">+ Nueva ficha</button>' +
     '<button class="btn secundario" data-ficha-accion="matriz"' + (lista.length ? '' : ' disabled') + '>PDF de alérgenos de la carta</button></div>';
@@ -2711,6 +2736,7 @@ function abrirFicha(id) {
   const f = id ? fichas().find((x) => x.id === id) : null;
   fichaUI = f ? JSON.parse(JSON.stringify(f)) : { id: null, nombre: '', categoria: CATEGORIAS_FICHA[1], raciones: 1, ingredientes: [{ nombre: '', cant: null, unidad: 'g', prep: '', alg: [] }], elaboracion: '', emplatado: '', vajilla: '', envase: '', conservacion: '', alergenos: {}, sinAlergenos: false, foto: '', fotoEmplatado: '' };
   ingAbierto = -1;
+  montajeUI = null;
   pintarFicha();
   if (!id) setTimeout(() => { const n = $('fiNombre'); if (n) n.focus(); }, 250);
 }
@@ -2863,7 +2889,19 @@ $('panel').addEventListener('click', async (e) => {
     ofrecerDeshacer('Ficha borrada', () => { lista.splice(i, 0, quitada); });
   }
 });
+$('segFichas').addEventListener('click', (e) => {
+  const b = e.target.closest('[data-sub-fichas]');
+  if (b) { subFichas = b.dataset.subFichas; pintarFichas(); }
+});
 $('fichasContenido').addEventListener('click', (e) => {
+  const mo = e.target.closest('[data-montaje]');
+  if (mo) { abrirMontaje(mo.dataset.montaje); return; }
+  const bm = e.target.closest('[data-montaje-accion]');
+  if (bm) {
+    if (bm.dataset.montajeAccion === 'nuevo') abrirMontaje(null);
+    if (bm.dataset.montajeAccion === 'pdf-todas') imprimirMontajes(montajes().slice().sort((x, y) => x.nombre.localeCompare(y.nombre, 'es', { sensitivity: 'base' })));
+    return;
+  }
   const fila = e.target.closest('[data-ficha]');
   if (fila) { abrirFicha(fila.dataset.ficha); return; }
   const b = e.target.closest('[data-ficha-accion]');
@@ -2897,6 +2935,139 @@ function imprimirFicha(f) {
     '<div class="inf-firmas"><div>Elaborado por</div><div>Revisado</div></div></div>';
   fuentesListas().then(() => imprimir('Ficha ' + f.nombre + ' - Kumi Mara'));
 }
+// ---------- Hojas de montaje: los pasos de un plato en fotos, como las hojas plastificadas de la cocina ----------
+// La foto de cada paso se guarda una vez por nombre («Base uramaki») y sirve para todas las hojas que lo usan.
+let subFichas = 'fichas';
+let montajeUI = null;
+function montajes() { if (!datos.montajes) datos.montajes = []; return datos.montajes; }
+function fotosPasos() { if (!datos.fotosPasos) datos.fotosPasos = {}; return datos.fotosPasos; }
+const clavePaso = (nombre) => sinTildes(nombre).replace(/\s+/g, ' ').trim();
+const fotoPaso = (nombre) => fotosPasos()[clavePaso(nombre)] || '';
+
+function pintarMontajes() {
+  const lista = montajes().slice().sort((a, b) => a.nombre.localeCompare(b.nombre, 'es', { sensitivity: 'base' }));
+  let html = '<div class="acciones"><button class="btn principal" data-montaje-accion="nuevo">+ Nueva hoja de montaje</button>' +
+    '<button class="btn secundario" data-montaje-accion="pdf-todas"' + (lista.length ? '' : ' disabled') + '>PDF de todas</button></div>';
+  if (!lista.length) {
+    html += '<div class="tarjeta"><h3>Aún no hay hojas de montaje</h3><div class="sub">Los pasos de un plato en fotos, en orden, con el resultado al final. La foto de cada paso se pone una vez y sirve para todas las hojas.</div></div>';
+  } else {
+    html += '<div class="tarjeta">' + lista.map((m) => '<div class="montaje-fila" data-montaje="' + m.id + '"><b>' + escapar(m.nombre) + '</b>' +
+      '<div class="tira-mini">' + m.pasos.map((p) => { const f = fotoPaso(p); return f ? '<img src="' + f + '" alt="' + escapar(p) + '">' : '<span>' + escapar(p) + '</span>'; }).join('<i>›</i>') +
+      (m.resultado ? '<i>=</i><img class="resultado" src="' + m.resultado + '" alt="Resultado">' : '') + '</div></div>').join('') + '</div>';
+  }
+  $('fichasContenido').innerHTML = html;
+}
+
+function abrirMontaje(id) {
+  const m = id ? montajes().find((x) => x.id === id) : null;
+  fichaUI = null;
+  montajeUI = m ? JSON.parse(JSON.stringify(m)) : { id: null, nombre: '', pasos: ['', ''], resultado: '' };
+  pintarMontaje();
+  if (!id) setTimeout(() => { const n = $('moNombre'); if (n) n.focus(); }, 250);
+}
+function pintarMontaje() {
+  const m = montajeUI;
+  const nombres = [...new Set(montajes().flatMap((x) => x.pasos).concat(fichas().flatMap((f) => f.ingredientes.map((i) => i.nombre))))].filter(Boolean);
+  abrirPanel('<h3>' + (m.id ? 'Hoja de montaje' : 'Nueva hoja de montaje') + '</h3><p class="sub">&nbsp;</p>' +
+    '<label class="campo"><span>Nombre</span><input id="moNombre" data-mo="nombre" value="' + escapar(m.nombre) + '" placeholder="Ej.: Roll base salmón y queso"></label>' +
+    (!m.id && fichas().length ? '<label class="campo"><span>Empezar desde una ficha (opcional)</span><select data-mo-ficha><option value="">—</option>' +
+      fichas().map((f) => '<option value="' + f.id + '">' + escapar(f.nombre) + '</option>').join('') + '</select></label>' : '') +
+    '<div class="grupo-stock">Pasos, en orden</div><p class="pista-campo" style="margin-top:0">Toca la cámara para poner la foto de un paso. Si el paso se llama igual en otra hoja, usa la misma foto.</p>' +
+    '<datalist id="dlPasos">' + nombres.map((n) => '<option value="' + escapar(n) + '">').join('') + '</datalist>' +
+    m.pasos.map((p, n) => { const f = fotoPaso(p); return '<div class="paso-mo">' +
+      '<button class="paso-foto" data-montaje-accion="foto-paso" data-n="' + n + '" aria-label="Foto de ' + escapar(p || 'este paso') + '">' + (f ? '<img src="' + f + '" alt="">' : '📷') + '</button>' +
+      '<input list="dlPasos" data-mo-paso="' + n + '" value="' + escapar(p) + '" placeholder="Paso ' + (n + 1) + ' (ej.: Base uramaki)" aria-label="Paso ' + (n + 1) + '">' +
+      '<button data-montaje-accion="subir" data-n="' + n + '" aria-label="Subir"' + (n ? '' : ' disabled') + '>↑</button>' +
+      '<button data-montaje-accion="quitar" data-n="' + n + '" aria-label="Quitar paso">✕</button></div>'; }).join('') +
+    '<button class="btn secundario chico" data-montaje-accion="anadir">+ Paso</button>' +
+    '<div class="grupo-stock">Resultado</div>' +
+    '<div class="foto-ficha">' + (m.resultado ? '<img src="' + m.resultado + '" alt="Resultado">' : '') +
+    '<button class="btn secundario chico" data-montaje-accion="foto-resultado">' + (m.resultado ? 'Cambiar foto' : '📷 Foto del resultado') + '</button>' +
+    (m.resultado ? '<button class="btn texto" data-montaje-accion="quitar-resultado">Quitar</button>' : '') + '</div>' +
+    '<div class="acciones"><button class="btn principal" data-montaje-accion="guardar">Guardar</button>' +
+    '<button class="btn secundario" data-montaje-accion="pdf">PDF de esta hoja</button>' +
+    '<button class="btn secundario" data-accion="cerrar-panel">Cancelar</button>' +
+    (m.id ? '<button class="btn texto" data-montaje-accion="borrar">Borrar esta hoja</button>' : '') + '</div>');
+}
+// Guarda la hoja que se está editando; devuelve false si falta el nombre o no tiene pasos.
+function guardarMontaje() {
+  const m = montajeUI;
+  if (!m.nombre.trim()) { avisar('Ponle nombre a la hoja'); return false; }
+  m.nombre = m.nombre.trim();
+  m.pasos = m.pasos.map((p) => p.trim()).filter(Boolean);
+  if (!m.pasos.length) { avisar('Añade al menos un paso'); return false; }
+  const lista = montajes();
+  if (!m.id) { m.id = nuevoId(); lista.push(m); }
+  else lista.splice(lista.findIndex((x) => x.id === m.id), 1, m);
+  montajeUI = JSON.parse(JSON.stringify(m));
+  guardar();
+  return true;
+}
+function elegirFoto(alListo) {
+  const entrada = document.createElement('input');
+  entrada.type = 'file'; entrada.accept = 'image/*';
+  entrada.onchange = async () => {
+    try { alListo(await fotoFicha(entrada.files[0])); }
+    catch (err) { avisar('No se pudo usar esa foto'); }
+  };
+  entrada.click();
+}
+
+$('panel').addEventListener('input', (e) => {
+  if (!montajeUI) return;
+  const t = e.target;
+  if (t.dataset.mo) montajeUI[t.dataset.mo] = t.value;
+  if (t.dataset.moPaso != null) montajeUI.pasos[+t.dataset.moPaso] = t.value;
+});
+$('panel').addEventListener('change', (e) => {
+  if (!montajeUI) return;
+  const t = e.target, y = $('panel').scrollTop;
+  if (t.dataset.moPaso != null) { pintarMontaje(); $('panel').scrollTop = y; }
+  if (t.matches('[data-mo-ficha]') && t.value) {
+    const f = fichas().find((x) => x.id === t.value);
+    montajeUI.pasos = f.ingredientes.map((i) => i.nombre).filter(Boolean);
+    if (!montajeUI.nombre.trim()) montajeUI.nombre = f.nombre;
+    if (!montajeUI.resultado && f.foto) montajeUI.resultado = f.foto;
+    pintarMontaje(); $('panel').scrollTop = y;
+  }
+});
+$('panel').addEventListener('click', (e) => {
+  if (!montajeUI) return;
+  const b = e.target.closest('[data-montaje-accion]');
+  if (!b) return;
+  const a = b.dataset.montajeAccion, n = +b.dataset.n, y = $('panel').scrollTop;
+  const repintar = () => { pintarMontaje(); $('panel').scrollTop = y; };
+  if (a === 'anadir') { montajeUI.pasos.push(''); repintar(); const ins = $('panel').querySelectorAll('[data-mo-paso]'); ins[ins.length - 1].focus(); }
+  if (a === 'quitar') { montajeUI.pasos.splice(n, 1); repintar(); }
+  if (a === 'subir' && n > 0) { [montajeUI.pasos[n - 1], montajeUI.pasos[n]] = [montajeUI.pasos[n], montajeUI.pasos[n - 1]]; repintar(); }
+  if (a === 'foto-paso') {
+    const nombre = (montajeUI.pasos[n] || '').trim();
+    if (!nombre) { avisar('Escribe primero el nombre del paso'); return; }
+    elegirFoto((foto) => { fotosPasos()[clavePaso(nombre)] = foto; guardar(); repintar(); });
+  }
+  if (a === 'foto-resultado') elegirFoto((foto) => { montajeUI.resultado = foto; repintar(); });
+  if (a === 'quitar-resultado') { montajeUI.resultado = ''; repintar(); }
+  if (a === 'guardar') { if (!guardarMontaje()) return; montajeUI = null; cerrarPanel(); pintarFichas(); avisar('Hoja guardada'); }
+  if (a === 'pdf') { if (guardarMontaje()) { pintarFichas(); imprimirMontajes([montajeUI]); } }
+  if (a === 'borrar') {
+    if (!confirm('¿Borrar la hoja «' + montajeUI.nombre + '»?')) return;
+    const lista = montajes(), i = lista.findIndex((x) => x.id === montajeUI.id), [quitada] = lista.splice(i, 1);
+    montajeUI = null; guardar(); cerrarPanel(); pintarFichas();
+    ofrecerDeshacer('Hoja borrada', () => { lista.splice(i, 0, quitada); });
+  }
+});
+
+function imprimirMontajes(lista) {
+  const zona = $('zonaImprimir');
+  zona.className = 'informe';
+  zona.innerHTML = '<div class="inf"><div class="inf-marca">Kumi Mara · Miss Sushi · Hojas de montaje</div>' +
+    lista.map((m) => '<div class="tira"><h2 class="tira-titulo">' + escapar(m.nombre) + '</h2><table class="tira-tabla"><tr>' +
+      m.pasos.map((p) => { const f = fotoPaso(p); return '<td><div class="tira-img">' + (f ? '<img src="' + f + '" alt="">' : '') + '</div><div class="tira-txt">' + escapar(p) + '</div></td>'; }).join('') +
+      (m.resultado ? '<td class="tira-res"><div class="tira-img"><img src="' + m.resultado + '" alt=""></div><div class="tira-txt">&nbsp;</div></td>' : '') +
+      '</tr></table></div>').join('') + '</div>';
+  fuentesListas().then(() => imprimir((lista.length === 1 ? 'Montaje ' + lista[0].nombre : 'Hojas de montaje') + ' - Kumi Mara'));
+}
+
 function imprimirMatrizAlergenos() {
   const lista = fichas().slice().sort((a, b) => a.nombre.localeCompare(b.nombre, 'es', { sensitivity: 'base' }));
   const zona = $('zonaImprimir');
