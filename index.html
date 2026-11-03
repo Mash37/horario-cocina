@@ -427,11 +427,40 @@
   }
   .campo input:focus, .campo select:focus { border-color: var(--rosa); background: var(--blanco); }
   .campos-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .campo textarea { width: 100%; min-height: 84px; border-radius: 12px; border: 1px solid var(--borde); background: var(--fondo); padding: 10px 12px; font: 16px/1.45 inherit; font-family: inherit; color: inherit; outline: none; resize: vertical; }
+  .campo textarea:focus { border-color: var(--rosa); background: var(--blanco); }
+  /* Fichas técnicas */
+  .ficha-fila { display: grid; grid-template-columns: 1fr auto; gap: 4px 10px; align-items: center; padding: 11px 0; border-top: 1px solid var(--borde); cursor: pointer; }
+  .ficha-fila:first-of-type { border-top: 0; }
+  .ficha-fila b { font-size: 15px; }
+  .ficha-fila small { display: block; font-size: 12px; color: var(--gris); }
+  .ficha-fila .importe { font-weight: 600; color: var(--frambuesa); font-variant-numeric: tabular-nums; font-size: 14px; }
+  .alg-mini { display: flex; flex-wrap: wrap; gap: 3px; grid-column: 1 / -1; }
+  .alg-mini span { font-size: 11px; padding: 1px 7px; border-radius: 99px; background: var(--rosa-suave); color: var(--frambuesa); font-weight: 600; }
+  .alg-mini span.trazas { background: transparent; border: 1px dashed var(--rosa-medio); font-weight: 500; }
+  .alg-mini span.sin { background: #e9f7ef; color: #1e7a4d; }
+  .alergenos { display: grid; grid-template-columns: repeat(auto-fill, minmax(104px, 1fr)); gap: 6px; margin-bottom: 8px; }
+  .alergenos button { border: 1px solid var(--borde); background: var(--blanco); border-radius: 12px; padding: 7px 6px; font-size: 12.5px; line-height: 1.2; color: var(--tinta); display: grid; gap: 2px; justify-items: center; text-align: center; }
+  .alergenos button i { font-style: normal; font-size: 18px; }
+  .alergenos button em { font-style: normal; font-size: 10.5px; color: var(--gris); }
+  .alergenos button.si { background: var(--frambuesa); color: #fff; border-color: transparent; }
+  .alergenos button.si em { color: #ffd3e1; }
+  .alergenos button.trazas { border: 1.5px dashed var(--frambuesa); background: var(--rosa-suave); }
+  .sugeridos { background: #fff7e0; border: 1px solid #f5d48b; color: #6b4b00; border-radius: 12px; padding: 9px 12px; font-size: 13px; margin-bottom: 12px; }
+  .sugeridos button { margin-top: 6px; }
+  .ing { display: grid; grid-template-columns: 1fr 70px 78px 30px; gap: 6px; align-items: center; margin-bottom: 6px; }
+  .ing input, .ing select { height: 42px; border-radius: 10px; border: 1px solid var(--borde); background: var(--fondo); padding: 0 8px; font-size: 15px; width: 100%; min-width: 0; -webkit-appearance: none; appearance: none; }
+  .ing input.numero { text-align: right; }
+  .ing button { border: 0; background: none; color: #c9b5bd; font-size: 17px; height: 40px; }
+  .ing-pie { font-size: 12.5px; color: var(--gris); margin: 2px 2px 12px; }
+  .foto-ficha { display: flex; gap: 10px; align-items: center; margin-bottom: 12px; }
+  .foto-ficha img { width: 64px; height: 64px; object-fit: cover; border-radius: 12px; border: 1px solid var(--borde); }
   .pista-campo { font-size: 12px; color: var(--gris); margin: -6px 2px 12px; }
   .hoja { max-height: 92vh; overflow-y: auto; }
   .historial { font-size: 13px; color: var(--gris); margin: 4px 0 14px; }
   .historial div { display: flex; justify-content: space-between; padding: 4px 0; border-bottom: 1px dashed var(--borde); }
   .btn.texto { background: none; color: #b42318; min-height: 44px; }
+  .btn.chico { display: inline-flex; align-items: center; justify-content: center; width: auto; min-height: 36px; padding: 6px 14px; font-size: 13.5px; border-radius: 10px; margin-bottom: 8px; }
   .copia { background: linear-gradient(135deg, #fff, var(--rosa-suave)); border: 1px solid var(--rosa-medio); }
   .copia .sub b { color: var(--frambuesa); }
 
@@ -458,7 +487,7 @@
     main { max-width: 1100px; padding: 18px 24px; }
     header.cabecera > * { max-width: 1052px; margin-left: auto; margin-right: auto; }
     #personas { display: grid; grid-template-columns: 1fr 1fr; gap: 0 14px; align-items: start; }
-    #vistaStock, #vistaHoras, #vistaEquipo { max-width: 760px; margin: 0 auto; }
+    #vistaStock, #vistaHoras, #vistaEquipo, #vistaFichas { max-width: 760px; margin: 0 auto; }
     #vistaCuadro { max-width: 900px; margin: 0 auto; }
     .hoja-fondo { align-items: center; }
     .hoja { max-width: 600px; border-radius: 26px; }
@@ -480,7 +509,21 @@
     #zonaImprimir { display: block; }
     #zonaImprimir.informe { page: informe; }
     #zonaImprimir img { width: 100%; }
+    @page matriz { size: A4 landscape; margin: 10mm; }
+    #zonaImprimir.matriz { page: matriz; }
+    #zonaImprimir img.ficha-foto { width: 52mm; height: 52mm; object-fit: cover; float: right; margin: 0 0 6mm 8mm; border-radius: 4mm; }
   }
+  .inf .ficha-alg { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; margin-bottom: 12px; }
+  .inf .ficha-alg div { border: 1px solid #ead6dd; border-radius: 6px; padding: 4px 2px; text-align: center; font-size: 8.5pt; line-height: 1.2; color: #b9a9af; }
+  .inf .ficha-alg div.si { background: #b0135f; color: #fff; border-color: #b0135f; font-weight: 600; }
+  .inf .ficha-alg div.trazas { border: 1.5px dashed #b0135f; color: #b0135f; font-weight: 600; }
+  .inf .ficha-txt { white-space: pre-line; margin: 0 0 12px; line-height: 1.45; }
+  .inf .ficha-sec { break-inside: avoid; margin-top: 10px; }
+  .inf table.matriz th { font-size: 7.5pt; text-align: center; padding: 4px 2px; vertical-align: bottom; }
+  .inf table.matriz th:first-child { text-align: left; font-size: 9pt; }
+  .inf table.matriz td { text-align: center; padding: 4px 2px; font-size: 11pt; }
+  .inf table.matriz td:first-child { text-align: left; font-size: 9.5pt; }
+  .inf table.matriz tr.cat td { background: #fbeef2; font-weight: 600; font-size: 9pt; text-align: left; letter-spacing: .08em; text-transform: uppercase; color: #b0135f; }
 </style>
 </head>
 <body>
@@ -628,6 +671,12 @@
       <button data-sub="informe">Informe</button>
     </div>
     <div id="stockContenido"></div>
+  </section>
+
+  <section class="vista" id="vistaFichas">
+    <button class="volver" data-volver><span>‹</span> Inicio</button>
+    <h2>Fichas técnicas</h2>
+    <div id="fichasContenido"></div>
   </section>
 
   <section class="vista" id="vistaEquipo">
@@ -2552,6 +2601,261 @@ $('panel').addEventListener('click', (e) => {
   if (b) accionStock(b);
 });
 
+// ---------- Fichas técnicas: ingredientes, elaboración, coste y alérgenos de cada plato ----------
+// Los 14 alérgenos de declaración obligatoria (Reglamento UE 1169/2011, anexo II).
+const ALERGENOS = [
+  ['gluten', 'Gluten', '🌾'], ['crustaceos', 'Crustáceos', '🦐'], ['huevo', 'Huevo', '🥚'], ['pescado', 'Pescado', '🐟'],
+  ['cacahuete', 'Cacahuete', '🥜'], ['soja', 'Soja', '🫘'], ['leche', 'Leche', '🥛'], ['frutos', 'Frutos de cáscara', '🌰'],
+  ['apio', 'Apio', '🥬'], ['mostaza', 'Mostaza', '🌭'], ['sesamo', 'Sésamo', '⚪'], ['sulfitos', 'Sulfitos', '🍷'],
+  ['altramuz', 'Altramuces', '🌼'], ['moluscos', 'Moluscos', '🦑'],
+];
+// Solo sugiere: quien hace la ficha confirma con la etiqueta de cada producto.
+const PISTAS_ALERGENOS = {
+  gluten: ['harina', 'trigo', 'panko', 'tempura', 'pan', 'brioche', 'salsa de soja', 'soja', 'shoyu', 'teriyaki', 'udon', 'ramen', 'noodle', 'fideo', 'gyoza', 'cebada', 'centeno', 'avena', 'rebozado', 'cerveza', 'yakisoba', 'katsu', 'tonkatsu', 'surimi', 'kani'],
+  crustaceos: ['gamba', 'langostino', 'cangrejo', 'bogavante', 'langosta', 'cigala', 'ebi', 'kani'],
+  huevo: ['huevo', 'yema', 'mayonesa', 'mayo', 'tamago', 'alioli', 'surimi', 'codorniz'],
+  pescado: ['salmon', 'atun', 'pescado', 'hamachi', 'lubina', 'caballa', 'saba', 'bonito', 'anchoa', 'boquer', 'bacalao', 'dashi', 'katsuobushi', 'tobiko', 'masago', 'ikura', 'hueva', 'surimi', 'anguila', 'unagi', 'dorada', 'sardina', 'pez ', 'pez mantequilla', 'tarantelo'],
+  cacahuete: ['cacahuete', 'mani'],
+  soja: ['soja', 'tofu', 'edamame', 'miso', 'tamari', 'shoyu', 'teriyaki', 'ponzu'],
+  leche: ['leche', 'queso', 'nata', 'mantequilla', 'crema', 'yogur', 'philadelphia', 'helado', 'mascarpone', 'cheesecake'],
+  frutos: ['almendra', 'nuez', 'nueces', 'anacardo', 'avellana', 'pistacho', 'macadamia', 'pacana'],
+  apio: ['apio'],
+  mostaza: ['mostaza'],
+  sesamo: ['sesamo', 'tahini', 'goma', 'furikake'],
+  sulfitos: ['vino', 'vinagre', 'mirin', 'sake', 'sulfito', 'encurtido', 'gari'],
+  altramuz: ['altramuz'],
+  moluscos: ['pulpo', 'calamar', 'sepia', 'mejillon', 'almeja', 'vieira', 'ostra', 'berberecho', 'navaja', 'tako', 'hotate'],
+};
+const CATEGORIAS_FICHA = ['Entrantes', 'Sushi y rolls', 'Nigiri y sashimi', 'Principales', 'Postres', 'Bebidas', 'Salsas y bases', 'Otros'];
+const UNIDADES_FICHA = ['g', 'kg', 'ml', 'L', 'ud', 'loncha', 'cda', 'cdta', 'al gusto'];
+// Cuánto vale una unidad de la ficha en la unidad del producto del stock (para el coste).
+const CONVERSION = { 'g>kg': 0.001, 'kg>g': 1000, 'ml>L': 0.001, 'L>ml': 1000 };
+const LADO_FOTO_FICHA = 480;
+
+const sinTildes = (t) => String(t || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
+function fichas() { if (!datos.fichas) datos.fichas = []; return datos.fichas; }
+function productoPorNombre(nombre) {
+  const n = sinTildes(nombre).trim();
+  return n ? productosActivos().find((p) => sinTildes(p.nombre).trim() === n) : null;
+}
+function costeIngrediente(ing) {
+  const p = productoPorNombre(ing.nombre);
+  if (!p || p.precio == null || !(ing.cant > 0)) return null;
+  const factor = ing.unidad === p.unidad ? 1 : CONVERSION[ing.unidad + '>' + p.unidad];
+  return factor ? ing.cant * factor * p.precio : null;
+}
+function costeFicha(f) {
+  const costes = f.ingredientes.filter((i) => i.nombre.trim()).map(costeIngrediente);
+  const total = costes.reduce((s, c) => s + (c || 0), 0);
+  return { total, porRacion: f.raciones > 0 ? total / f.raciones : total, completo: costes.every((c) => c != null), alguno: costes.some((c) => c != null) };
+}
+function alergenosSugeridos(f) {
+  const texto = ' ' + f.ingredientes.map((i) => sinTildes(i.nombre)).join(' | ') + ' ';
+  return ALERGENOS.filter(([k]) => !f.alergenos[k] && PISTAS_ALERGENOS[k].some((w) => texto.includes(w))).map(([k]) => k);
+}
+const nombreAlergeno = (k) => (ALERGENOS.find((a) => a[0] === k) || [k, k])[1];
+
+function pintarFichas() {
+  const lista = fichas().slice().sort((a, b) => a.nombre.localeCompare(b.nombre, 'es', { sensitivity: 'base' }));
+  let html = '<div class="acciones"><button class="btn principal" data-ficha-accion="nueva">+ Nueva ficha</button>' +
+    '<button class="btn secundario" data-ficha-accion="matriz"' + (lista.length ? '' : ' disabled') + '>PDF de alérgenos de la carta</button></div>';
+  if (!lista.length) {
+    html += '<div class="tarjeta"><h3>Aún no hay fichas</h3><div class="sub">Una ficha por plato: ingredientes con su cantidad, cómo se hace, cómo se emplata y sus alérgenos. Si el ingrediente está en el stock con precio, Kumi calcula el coste por ración.</div></div>';
+  }
+  CATEGORIAS_FICHA.forEach((cat) => {
+    const deCat = lista.filter((f) => (f.categoria || 'Otros') === cat);
+    if (!deCat.length) return;
+    html += '<div class="tarjeta"><div class="grupo-stock">' + cat + '</div>' + deCat.map((f) => {
+      const c = costeFicha(f);
+      const algs = ALERGENOS.filter(([k]) => f.alergenos[k]);
+      return '<div class="ficha-fila" data-ficha="' + f.id + '"><div><b>' + escapar(f.nombre) + '</b><small>' +
+        (f.raciones ? f.raciones + (f.raciones === 1 ? ' ración' : ' raciones') : '') + (f.ingredientes.length ? ' · ' + f.ingredientes.length + ' ingredientes' : '') + '</small></div>' +
+        '<span class="importe">' + (c.alguno ? euros.format(c.porRacion) + (c.completo ? '' : '*') : '') + '</span>' +
+        '<div class="alg-mini">' + (algs.length ? algs.map(([k, n]) => '<span' + (f.alergenos[k] === 'trazas' ? ' class="trazas" title="Puede contener"' : '') + '>' + n + '</span>').join('')
+          : f.sinAlergenos ? '<span class="sin">Sin alérgenos</span>' : '<span class="trazas">Alérgenos sin revisar</span>') + '</div></div>';
+    }).join('') + '</div>';
+  });
+  if (lista.some((f) => { const c = costeFicha(f); return c.alguno && !c.completo; })) html += '<p class="nota">* Coste parcial: algún ingrediente no está en el stock con precio o su unidad no se puede convertir.</p>';
+  $('fichasContenido').innerHTML = html;
+}
+
+let fichaUI = null;
+function abrirFicha(id) {
+  const f = id ? fichas().find((x) => x.id === id) : null;
+  fichaUI = f ? JSON.parse(JSON.stringify(f)) : { id: null, nombre: '', categoria: CATEGORIAS_FICHA[1], raciones: 1, ingredientes: [{ nombre: '', cant: null, unidad: 'g' }], elaboracion: '', emplatado: '', conservacion: '', alergenos: {}, sinAlergenos: false, foto: '' };
+  pintarFicha();
+  if (!id) setTimeout(() => { const n = $('fiNombre'); if (n) n.focus(); }, 250);
+}
+function pintarFicha() {
+  const f = fichaUI;
+  const sug = alergenosSugeridos(f);
+  const c = costeFicha(f);
+  abrirPanel('<h3>' + (f.id ? 'Ficha técnica' : 'Nueva ficha') + '</h3><p class="sub">&nbsp;</p>' +
+    '<label class="campo"><span>Plato</span><input id="fiNombre" data-fi="nombre" value="' + escapar(f.nombre) + '" placeholder="Ej.: Uramaki de salmón"></label>' +
+    '<div class="campos-2"><label class="campo"><span>Categoría</span><select data-fi="categoria">' + opcionesLista(CATEGORIAS_FICHA, f.categoria) + '</select></label>' +
+    '<label class="campo"><span>Raciones que salen</span><input class="numero" inputmode="decimal" data-fi="raciones" value="' + (f.raciones || '') + '"></label></div>' +
+    '<div class="foto-ficha">' + (f.foto ? '<img src="' + f.foto + '" alt="Foto del plato">' : '') +
+    '<button class="btn secundario chico" data-ficha-accion="foto">' + (f.foto ? 'Cambiar foto' : '📷 Foto del plato') + '</button>' +
+    (f.foto ? '<button class="btn texto" data-ficha-accion="quitar-foto">Quitar</button>' : '') + '</div>' +
+    '<div class="grupo-stock">Ingredientes</div>' +
+    '<datalist id="dlFicha">' + productosActivos().map((p) => '<option value="' + escapar(p.nombre) + '">').join('') + '</datalist>' +
+    f.ingredientes.map((i, n) => '<div class="ing"><input list="dlFicha" data-ing="nombre" data-n="' + n + '" value="' + escapar(i.nombre) + '" placeholder="Ingrediente" aria-label="Ingrediente">' +
+      '<input class="numero" inputmode="decimal" data-ing="cant" data-n="' + n + '" value="' + (i.cant != null ? cifra.format(i.cant) : '') + '" placeholder="—" aria-label="Cantidad">' +
+      '<select data-ing="unidad" data-n="' + n + '" aria-label="Unidad">' + opcionesLista(UNIDADES_FICHA, i.unidad) + '</select>' +
+      '<button data-ficha-accion="quitar-ing" data-n="' + n + '" aria-label="Quitar ingrediente">✕</button></div>').join('') +
+    '<button class="btn secundario chico" data-ficha-accion="anadir-ing">+ Ingrediente</button>' +
+    '<p class="ing-pie" id="fiCoste">' + textoCoste(c, f) + '</p>' +
+    '<div class="grupo-stock">Alérgenos</div><p class="pista-campo" style="margin-top:0">Toca una vez: <b>contiene</b>. Dos veces: <b>puede contener</b> (trazas). Tres: no lo tiene.</p>' +
+    '<div class="alergenos">' + ALERGENOS.map(([k, n, ico]) => '<button data-alg="' + k + '" class="' + (f.alergenos[k] || '') + '" aria-label="' + n + ': ' + (f.alergenos[k] === 'si' ? 'contiene' : f.alergenos[k] === 'trazas' ? 'puede contener' : 'no') + '"><i>' + ico + '</i>' + n +
+      '<em>' + (f.alergenos[k] === 'si' ? 'Contiene' : f.alergenos[k] === 'trazas' ? 'Puede contener' : ' ') + '</em></button>').join('') + '</div>' +
+    (sug.length ? '<div class="sugeridos">Por los ingredientes, revisa: <b>' + sug.map(nombreAlergeno).join(', ') + '</b>. Kumi solo sugiere: confírmalo con la etiqueta de cada producto.<br><button class="btn secundario chico" data-ficha-accion="sugeridos">Marcarlos como «contiene»</button></div>' : '') +
+    (Object.keys(f.alergenos).length ? '' : '<label class="sig-ed" style="display:flex;gap:8px;align-items:center;font-size:14px;margin:0 2px 12px"><input type="checkbox" data-fi="sinAlergenos"' + (f.sinAlergenos ? ' checked' : '') + ' style="width:20px;height:20px"> Revisado: no tiene ninguno de los 14</label>') +
+    '<label class="campo"><span>Elaboración</span><textarea data-fi="elaboracion" placeholder="Paso a paso">' + escapar(f.elaboracion) + '</textarea></label>' +
+    '<label class="campo"><span>Emplatado</span><textarea data-fi="emplatado" placeholder="Plato, orden, decoración">' + escapar(f.emplatado) + '</textarea></label>' +
+    '<label class="campo"><span>Conservación (opcional)</span><textarea data-fi="conservacion" placeholder="Temperatura, vida útil, cómo se guarda">' + escapar(f.conservacion) + '</textarea></label>' +
+    '<div class="acciones"><button class="btn principal" data-ficha-accion="guardar">Guardar</button>' +
+    '<button class="btn secundario" data-ficha-accion="pdf">PDF de la ficha</button>' +
+    '<button class="btn secundario" data-accion="cerrar-panel">Cancelar</button>' +
+    (f.id ? '<button class="btn texto" data-ficha-accion="borrar">Borrar esta ficha</button>' : '') + '</div>');
+}
+function textoCoste(c, f) {
+  if (!c.alguno) return 'Si el ingrediente se llama igual que en el stock y tiene precio, aquí sale el coste.';
+  return 'Coste: <b>' + euros.format(c.total) + '</b>' + (f.raciones > 1 ? ' · <b>' + euros.format(c.porRacion) + '</b> por ración' : '') + (c.completo ? '' : ' (parcial: faltan precios)');
+}
+
+// Guarda la ficha que se está editando; devuelve false si falta el nombre o hay una cantidad mal escrita.
+function guardarFicha() {
+  const f = fichaUI;
+  if (!f.nombre.trim()) { avisar('Ponle nombre al plato'); return false; }
+  if (f.ingredientes.some((i) => Number.isNaN(i.cant))) { avisar('Revisa las cantidades'); return false; }
+  f.nombre = f.nombre.trim();
+  f.ingredientes = f.ingredientes.filter((i) => i.nombre.trim());
+  if (Object.keys(f.alergenos).length) f.sinAlergenos = false;
+  f.actualizada = Date.now();
+  const lista = fichas();
+  if (!f.id) { f.id = nuevoId(); lista.push(f); }
+  else lista.splice(lista.findIndex((x) => x.id === f.id), 1, f);
+  fichaUI = JSON.parse(JSON.stringify(f));
+  guardar();
+  return true;
+}
+
+async function fotoFicha(archivo) {
+  const img = await createImageBitmap(archivo);
+  const lado = Math.min(img.width, img.height);
+  const c = document.createElement('canvas');
+  c.width = c.height = Math.min(LADO_FOTO_FICHA, lado);
+  c.getContext('2d').drawImage(img, (img.width - lado) / 2, (img.height - lado) / 2, lado, lado, 0, 0, c.width, c.height);
+  return c.toDataURL('image/jpeg', 0.78);
+}
+
+$('panel').addEventListener('input', (e) => {
+  if (!fichaUI) return;
+  const t = e.target;
+  if (t.dataset.fi) {
+    const v = t.type === 'checkbox' ? t.checked : t.dataset.fi === 'raciones' ? (leerNumero(t.value) || 0) : t.value;
+    fichaUI[t.dataset.fi] = v;
+    if (t.dataset.fi === 'raciones') $('fiCoste').innerHTML = textoCoste(costeFicha(fichaUI), fichaUI);
+  }
+  if (t.dataset.ing) {
+    const i = fichaUI.ingredientes[+t.dataset.n];
+    i[t.dataset.ing] = t.dataset.ing === 'cant' ? leerNumero(t.value) : t.value;
+    $('fiCoste').innerHTML = textoCoste(costeFicha(fichaUI), fichaUI);
+  }
+});
+// Al salir de un ingrediente se repintan las sugerencias de alérgenos (mientras se escribe, no, para no perder el foco).
+$('panel').addEventListener('change', (e) => {
+  if (fichaUI && e.target.dataset.ing === 'nombre') {
+    const y = $('panel').scrollTop;
+    pintarFicha();
+    $('panel').scrollTop = y;
+  }
+});
+$('panel').addEventListener('click', async (e) => {
+  if (!fichaUI) return;
+  const alg = e.target.closest('[data-alg]');
+  if (alg) {
+    const k = alg.dataset.alg, ahora = fichaUI.alergenos[k];
+    if (!ahora) fichaUI.alergenos[k] = 'si'; else if (ahora === 'si') fichaUI.alergenos[k] = 'trazas'; else delete fichaUI.alergenos[k];
+    const y = $('panel').scrollTop; pintarFicha(); $('panel').scrollTop = y;
+    return;
+  }
+  const b = e.target.closest('[data-ficha-accion]');
+  if (!b) return;
+  const a = b.dataset.fichaAccion, y = $('panel').scrollTop;
+  const repintar = () => { pintarFicha(); $('panel').scrollTop = y; };
+  if (a === 'anadir-ing') { fichaUI.ingredientes.push({ nombre: '', cant: null, unidad: 'g' }); repintar(); const ins = $('panel').querySelectorAll('[data-ing="nombre"]'); ins[ins.length - 1].focus(); }
+  if (a === 'quitar-ing') { fichaUI.ingredientes.splice(+b.dataset.n, 1); repintar(); }
+  if (a === 'sugeridos') { alergenosSugeridos(fichaUI).forEach((k) => { fichaUI.alergenos[k] = 'si'; }); repintar(); }
+  if (a === 'quitar-foto') { fichaUI.foto = ''; repintar(); }
+  if (a === 'foto') {
+    const entrada = document.createElement('input');
+    entrada.type = 'file'; entrada.accept = 'image/*';
+    entrada.onchange = async () => {
+      try { fichaUI.foto = await fotoFicha(entrada.files[0]); repintar(); }
+      catch (err) { avisar('No se pudo usar esa foto'); }
+    };
+    entrada.click();
+  }
+  if (a === 'guardar') {
+    if (!guardarFicha()) return;
+    fichaUI = null; cerrarPanel(); pintarFichas(); avisar('Ficha guardada');
+  }
+  if (a === 'pdf') { if (guardarFicha()) { pintarFichas(); imprimirFicha(fichaUI); } }
+  if (a === 'borrar') {
+    if (!confirm('¿Borrar la ficha de «' + fichaUI.nombre + '»?')) return;
+    const lista = fichas(), i = lista.findIndex((x) => x.id === fichaUI.id), [quitada] = lista.splice(i, 1);
+    fichaUI = null; guardar(); cerrarPanel(); pintarFichas();
+    ofrecerDeshacer('Ficha borrada', () => { lista.splice(i, 0, quitada); });
+  }
+});
+$('fichasContenido').addEventListener('click', (e) => {
+  const fila = e.target.closest('[data-ficha]');
+  if (fila) { abrirFicha(fila.dataset.ficha); return; }
+  const b = e.target.closest('[data-ficha-accion]');
+  if (!b) return;
+  if (b.dataset.fichaAccion === 'nueva') abrirFicha(null);
+  if (b.dataset.fichaAccion === 'matriz') imprimirMatrizAlergenos();
+});
+
+const fechaLarga = (ts) => { const d = new Date(ts); return d.getDate() + '/' + (d.getMonth() + 1) + '/' + d.getFullYear(); };
+function imprimirFicha(f) {
+  const c = costeFicha(f);
+  const zona = $('zonaImprimir');
+  zona.className = 'informe';
+  const seccion = (t, txt) => txt && txt.trim() ? '<div class="ficha-sec"><h2><span>' + t + '</span></h2><p class="ficha-txt">' + escapar(txt.trim()) + '</p></div>' : '';
+  zona.innerHTML = '<div class="inf"><div class="inf-marca">Kumi Mara · Miss Sushi · Ficha técnica</div>' +
+    (f.foto ? '<img class="ficha-foto" src="' + f.foto + '" alt="">' : '') +
+    '<h1>' + escapar(f.nombre) + '</h1>' +
+    '<p class="inf-sub">' + escapar(f.categoria) + (f.raciones ? ' · ' + f.raciones + (f.raciones === 1 ? ' ración' : ' raciones') : '') + ' · Actualizada el ' + fechaLarga(f.actualizada || Date.now()) + '</p>' +
+    '<div class="ficha-sec"><h2><span>Alérgenos</span><span>' + (f.sinAlergenos ? 'Sin alérgenos' : '■ contiene · ▢ puede contener') + '</span></h2><div class="ficha-alg">' +
+    ALERGENOS.map(([k, n]) => '<div class="' + (f.alergenos[k] || '') + '">' + n + '</div>').join('') + '</div></div>' +
+    (f.ingredientes.length ? '<div class="ficha-sec" style="clear:both"><h2><span>Ingredientes</span></h2><table><thead><tr><th>Ingrediente</th><th class="n">Cantidad</th><th class="n">Coste</th></tr></thead><tbody>' +
+      f.ingredientes.map((i) => { const ci = costeIngrediente(i); return '<tr><td>' + escapar(i.nombre) + '</td><td class="n">' + (i.cant != null ? cifra.format(i.cant) + ' ' : '') + escapar(i.unidad) + '</td><td class="n">' + (ci != null ? euros.format(ci) : '—') + '</td></tr>'; }).join('') +
+      (c.alguno ? '<tr class="suma"><td>Coste' + (c.completo ? '' : ' (parcial)') + '</td><td class="n">' + (f.raciones > 1 ? euros.format(c.porRacion) + ' / ración' : '') + '</td><td class="n">' + euros.format(c.total) + '</td></tr>' : '') +
+      '</tbody></table></div>' : '') +
+    seccion('Elaboración', f.elaboracion) + seccion('Emplatado', f.emplatado) + seccion('Conservación', f.conservacion) +
+    '<div class="inf-firmas"><div>Elaborado por</div><div>Revisado</div></div></div>';
+  fuentesListas().then(() => imprimir('Ficha ' + f.nombre + ' - Kumi Mara'));
+}
+function imprimirMatrizAlergenos() {
+  const lista = fichas().slice().sort((a, b) => a.nombre.localeCompare(b.nombre, 'es', { sensitivity: 'base' }));
+  const zona = $('zonaImprimir');
+  zona.className = 'informe matriz';
+  let filas = '';
+  CATEGORIAS_FICHA.forEach((cat) => {
+    const deCat = lista.filter((f) => (f.categoria || 'Otros') === cat);
+    if (!deCat.length) return;
+    filas += '<tr class="cat"><td colspan="' + (ALERGENOS.length + 1) + '">' + cat + '</td></tr>' +
+      deCat.map((f) => '<tr><td>' + escapar(f.nombre) + '</td>' + ALERGENOS.map(([k]) => '<td>' + (f.alergenos[k] === 'si' ? '●' : f.alergenos[k] === 'trazas' ? '○' : '') + '</td>').join('') + '</tr>').join('');
+  });
+  zona.innerHTML = '<div class="inf"><div class="inf-marca">Kumi Mara · Miss Sushi</div><h1>Alérgenos de la carta</h1>' +
+    '<p class="inf-sub">● contiene · ○ puede contener (trazas) · Actualizado el ' + fechaLarga(Date.now()) + '</p>' +
+    '<table class="matriz"><thead><tr><th>Plato</th>' + ALERGENOS.map(([, n, ico]) => '<th>' + ico + '<br>' + n + '</th>').join('') + '</tr></thead><tbody>' + filas + '</tbody></table>' +
+    '<p class="inf-nota">Información sobre los 14 alérgenos del Reglamento (UE) 1169/2011. Si tienes alguna alergia o intolerancia, consulta a nuestro equipo antes de pedir.</p></div>';
+  fuentesListas().then(() => imprimir('Alérgenos de la carta - Kumi Mara'));
+}
+
 // --- Copia de seguridad: un archivo con todos los datos de este móvil ---
 function textoUltimaCopia() {
   if (!datos.ultimaCopia) return 'Todavía no has guardado ninguna copia.';
@@ -2610,6 +2914,7 @@ function abrirMas() {
     acceso('recuento', '📦', 'Hacer recuento', pedir ? pedir + ' por pedir ahora' : 'Contar lo que queda') +
     '</div><div class="grupo-stock">Más</div><div class="accesos">' +
     acceso('horas', '🕒', 'Horas del mes', 'Informe en PDF para la nómina', vista === 'horas') +
+    acceso('fichas', '📋', 'Fichas técnicas', (datos.fichas || []).length ? datos.fichas.length + ' platos con alérgenos' : 'Platos, alérgenos y coste', vista === 'fichas') +
     acceso('equipo', '👥', 'Tu equipo', datos.equipo.length + (datos.equipo.length === 1 ? ' persona' : ' personas'), vista === 'equipo') +
     acceso('servicios', '🍽️', 'Servicios y mínimos', franjas().map((f) => f.nombre + ' ' + f.minimo).join(' · ') || 'Sin servicios') +
     '</div><div class="grupo-stock">Tus datos</div><div class="accesos">' +
@@ -2623,9 +2928,9 @@ $('panel').addEventListener('click', (e) => {
   if (!b) return;
   const que = b.dataset.mas;
   if (que === 'servicios') { abrirServicios(); return; }
-  const navega = ['horas', 'equipo', 'recuento', 'compra'].includes(que);
+  const navega = ['horas', 'equipo', 'fichas', 'recuento', 'compra'].includes(que);
   cerrarPanel(navega);
-  if (que === 'horas' || que === 'equipo') irA(que);
+  if (que === 'horas' || que === 'equipo' || que === 'fichas') irA(que);
   if (que === 'recuento' || que === 'compra') {
     if (!productosActivos().length) { subStock = 'lista'; irA('stock'); avisar('Primero añade los productos'); return; }
     subStock = que === 'compra' ? 'compras' : 'lista';
@@ -2755,8 +3060,8 @@ function irA(nombre, desdeHistorial) {
   if (nombre !== 'stock') enRecuento = false;
   vista = nombre;
   document.querySelectorAll('.vista').forEach((v) => v.classList.toggle('activa', v.id === 'vista' + nombre[0].toUpperCase() + nombre.slice(1)));
-  document.querySelectorAll('nav button').forEach((b) => b.classList.toggle('activo', b.dataset.ir === nombre || (b.id === 'btnMas' && ['horas', 'equipo'].includes(nombre))));
-  $('cabecera').hidden = ['inicio', 'equipo', 'horas', 'stock'].includes(nombre);
+  document.querySelectorAll('nav button').forEach((b) => b.classList.toggle('activo', b.dataset.ir === nombre || (b.id === 'btnMas' && ['horas', 'equipo', 'fichas'].includes(nombre))));
+  $('cabecera').hidden = ['inicio', 'equipo', 'horas', 'stock', 'fichas'].includes(nombre);
   $('dias').style.display = nombre === 'rellenar' ? '' : 'none';
   refrescar();
   window.scrollTo(0, 0);
@@ -2776,6 +3081,7 @@ function refrescar() {
   if (vista === 'inicio') { pintarInicio(); return; }
   if (vista === 'horas') { pintarHoras(); return; }
   if (vista === 'stock') { pintarStock(); return; }
+  if (vista === 'fichas') { pintarFichas(); return; }
   pintarCabecera();
   if (vista === 'rellenar') pintarDia();
   if (vista === 'cuadro') pintarCuadro();
