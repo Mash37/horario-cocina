@@ -68,6 +68,7 @@
   .barra-sup { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
   .logo-txt { font-family: var(--firma); font-size: 22px; font-weight: 500; letter-spacing: .22em; line-height: 1; }
   .logo-txt small { font-family: var(--letra); font-size: 10px; letter-spacing: .3em; text-transform: uppercase; margin-left: 6px; opacity: .85; vertical-align: 4px; }
+  .marca-jp { font-family: var(--titulo); font-size: 15px; letter-spacing: 0; margin-left: 4px; vertical-align: -1px; }
   .marca { font-family: var(--letra); white-space: nowrap; font-size: 11px; letter-spacing: .24em; text-transform: uppercase; opacity: .85; font-weight: 500; }
   .saludo { margin-top: 26px; position: relative; z-index: 1; }
   .saludo .t { font-size: 24px; font-weight: 500; opacity: .95; display: block; }
@@ -227,10 +228,59 @@
 
   .cuadro-img { width: 100%; background: #fff; border: 1px solid var(--borde); border-radius: 14px; display: block; }
 
-  .fila-equipo { display: flex; gap: 6px; align-items: center; margin-bottom: 8px; }
+  .fila-equipo { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin-bottom: 10px; padding-bottom: 10px; border-bottom: 1px solid var(--borde); }
+  .fila-equipo .linea2 { flex-basis: 100%; box-sizing: border-box; min-width: 0; display: flex; align-items: center; gap: 6px; padding-left: 36px; }
+  .fila-equipo .linea2 small { flex: 1 1 0; min-width: 0; width: 0; font-size: 12.5px; color: var(--gris); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .fila-equipo .linea2 small.ojo { color: #8a5a00; }
+  .fila-equipo .linea2 button { height: 36px; width: 40px; border-radius: 10px; font-size: 15px; }
+  .fila-equipo .linea2 button.ficha-btn { width: auto; padding: 0 14px; font-size: 14px; font-weight: 600; background: var(--rosa-suave); border-color: var(--rosa-medio); }
+  .titulo-ficha { display: flex; align-items: center; gap: 10px; }
+  .ficha-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 0 10px; }
+  .ficha-grid input, .campos-2 input[type=date] { min-width: 0; max-width: 100%; }
+  .ficha-grid input[type=date], .campos-2 input[type=date] { padding: 0 8px; font-size: 15px; }
+  .ficha-grid .ancho, .ficha-grid .grupo-stock { grid-column: 1 / -1; }
+  .ficha-grid .grupo-stock { margin-top: 8px; }
+  .ficha-grid .campo { min-width: 0; }
+  .ficha-grid .campo > span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .kiosco-reloj { text-align: center; margin: 2px 0 6px; }
+  .kiosco-reloj b { display: block; font-family: var(--titulo); font-weight: 700; font-size: 52px; line-height: 1.05; color: var(--frambuesa); font-variant-numeric: tabular-nums; }
+  .kiosco-reloj span { font-size: 14px; color: var(--gris); }
+  .kiosco-nota { text-align: center; margin: 0 0 14px; }
+  .kiosco { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .kiosco button { border: 1px solid var(--borde); background: var(--blanco); border-radius: 18px; padding: 16px 8px 14px; display: flex; flex-direction: column; align-items: center; gap: 6px; font: inherit; color: var(--tinta); box-shadow: 0 4px 14px rgba(176, 77, 110, .06); }
+  .kiosco button .avatar { width: 56px; height: 56px; font-size: 19px; }
+  .kiosco button b { font-size: 15px; font-weight: 600; letter-spacing: .02em; }
+  .kiosco button small { font-size: 12.5px; color: var(--gris); text-align: center; }
+  .kiosco button.dentro { border-color: #8fd6b0; background: #effaf4; }
+  .kiosco button.dentro small { color: #1f7a4d; font-weight: 600; }
+  .fichar-panel { text-align: center; }
+  .fichar-panel > .avatar { width: 64px; height: 64px; font-size: 22px; margin-top: 4px; }
+  .fichar-panel h3 { margin-top: 6px; }
+  .fichar-panel .campo { text-align: left; }
+  .fichar-panel .alerta { text-align: left; }
+  .fichar-hora { font-family: var(--titulo); font-weight: 700; font-size: 46px; color: var(--tinta); margin: 4px 0 14px; font-variant-numeric: tabular-nums; }
+  .btn.fichar-ok { min-height: 64px; font-size: 19px; }
+  .btn.fichar-ok.salida { background: linear-gradient(135deg, #6c4a44 0%, #9c6b5f 100%); box-shadow: 0 8px 20px rgba(108, 74, 68, .3); }
+  .fichados { display: flex; flex-wrap: wrap; gap: 6px; }
+  .fichados .chip { background: #effaf4; color: #1f7a4d; }
+  .detalle-mes .toca { cursor: pointer; }
+  .quitar-tramo { width: 40px; height: 46px; flex: none; border-radius: 12px; border: 1px solid var(--borde); background: var(--blanco); color: var(--frambuesa); font-size: 15px; }
+  .ausencia { display: flex; width: 100%; align-items: center; gap: 10px; padding: 10px 0; border: 0; border-bottom: 1px solid var(--borde); background: none; font: inherit; color: inherit; text-align: left; }
+  .ausencia .quien { flex: 1; min-width: 0; }
+  .ausencia .quien b { display: block; font-size: 14.5px; font-weight: 600; }
+  .ausencia .quien small { display: block; font-size: 12.5px; color: var(--gris); }
+  .dias-aus { font-weight: 600; color: var(--frambuesa); font-size: 14px; white-space: nowrap; }
+  .vac-fila { display: grid; grid-template-columns: 30px 92px 1fr auto; align-items: center; gap: 10px; padding: 6px 0; font-size: 13px; font-weight: 600; }
+  .vac-fila > span:nth-child(2) { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .vac-barra { height: 8px; background: var(--rosa-suave); border-radius: 99px; overflow: hidden; }
+  .vac-barra i { display: block; height: 100%; background: var(--deg); border-radius: 99px; }
+  .aus-dia { margin: 4px 0 8px; padding: 7px 12px; border-radius: 12px; background: #fff6e5; color: #7a4b00; font-size: 13.5px; font-weight: 500; }
+  .segmento.cuatro button { font-size: 13px; }
   .fila-equipo input { flex: 1; min-width: 0; height: 48px; border-radius: 12px; border: 1px solid var(--borde); background: var(--blanco); padding: 0 14px; font-size: 16px; font-weight: 500; text-transform: uppercase; }
-  .fila-equipo button { width: 44px; height: 48px; border-radius: 12px; border: 1px solid var(--borde); background: var(--blanco); font-size: 17px; color: var(--frambuesa); }
+  .fila-equipo > button { width: 44px; height: 48px; border-radius: 12px; border: 1px solid var(--borde); background: var(--blanco); font-size: 17px; color: var(--frambuesa); }
   .fila-equipo button:disabled { opacity: .3; }
+  @media (min-width: 700px) { .kiosco { grid-template-columns: repeat(3, 1fr); } }
+  @media (min-width: 1000px) { .kiosco { grid-template-columns: repeat(4, 1fr); } }
 
   nav {
     position: fixed; left: 0; right: 0; bottom: 0; z-index: 10; display: flex;
@@ -504,6 +554,7 @@
   .inf tr.suma td { font-weight: 700; border-top: 2px solid #44303a; border-bottom: 0; }
   .inf .inf-nota { font-size: 9pt; color: #866f77; margin: 0 0 16px; }
   .inf-persona { break-inside: avoid; margin-top: 14px; }
+  .inf-persona.salto { break-before: page; break-inside: auto; }
   .inf h2 { font-size: 12pt; margin: 0 0 4px; display: flex; justify-content: space-between; border-bottom: 2px solid #b04d6e; padding-bottom: 3px; }
   .inf-firmas { display: flex; gap: 40px; margin-top: 36px; break-inside: avoid; font-size: 10pt; }
   .inf-firmas div { flex: 1; border-top: 1px solid #44303a; padding-top: 6px; }
@@ -574,7 +625,7 @@
 
 <section class="vista activa" id="vistaInicio">
   <div class="portada">
-    <div class="barra-sup"><span class="logo-txt">Kumi<small>組</small></span><span class="marca">Hinoki · Muelle Uno</span></div>
+    <div class="barra-sup"><span class="logo-txt">Kumi<small>組</small></span><span class="marca">Hinoki <span class="marca-jp">檜</span></span></div>
     <div class="saludo"><span class="t" id="saludo">Hola,</span><span class="nombre">Mara</span></div>
     <div class="fecha" id="fechaHoy"></div>
     <svg class="emblema" viewBox="0 0 220 180" aria-hidden="true">
@@ -610,6 +661,13 @@
       <h3>El servicio de hoy</h3>
       <div class="sub" id="hoySub"></div>
       <div id="hoyLinea"></div>
+    </div>
+
+    <div class="tarjeta">
+      <h3>Fichaje</h3>
+      <div class="sub" id="ficharSub"></div>
+      <div id="ficharInicio"></div>
+      <div class="acciones" style="margin-top:12px"><button class="btn principal" id="btnIrFichar">Fichar entrada o salida</button></div>
     </div>
 
     <div class="tarjeta">
@@ -725,11 +783,15 @@
     <button class="volver" data-volver><span>‹</span> Inicio</button>
     <h2 class="titulo-equipo"><span class="jp-equipo">仲間</span> Tu equipo</h2>
     <p class="sub-equipo">El equipo de cocina de Hinoki</p>
-    <div id="equipo"></div>
-    <div class="acciones">
-      <button class="btn secundario" id="btnAnadir">+ Añadir persona</button>
+    <div class="segmento cuatro" id="segEquipo"><button data-sub-eq="equipo" class="activo">Equipo</button><button data-sub-eq="fichar">Fichar</button><button data-sub-eq="registro">Registro</button><button data-sub-eq="ausencias">Ausencias</button></div>
+    <div id="eqEquipo">
+      <div id="equipo"></div>
+      <div class="acciones">
+        <button class="btn secundario" id="btnAnadir">+ Añadir persona</button>
+      </div>
+      <p class="nota">Toca «Ficha» para sus datos y cuándo empezó. Los cambios se guardan solos en este dispositivo.</p>
     </div>
-    <p class="nota">Los cambios se guardan solos en este móvil.</p>
+    <div id="eqOtro" hidden></div>
   </section>
 </main>
 
@@ -930,6 +992,10 @@ function avisosSemana(lunesSem) {
     const total = semana.reduce((s, x) => s + minutosDe(x.tramos), 0);
     if (!total) return;
     const nombre = nombreCorto(p.nombre);
+    semana.forEach((x) => {
+      const aus = x.tramos.length && ausenciaDe(sumarDias(lunesSem, x.d), p.id);
+      if (aus) avisos.push({ id: p.id, dia: x.d, texto: nombre + ' tiene ' + aus.tipo.toLowerCase() + ' el ' + DIAS[x.d] + ' y está en el horario.' });
+    });
     semana.forEach((x) => {
       const min = minutosDe(x.tramos);
       if (min > MAX_DIA) avisos.push({ id: p.id, dia: x.d, texto: nombre + ' trabaja ' + horasExactas(min) + ' el ' + DIAS[x.d] + ' (más de 9 h en el día).' });
@@ -1142,7 +1208,7 @@ function pintarInicio() {
         }).join('') + '</div></div>').join('') +
       '<div class="horas-eje">' + eje + '</div></div>';
     const libres = filas.filter((f) => !f.tramos.length);
-    if (libres.length) $('hoyLinea').innerHTML += '<div class="libran">Libran: ' + libres.map((f) => '<span class="chip">' + escapar(f.p.nombre.toUpperCase()) + '</span>').join('') + '</div>';
+    if (libres.length) $('hoyLinea').innerHTML += '<div class="libran">Libran: ' + libres.map((f) => { const a = ausenciaDe(diaServicio, f.p.id); return '<span class="chip">' + (a ? iconoAus(a.tipo) + ' ' : '') + escapar(f.p.nombre.toUpperCase()) + '</span>'; }).join('') + '</div>';
   }
 
   const prox = datos.semanas[claveSemana(lunesProxima)];
@@ -1301,6 +1367,7 @@ function pintarDia() {
       '<span class="derecha"><span class="etiqueta trabaja"' + (trabaja ? '' : ' hidden') + '>' + (trabaja ? textoHoras(minutosTurnos(t)) : '') + '</span>' +
       '<button class="interruptor' + (libre ? ' on' : '') + '" data-libre="' + p.id + '" role="switch" aria-checked="' + libre + '">Libre<i></i></button></span></div>' +
       '<div data-avisos="' + p.id + '">' + htmlAvisosPersona(avisos, p.id, diaActivo) + '</div>' +
+      (ausenciaDe(fecha, p.id) ? '<div class="aus-dia">' + iconoAus(ausenciaDe(fecha, p.id).tipo) + ' ' + ausenciaDe(fecha, p.id).tipo + (trabaja ? ' · pero tiene turno este día' : '') + '</div>' : '') +
       (libre ? '<div class="dia-libre">🌴 Libre</div>' : fila(0) + fila(1)) + pie + '</div>';
   }).join('');
   actualizarRepetirDia();
@@ -1812,6 +1879,10 @@ function pintarHoras() {
         if (f.coberturas) extras.push('cubrió ' + f.coberturas);
         if (f.noche) extras.push(horasExactas(f.noche) + ' noche');
         if (f.domingo) extras.push(horasExactas(f.domingo) + ' domingo');
+        const ini = anio + '-' + String(mes + 1).padStart(2, '0') + '-01', fin = anio + '-' + String(mes + 1).padStart(2, '0') + '-' + String(ultimo).padStart(2, '0');
+        const vac = diasAusencia(f.id, 'Vacaciones', ini, fin), otras = diasAusencia(f.id, null, ini, fin) - vac;
+        if (vac) extras.push(vac + ' d vacaciones');
+        if (otras) extras.push(otras + ' d ausencia');
         return '<details class="persona-mes"><summary><span class="avatar" style="background:' + color + '">' + escapar(iniciales(f.nombre.replace(' (baja)', ''))) + '</span>' +
           '<span class="quien"><b>' + escapar(f.nombre) + '</b><small>' + extras.join(' · ') + '</small></span>' +
           '<span class="total' + (f.min ? '' : ' cero') + '">' + horasExactas(f.min) + '</span></summary>' +
@@ -3145,6 +3216,8 @@ function abrirMas() {
     '<div class="grupo-stock">Apuntar rápido</div><div class="accesos">' +
     acceso('compra', '🧾', 'Apuntar compra', 'Lo que ha llegado y lo que costó') +
     acceso('recuento', '📦', 'Hacer recuento', pedir ? pedir + ' por pedir ahora' : 'Contar lo que queda') +
+    acceso('fichar', '⏱️', 'Fichar', 'Entrada y salida del equipo') +
+    acceso('ausencias', '🏖️', 'Vacaciones y ausencias', (datos.ausencias || []).length ? datos.ausencias.length + ' apuntadas' : 'Apuntar quién no viene') +
     '</div><div class="grupo-stock">Más</div><div class="accesos">' +
     acceso('horas', '🕒', 'Horas del mes', 'Informe en PDF para la nómina', vista === 'horas') +
     acceso('fichas', '📋', 'Fichas técnicas', (datos.fichas || []).length ? datos.fichas.length + ' platos con alérgenos' : 'Platos, alérgenos y coste', vista === 'fichas') +
@@ -3161,9 +3234,10 @@ $('panel').addEventListener('click', (e) => {
   if (!b) return;
   const que = b.dataset.mas;
   if (que === 'servicios') { abrirServicios(); return; }
-  const navega = ['horas', 'equipo', 'fichas', 'recuento', 'compra'].includes(que);
+  const navega = ['horas', 'equipo', 'fichas', 'recuento', 'compra', 'fichar', 'ausencias'].includes(que);
   cerrarPanel(navega);
-  if (que === 'horas' || que === 'equipo' || que === 'fichas') irA(que);
+  if (que === 'equipo' || que === 'fichar' || que === 'ausencias') { subEquipo = que === 'equipo' ? 'equipo' : que; irA('equipo'); }
+  if (que === 'horas' || que === 'fichas') irA(que);
   if (que === 'recuento' || que === 'compra') {
     if (!productosActivos().length) { subStock = 'lista'; irA('stock'); avisar('Primero añade los productos'); return; }
     subStock = que === 'compra' ? 'compras' : 'lista';
@@ -3229,13 +3303,21 @@ $('panel').addEventListener('click', (e) => {
 
 // --- Equipo ---
 function pintarEquipo() {
+  document.querySelectorAll('#segEquipo button').forEach((b) => b.classList.toggle('activo', b.dataset.subEq === subEquipo));
+  $('eqEquipo').hidden = subEquipo !== 'equipo';
+  $('eqOtro').hidden = subEquipo === 'equipo';
+  if (subEquipo === 'fichar') { pintarFichar(); return; }
+  if (subEquipo === 'registro') { pintarRegistro(); return; }
+  if (subEquipo === 'ausencias') { pintarAusencias(); return; }
   const n = datos.equipo.length;
   $('equipo').innerHTML = datos.equipo.map((p, i) =>
     '<div class="fila-equipo">' + avatar(p) +
       '<input value="' + escapar(p.nombre) + '" data-i="' + i + '" aria-label="Nombre">' +
+      '<button data-quitar="' + i + '" aria-label="Quitar">🗑</button>' +
+      '<div class="linea2">' + (alertasFicha(p).length ? '<small class="ojo">⚠️ ' + escapar(alertasFicha(p)[0]) + '</small>' : '<small>' + escapar(resumenFicha(p)) + '</small>') +
       '<button data-subir="' + i + '" ' + (i === 0 ? 'disabled' : '') + ' aria-label="Subir">↑</button>' +
       '<button data-bajar="' + i + '" ' + (i === n - 1 ? 'disabled' : '') + ' aria-label="Bajar">↓</button>' +
-      '<button data-quitar="' + i + '" aria-label="Quitar">🗑</button>' +
+      '<button class="ficha-btn" data-ficha="' + p.id + '">Ficha</button></div>' +
     '</div>').join('');
 }
 $('equipo').addEventListener('input', (e) => {
@@ -3247,6 +3329,7 @@ $('equipo').addEventListener('change', (e) => { if (e.target.tagName === 'INPUT'
 $('equipo').addEventListener('click', (e) => {
   const b = e.target.closest('button');
   if (!b) return;
+  if (b.dataset.ficha) { abrirFichaEmpleado(b.dataset.ficha); return; }
   const eq = datos.equipo;
   if (b.dataset.subir) { const i = +b.dataset.subir; [eq[i - 1], eq[i]] = [eq[i], eq[i - 1]]; }
   if (b.dataset.bajar) { const i = +b.dataset.bajar; [eq[i + 1], eq[i]] = [eq[i], eq[i + 1]]; }
@@ -3265,6 +3348,468 @@ $('btnAnadir').addEventListener('click', () => {
   guardar(); pintarEquipo();
   const inputs = $('equipo').querySelectorAll('input');
   inputs[inputs.length - 1].focus();
+});
+
+// --- Ficha de cada persona: datos personales y de trabajo. Se guardan solo en este dispositivo y en las copias. ---
+const PUESTOS = ['Jefa de cocina', 'Segundo/a de cocina', 'Cocinero/a', 'Sushiman', 'Ayudante de cocina', 'Office y limpieza', 'Otro'];
+const CONTRATOS = ['Indefinido', 'Temporal', 'Fijo discontinuo', 'Prácticas', 'Otro'];
+const TALLAS = ['XS', 'S', 'M', 'L', 'XL', 'XXL'];
+const VACACIONES_ANIO = 30;
+const deISO = (s) => { const [a, m, d] = s.split('-').map(Number); return new Date(a, m - 1, d); };
+const isoDe = (f) => claveSemana(f);
+const hoyCero = () => { const d = new Date(); return new Date(d.getFullYear(), d.getMonth(), d.getDate()); };
+function fechaIsoLarga(s) { const f = deISO(s); return f.getDate() + ' de ' + MESES[f.getMonth()] + ' de ' + f.getFullYear(); }
+function fechaIsoCorta(s) { const f = deISO(s); return f.getDate() + ' ' + MESES_CORTOS[f.getMonth()] + ' ' + f.getFullYear(); }
+function diasHasta(s) { return Math.round((deISO(s) - hoyCero()) / 86400000); }
+function antiguedad(alta) {
+  const a = deISO(alta), h = hoyCero();
+  if (a > h) return 'Empieza el ' + fechaIsoLarga(alta);
+  let meses = (h.getFullYear() - a.getFullYear()) * 12 + h.getMonth() - a.getMonth();
+  if (h.getDate() < a.getDate()) meses--;
+  const anios = Math.floor(meses / 12), resto = meses % 12;
+  const partes = [];
+  if (anios) partes.push(anios + (anios === 1 ? ' año' : ' años'));
+  if (resto) partes.push(resto + (resto === 1 ? ' mes' : ' meses'));
+  return partes.length ? 'Lleva ' + partes.join(' y ') : 'Lleva menos de un mes';
+}
+function alertasFicha(p) {
+  const f = p.ficha || {};
+  const out = [];
+  if (f.fin && diasHasta(f.fin) >= 0 && diasHasta(f.fin) <= 30) out.push('El contrato acaba el ' + fechaIsoCorta(f.fin));
+  if (f.manipulador && diasHasta(f.manipulador) < 0) out.push('Carné de manipulador caducado');
+  else if (f.manipulador && diasHasta(f.manipulador) <= 30) out.push('El carné de manipulador caduca el ' + fechaIsoCorta(f.manipulador));
+  return out;
+}
+function resumenFicha(p) {
+  const f = p.ficha || {};
+  const partes = [f.puesto, f.alta ? antiguedad(f.alta).replace('Lleva ', '') : ''].filter(Boolean);
+  return partes.length ? partes.join(' · ') : 'Ficha sin rellenar';
+}
+function avatarId(id) {
+  const p = datos.equipo.find((x) => x.id === id);
+  return p ? avatar(p) : '<span class="avatar" style="background:#b3a9b1">' + escapar(iniciales(nombreDe(id).replace(' (baja)', ''))) + '</span>';
+}
+const CAMPOS_FICHA = [
+  ['Datos personales'],
+  ['nombreCompleto', 'Nombre y apellidos', 'text'],
+  ['dni', 'DNI o NIE', 'text', 1],
+  ['nacimiento', 'Fecha de nacimiento', 'date', 1],
+  ['telefono', 'Teléfono', 'tel', 1],
+  ['email', 'Correo', 'email', 1],
+  ['direccion', 'Dirección', 'text'],
+  ['nss', 'Nº de la Seguridad Social', 'text', 1],
+  ['iban', 'Cuenta para la nómina', 'text', 1],
+  ['Si pasa algo, avisar a'],
+  ['emergenciaNombre', 'Nombre', 'text', 1],
+  ['emergenciaTel', 'Teléfono', 'tel', 1],
+  ['Trabajo'],
+  ['alta', 'Empezó a trabajar el', 'date', 1],
+  ['puesto', 'Puesto', PUESTOS, 1],
+  ['contrato', 'Contrato', CONTRATOS, 1],
+  ['fin', 'Fin del contrato (si tiene)', 'date', 1],
+  ['jornada', 'Horas a la semana', 'number', 1],
+  ['vacaciones', 'Días de vacaciones al año', 'number', 1],
+  ['manipulador', 'Carné de manipulador: caduca', 'date', 1],
+  ['talla', 'Talla de chaquetilla', TALLAS, 1],
+  ['pin', 'Código para fichar (opcional)', 'pin'],
+  ['notas', 'Notas', 'area'],
+];
+let empleadoUI = null;
+function abrirFichaEmpleado(id) {
+  const p = datos.equipo.find((x) => x.id === id);
+  if (!p) return;
+  empleadoUI = { id };
+  const f = p.ficha || {};
+  const campo = ([k, txt, tipo, mitad]) => {
+    if (!txt) return '<div class="grupo-stock">' + k + '</div>';
+    const v = f[k] == null ? '' : String(f[k]);
+    let control;
+    if (Array.isArray(tipo)) control = '<select data-fe="' + k + '"><option value="">—</option>' + tipo.map((o) => '<option' + (o === v ? ' selected' : '') + '>' + o + '</option>').join('') + '</select>';
+    else if (tipo === 'area') control = '<textarea data-fe="' + k + '" placeholder="Alergias, formación, lo que quieras recordar">' + escapar(v) + '</textarea>';
+    else if (tipo === 'pin') control = '<input data-fe="pin" inputmode="numeric" maxlength="4" autocomplete="off" value="' + escapar(v) + '" placeholder="4 cifras">';
+    else control = '<input data-fe="' + k + '" type="' + tipo + '"' + (tipo === 'number' ? ' inputmode="numeric" min="0"' : '') + (k === 'vacaciones' ? ' placeholder="' + VACACIONES_ANIO + '"' : '') + (k === 'iban' ? ' placeholder="ES00 0000…"' : '') + ' value="' + escapar(v) + '">';
+    return '<label class="campo' + (mitad ? '' : ' ancho') + '"><span>' + txt + '</span>' + control + '</label>';
+  };
+  const anio = new Date().getFullYear();
+  const usados = diasAusencia(id, 'Vacaciones', anio + '-01-01', anio + '-12-31');
+  const derecho = +f.vacaciones || VACACIONES_ANIO;
+  const lineas = [f.alta ? antiguedad(f.alta) + ' en Hinoki' : '', 'Vacaciones ' + anio + ': ' + usados + ' de ' + derecho + ' días · quedan <b>' + Math.max(0, derecho - usados) + '</b>'].filter(Boolean);
+  const alertas = alertasFicha(p);
+  abrirPanel('<h3 class="titulo-ficha">' + avatar(p) + escapar(p.nombre.toUpperCase()) + '</h3><p class="sub">' + lineas.join('<br>') + '</p>' +
+    (alertas.length ? '<div class="alerta">⚠️ ' + alertas.join(' · ') + '</div>' : '') +
+    '<div class="ficha-grid">' + CAMPOS_FICHA.map(campo).join('') + '</div>' +
+    '<p class="pista-campo">Con código, al fichar se lo pide (así nadie ficha por otro). Estos datos se guardan solo en este dispositivo y en las copias que guardes.</p>' +
+    '<div class="acciones"><button class="btn principal" data-fe-guardar>Guardar</button><button class="btn secundario" data-fe-cerrar>Cancelar</button></div>');
+}
+$('panel').addEventListener('click', (e) => {
+  if (!empleadoUI) return;
+  if (e.target.closest('[data-fe-cerrar]')) { empleadoUI = null; cerrarPanel(); return; }
+  if (!e.target.closest('[data-fe-guardar]')) return;
+  const f = {};
+  $('panel').querySelectorAll('[data-fe]').forEach((c) => { const v = c.value.trim(); if (v) f[c.dataset.fe] = v; });
+  if (f.pin && !/^\d{4}$/.test(f.pin)) { avisar('El código tiene que ser de 4 cifras'); return; }
+  if (f.fin && f.alta && f.fin < f.alta) { avisar('El fin del contrato es antes de que empezara'); return; }
+  const p = datos.equipo.find((x) => x.id === empleadoUI.id);
+  if (p) p.ficha = f;
+  empleadoUI = null;
+  guardar(); cerrarPanel(); refrescar();
+  avisar('Ficha guardada');
+});
+
+// --- Fichaje: cada persona toca su nombre al entrar y al salir, en la tablet de la cocina. ---
+// Por mes: datos.fichajes['2026-11'] = [{ id, e, s }], horas en milisegundos; s = null mientras está dentro; ed = corregido a mano.
+const OLVIDO_SALIDA = 16 * 3600000;
+const claveMes = (f) => f.getFullYear() + '-' + String(f.getMonth() + 1).padStart(2, '0');
+function leerMes(f) { return (datos.fichajes || {})[claveMes(f)] || []; }
+function mesParaEscribir(f) {
+  if (!datos.fichajes) datos.fichajes = {};
+  return datos.fichajes[claveMes(f)] || (datos.fichajes[claveMes(f)] = []);
+}
+function ultimoFichaje(id) {
+  const ahora = new Date();
+  return leerMes(new Date(ahora.getFullYear(), ahora.getMonth() - 1, 1)).concat(leerMes(ahora))
+    .filter((x) => x.id === id).reduce((u, x) => (!u || x.e > u.e ? x : u), null);
+}
+function dentroDesde(id) { const u = ultimoFichaje(id); return u && u.s == null && Date.now() - u.e < OLVIDO_SALIDA ? u : null; }
+function hhmm(ms) { const d = new Date(ms); return String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0'); }
+function horaDe(ms) { const d = new Date(ms); return d.getHours() + ':' + String(d.getMinutes()).padStart(2, '0'); }
+const minFichaje = (x) => (x.s == null ? 0 : Math.floor(x.s / 60000) - Math.floor(x.e / 60000));
+const sinSalida = (x) => x.s == null && Date.now() - x.e >= OLVIDO_SALIDA;
+let subEquipo = 'equipo';
+function pintarFichar() {
+  const ahora = new Date(), dia = hoyCero();
+  const dentro = datos.equipo.filter((p) => dentroDesde(p.id)).length;
+  $('eqOtro').innerHTML = '<div class="kiosco-reloj"><b>' + horaDe(ahora.getTime()) + '</b><span>' + DIAS[(ahora.getDay() + 6) % 7] + ', ' + ahora.getDate() + ' de ' + MESES[ahora.getMonth()] +
+    ' · ' + (dentro ? dentro + ' en cocina' : 'nadie dentro') + '</span></div>' +
+    '<p class="nota kiosco-nota">Toca tu nombre al entrar y al salir de la cocina.</p>' +
+    (datos.equipo.length ? '<div class="kiosco">' + datos.equipo.map((p) => {
+      const d = dentroDesde(p.id);
+      const aus = ausenciaDe(dia, p.id);
+      const turno = textoTurnos4(turnosPlan(dia, p.id));
+      return '<button data-fj="' + p.id + '" class="' + (d ? 'dentro' : '') + '">' + avatar(p) + '<b>' + escapar(p.nombre.toUpperCase()) + '</b><small>' +
+        (d ? '● Dentro desde ' + horaDe(d.e) : aus ? iconoAus(aus.tipo) + ' ' + aus.tipo : turno ? 'Turno ' + turno : 'Hoy libra') + '</small></button>';
+    }).join('') + '</div>' : '<div class="vacio">Añade a tu equipo primero.</div>');
+}
+let fichajeUI = null;
+function abrirFichaje(id) {
+  const p = datos.equipo.find((x) => x.id === id);
+  if (!p) return;
+  const d = dentroDesde(id);
+  const u = ultimoFichaje(id);
+  const pin = p.ficha && p.ficha.pin;
+  fichajeUI = { id };
+  abrirPanel('<div class="fichar-panel">' + avatar(p) + '<h3>' + escapar(p.nombre.toUpperCase()) + '</h3>' +
+    '<p class="sub">' + (d ? 'Dentro desde las ' + horaDe(d.e) : 'Fuera de la cocina') + '</p>' +
+    '<div class="fichar-hora" id="ficharHora">' + horaDe(Date.now()) + '</div>' +
+    (u && sinSalida(u) ? '<div class="alerta">⚠️ No fichaste la salida del ' + DIAS[(new Date(u.e).getDay() + 6) % 7] + ' ' + new Date(u.e).getDate() + '. Avisa a Mara para corregirlo.</div>' : '') +
+    (pin ? '<label class="campo"><span>Tu código</span><input id="fjPin" type="password" inputmode="numeric" maxlength="4" autocomplete="off"></label>' : '') +
+    '<div class="acciones"><button class="btn principal fichar-ok' + (d ? ' salida' : '') + '" data-fj-ok>' + (d ? 'Fichar salida' : 'Fichar entrada') + '</button>' +
+    '<button class="btn secundario" data-fj-cerrar>Cancelar</button></div></div>');
+  if (pin) setTimeout(() => { if ($('fjPin')) $('fjPin').focus(); }, 60);
+}
+function confirmarFichaje() {
+  const p = datos.equipo.find((x) => x.id === fichajeUI.id);
+  if (!p) return;
+  if (p.ficha && p.ficha.pin && ($('fjPin') ? $('fjPin').value : '') !== p.ficha.pin) { avisar('Código incorrecto'); if ($('fjPin')) $('fjPin').value = ''; return; }
+  const ahora = Date.now();
+  const d = dentroDesde(p.id);
+  if (d && ahora - d.e < 120000 && !confirm('Acabas de fichar la entrada. ¿Fichar ya la salida?')) return;
+  if (d) d.s = ahora; else mesParaEscribir(new Date(ahora)).push({ id: p.id, e: ahora, s: null });
+  fichajeUI = null;
+  guardar(); cerrarPanel(); refrescar();
+  avisar(nombreCorto(p.nombre) + ': ' + (d ? 'salida' : 'entrada') + ' a las ' + horaDe(ahora) + ' ✓');
+}
+$('panel').addEventListener('click', (e) => {
+  if (!fichajeUI) return;
+  if (e.target.closest('[data-fj-cerrar]')) { fichajeUI = null; cerrarPanel(); return; }
+  if (e.target.closest('[data-fj-ok]')) confirmarFichaje();
+});
+$('panel').addEventListener('keydown', (e) => { if (fichajeUI && e.key === 'Enter' && e.target.id === 'fjPin') { e.preventDefault(); confirmarFichaje(); } });
+function pintarFicharInicio() {
+  const dentro = datos.equipo.map((p) => ({ p, d: dentroDesde(p.id) })).filter((x) => x.d);
+  $('ficharSub').textContent = dentro.length ? (dentro.length === 1 ? '1 persona fichada ahora' : dentro.length + ' personas fichadas ahora') : 'Nadie ha fichado la entrada';
+  $('ficharInicio').innerHTML = dentro.length ? '<div class="fichados">' + dentro.map((x) => '<span class="chip">● ' + escapar(x.p.nombre.toUpperCase()) + ' · ' + horaDe(x.d.e) + '</span>').join('') + '</div>' : '';
+}
+$('btnIrFichar').addEventListener('click', () => { subEquipo = 'fichar'; irA('equipo'); });
+setInterval(() => {
+  if (vista === 'equipo' && subEquipo === 'fichar' && $('panelFondo').hidden) pintarFichar();
+  if (fichajeUI && $('ficharHora')) $('ficharHora').textContent = horaDe(Date.now());
+}, 20000);
+
+// --- Registro de jornada: lo fichado en el mes, para corregir y guardar en PDF ---
+let mesRegistro = new Date(hoy.getFullYear(), hoy.getMonth(), 1);
+function fichajesDia(id, iso) { return ((datos.fichajes || {})[iso.slice(0, 7)] || []).filter((x) => x.id === id && isoDe(new Date(x.e)) === iso).sort((a, b) => a.e - b.e); }
+function registroMes(anio, mes) {
+  const lista = leerMes(new Date(anio, mes, 1)).slice().sort((a, b) => a.e - b.e);
+  const nueva = () => ({ min: 0, olvidos: 0, dias: new Map() });
+  const porPersona = new Map();
+  lista.forEach((x) => {
+    if (!porPersona.has(x.id)) porPersona.set(x.id, nueva());
+    const r = porPersona.get(x.id);
+    const iso = isoDe(new Date(x.e));
+    if (!r.dias.has(iso)) r.dias.set(iso, []);
+    r.dias.get(iso).push(x);
+    r.min += minFichaje(x);
+    if (sinSalida(x)) r.olvidos++;
+  });
+  const ids = datos.equipo.map((p) => p.id).concat([...porPersona.keys()].filter((id) => !datos.equipo.some((p) => p.id === id)));
+  return ids.map((id) => ({ id, nombre: nombreDe(id), ...(porPersona.get(id) || nueva()) }));
+}
+function textoFichajes(lista) {
+  return lista.map((x) => horaDe(x.e) + '–' + (x.s == null ? (sinSalida(x) ? 'sin salida' : 'dentro') : horaDe(x.s)) + (x.ed ? '*' : '')).join(' · ');
+}
+function pintarRegistro() {
+  const anio = mesRegistro.getFullYear(), mes = mesRegistro.getMonth();
+  const filas = registroMes(anio, mes).filter((f) => f.dias.size);
+  const plan = new Map(informeMes(anio, mes).filas.map((f) => [f.id, f.min]));
+  const total = filas.reduce((s, f) => s + f.min, 0);
+  const olvidos = filas.reduce((s, f) => s + f.olvidos, 0);
+  const abiertos = new Set([...$('eqOtro').querySelectorAll('details[open]')].map((d) => d.dataset.p));
+  $('eqOtro').innerHTML = '<div class="mes-nav"><button data-rg-mes="-1" aria-label="Mes anterior">‹</button><div><small>Registro de jornada</small><b>' +
+    MESES[mes][0].toUpperCase() + MESES[mes].slice(1) + ' ' + anio + '</b></div><button data-rg-mes="1" aria-label="Mes siguiente">›</button></div>' +
+    '<div class="tarjeta"><div class="cifras"><div><b>' + horasExactas(total).replace(' min', '′') + '</b><span>horas fichadas</span></div><div><b>' + filas.length + '</b><span>personas</span></div><div><b>' + olvidos + '</b><span>sin salida</span></div></div></div>' +
+    (olvidos ? '<div class="alerta">⚠️ Hay ' + olvidos + (olvidos === 1 ? ' fichaje' : ' fichajes') + ' sin salida. Toca el día para poner la hora.</div>' : '') +
+    '<div class="tarjeta"><h3>Por persona</h3><div class="sub">Toca un día para corregirlo</div><div>' +
+    (filas.length ? filas.map((f) => {
+      const extras = [f.dias.size + (f.dias.size === 1 ? ' día' : ' días')];
+      if (plan.get(f.id)) extras.push('horario ' + horasExactas(plan.get(f.id)));
+      if (f.olvidos) extras.push(f.olvidos + ' sin salida');
+      return '<details class="persona-mes" data-p="' + f.id + '"' + (abiertos.has(f.id) ? ' open' : '') + '><summary>' + avatarId(f.id) +
+        '<span class="quien"><b>' + escapar(f.nombre) + '</b><small>' + extras.join(' · ') + '</small></span><span class="total">' + horasExactas(f.min) + '</span></summary>' +
+        '<div class="detalle-mes">' + [...f.dias].map(([iso, l]) => {
+          const fd = deISO(iso);
+          return '<div class="toca" data-rg-dia="' + iso + '" data-rg-p="' + f.id + '"><span>' + DIAS_ABREV[(fd.getDay() + 6) % 7] + ' ' + fd.getDate() + '</span><span' +
+            (l.some(sinSalida) ? ' style="color:var(--frambuesa)"' : '') + '>' + textoFichajes(l) + '</span><span>' + horasExactas(l.reduce((s, x) => s + minFichaje(x), 0)) + '</span></div>';
+        }).join('') + '</div></details>';
+    }).join('') : '<div class="vacio">Nadie ha fichado en ' + MESES[mes] + '.</div>') + '</div></div>' +
+    '<div class="acciones"><button class="btn secundario" data-rg-anadir>+ Añadir un fichaje olvidado</button><button class="btn principal" data-rg-pdf>Guardar PDF del registro</button></div>' +
+    '<p class="nota">La ley pide guardar el registro de entradas y salidas 4 años (art. 34.9 del Estatuto de los Trabajadores): guarda el PDF cada mes. Lo marcado con * se corrigió a mano.</p>';
+}
+let regUI = null;
+function cargarFilasReg() {
+  regUI.filas = fichajesDia(regUI.id, regUI.iso).map((x) => ({ e: hhmm(x.e), s: x.s == null ? '' : hhmm(x.s), orig: x }));
+  if (regUI.nuevo || !regUI.filas.length) regUI.filas.push({ e: '', s: '' });
+}
+function abrirRegistroDia(id, iso, nuevo) {
+  regUI = { id: id || (datos.equipo[0] ? datos.equipo[0].id : ''), iso: iso || isoDe(new Date()), nuevo: !!nuevo };
+  cargarFilasReg();
+  pintarRegistroDia();
+}
+function pintarRegistroDia() {
+  const u = regUI;
+  abrirPanel('<h3>' + (u.nuevo ? 'Añadir fichaje' : escapar(nombreDe(u.id))) + '</h3><p class="sub">' +
+    (u.nuevo ? 'Para cuando alguien se olvidó de fichar.' : DIAS[(deISO(u.iso).getDay() + 6) % 7] + ' ' + fechaIsoLarga(u.iso)) + '</p>' +
+    (u.nuevo ? '<div class="campos-2"><label class="campo"><span>Persona</span><select id="rgP">' + datos.equipo.map((p) => '<option value="' + p.id + '"' + (p.id === u.id ? ' selected' : '') + '>' + escapar(p.nombre.toUpperCase()) + '</option>').join('') + '</select></label>' +
+      '<label class="campo"><span>Día</span><input type="date" id="rgDia" max="' + isoDe(new Date()) + '" value="' + u.iso + '"></label></div>' : '') +
+    u.filas.map((f, i) => '<div class="turno-inc"><span class="lbl">Entrada</span><input type="time" step="60" data-rg-e="' + i + '" value="' + f.e + '"><span>salida</span><input type="time" step="60" data-rg-s="' + i + '" value="' + f.s + '">' +
+      '<button class="quitar-tramo" data-rg-quitar="' + i + '" aria-label="Quitar">✕</button></div>').join('') +
+    '<button class="btn chico secundario" data-rg-mas>+ Otra entrada y salida</button>' +
+    '<p class="pista-campo" style="margin-top:4px">Si la salida es antes que la entrada, cuenta como pasada la medianoche. Lo corregido queda marcado con *.</p>' +
+    '<div class="acciones"><button class="btn principal" data-rg-guardar>Guardar</button><button class="btn secundario" data-rg-cerrar>Cancelar</button></div>');
+}
+function leerRegDOM() {
+  const pn = $('panel');
+  regUI.filas.forEach((f, i) => {
+    const e = pn.querySelector('[data-rg-e="' + i + '"]'), s = pn.querySelector('[data-rg-s="' + i + '"]');
+    if (e) f.e = e.value; if (s) f.s = s.value;
+  });
+}
+const msDe = (iso, h) => { const f = deISO(iso); const [a, b] = h.split(':').map(Number); f.setHours(a, b, 0, 0); return f.getTime(); };
+$('panel').addEventListener('change', (e) => {
+  if (!regUI || (e.target.id !== 'rgP' && e.target.id !== 'rgDia')) return;
+  if (e.target.id === 'rgP') regUI.id = e.target.value;
+  else if (e.target.value) regUI.iso = e.target.value;
+  cargarFilasReg();
+  pintarRegistroDia();
+});
+$('panel').addEventListener('click', (e) => {
+  if (!regUI) return;
+  const b = e.target.closest('button');
+  if (!b) return;
+  if (b.dataset.rgCerrar !== undefined) { regUI = null; cerrarPanel(); return; }
+  if (b.dataset.rgMas !== undefined) { leerRegDOM(); regUI.filas.push({ e: '', s: '' }); pintarRegistroDia(); return; }
+  if (b.dataset.rgQuitar !== undefined) { leerRegDOM(); regUI.filas.splice(+b.dataset.rgQuitar, 1); pintarRegistroDia(); return; }
+  if (b.dataset.rgGuardar === undefined) return;
+  leerRegDOM();
+  const u = regUI;
+  if (!u.id) { avisar('Elige a la persona'); return; }
+  const nuevas = [];
+  for (const f of u.filas) {
+    if (!f.e && !f.s) continue;
+    if (!f.e) { avisar('Falta la hora de entrada'); return; }
+    const e1 = msDe(u.iso, f.e);
+    let s1 = f.s ? msDe(u.iso, f.s) : null;
+    if (s1 != null && s1 <= e1) s1 += 86400000;
+    if (e1 > Date.now() || (s1 != null && s1 > Date.now())) { avisar('No se puede fichar una hora que aún no ha llegado'); return; }
+    const igual = f.orig && hhmm(f.orig.e) === f.e && (f.orig.s == null ? '' : hhmm(f.orig.s)) === f.s;
+    nuevas.push(igual ? f.orig : { id: u.id, e: e1, s: s1, ed: true });
+  }
+  nuevas.sort((a, b2) => a.e - b2.e);
+  for (let i = 1; i < nuevas.length; i++) {
+    if (nuevas[i - 1].s == null || nuevas[i].e < nuevas[i - 1].s) { avisar('Hay horas que se pisan o una entrada sin salida en medio'); return; }
+  }
+  const k = u.iso.slice(0, 7);
+  const antes = ((datos.fichajes || {})[k] || []).slice();
+  const resto = antes.filter((x) => !(x.id === u.id && isoDe(new Date(x.e)) === u.iso));
+  if (!datos.fichajes) datos.fichajes = {};
+  if (resto.length + nuevas.length) datos.fichajes[k] = resto.concat(nuevas); else delete datos.fichajes[k];
+  regUI = null;
+  guardar(); cerrarPanel(); refrescar();
+  ofrecerDeshacer('Registro corregido', () => { if (antes.length) datos.fichajes[k] = antes; else delete datos.fichajes[k]; });
+});
+async function pdfRegistro() {
+  const anio = mesRegistro.getFullYear(), mes = mesRegistro.getMonth();
+  const filas = registroMes(anio, mes).filter((f) => f.dias.size);
+  if (!filas.length) { avisar('Nadie ha fichado este mes'); return; }
+  const plan = new Map(informeMes(anio, mes).filas.map((f) => [f.id, f.min]));
+  const nombreMes = MESES[mes] + ' ' + anio;
+  const ultimo = new Date(anio, mes + 1, 0).getDate();
+  const g = new Date();
+  const salidaTxt = (x) => x.s == null ? (sinSalida(x) ? 'sin salida' : 'aún dentro') : horaDe(x.s) + (isoDe(new Date(x.s)) !== isoDe(new Date(x.e)) ? ' (+1)' : '');
+  const zona = $('zonaImprimir');
+  zona.className = 'informe';
+  zona.innerHTML = '<div class="inf">' +
+    '<div class="inf-marca">Kumi Mara · Hinoki · Cocina</div>' +
+    '<h1>Registro de jornada · ' + nombreMes + '</h1>' +
+    '<p class="inf-sub">Del 1 al ' + ultimo + ' de ' + MESES[mes] + ' de ' + anio + ' · Generado el ' + g.getDate() + '/' + (g.getMonth() + 1) + '/' + g.getFullYear() + '</p>' +
+    '<table><thead><tr><th>Persona</th><th class="n">Días</th><th class="n">Horas fichadas</th><th class="n">Según horario</th></tr></thead><tbody>' +
+    filas.map((f) => '<tr><td>' + escapar(f.nombre) + '</td><td class="n">' + f.dias.size + '</td><td class="n">' + horasExactas(f.min) + '</td><td class="n">' + (plan.get(f.id) ? horasExactas(plan.get(f.id)) : '—') + '</td></tr>').join('') +
+    '<tr class="suma"><td>Total</td><td class="n"></td><td class="n">' + horasExactas(filas.reduce((s, f) => s + f.min, 0)) + '</td><td class="n"></td></tr></tbody></table>' +
+    '<p class="inf-nota">Registro diario de jornada con la hora de entrada y de salida de cada persona (art. 34.9 del Estatuto de los Trabajadores). Se conserva durante cuatro años. Las horas marcadas con * se corrigieron a mano; (+1) es salida pasada la medianoche.</p>' +
+    filas.map((f) => '<div class="inf-persona salto"><h2><span>' + escapar(f.nombre) + '</span><span>' + horasExactas(f.min) + '</span></h2>' +
+      '<table><thead><tr><th>Fecha</th><th>Entrada</th><th>Salida</th><th class="n">Horas</th></tr></thead><tbody>' +
+      [...f.dias].map(([iso, l]) => l.map((x, i) => {
+        const fd = deISO(iso);
+        return '<tr><td>' + (i ? '' : DIAS_ABREV[(fd.getDay() + 6) % 7] + ' ' + fd.getDate() + '/' + (mes + 1)) + '</td><td>' + horaDe(x.e) + (x.ed ? '*' : '') + '</td><td>' + salidaTxt(x) + '</td><td class="n">' + horasExactas(minFichaje(x)) + '</td></tr>';
+      }).join('')).join('') +
+      '<tr class="suma"><td>Total</td><td></td><td></td><td class="n">' + horasExactas(f.min) + '</td></tr></tbody></table>' +
+      '<div class="inf-firmas"><div>Firma de la empresa</div><div>Firma de ' + escapar(nombreCorto(f.nombre.replace(' (baja)', ''))) + '</div></div></div>').join('') +
+    '</div>';
+  await fuentesListas();
+  imprimir('Registro de jornada ' + nombreMes + ' - Kumi Mara');
+}
+
+// --- Vacaciones y ausencias: datos.ausencias = [{ id, p, tipo, desde, hasta, nota }], fechas 'AAAA-MM-DD', «hasta» incluido ---
+const TIPOS_AUS = [['Vacaciones', '🏖️'], ['Baja médica', '🩺'], ['Asunto propio', '📝'], ['Permiso', '📄'], ['Otra', '📌']];
+const iconoAus = (t) => (TIPOS_AUS.find((x) => x[0] === t) || ['', '📌'])[1];
+function ausenciaDe(fecha, id) { const iso = isoDe(fecha); return (datos.ausencias || []).find((a) => a.p === id && a.desde <= iso && iso <= a.hasta) || null; }
+function diasEntre(desde, hasta) { return Math.round((deISO(hasta) - deISO(desde)) / 86400000) + 1; }
+function diasAusencia(id, tipo, ini, fin) {
+  return (datos.ausencias || []).filter((a) => a.p === id && (!tipo || a.tipo === tipo) && a.hasta >= ini && a.desde <= fin)
+    .reduce((s, a) => s + diasEntre(a.desde < ini ? ini : a.desde, a.hasta > fin ? fin : a.hasta), 0);
+}
+function rangoAus(a) {
+  const d = deISO(a.desde), h = deISO(a.hasta);
+  if (a.desde === a.hasta) return d.getDate() + ' ' + MESES_CORTOS[d.getMonth()];
+  return 'del ' + d.getDate() + (d.getMonth() === h.getMonth() ? '' : ' ' + MESES_CORTOS[d.getMonth()]) + ' al ' + h.getDate() + ' ' + MESES_CORTOS[h.getMonth()];
+}
+function pintarAusencias() {
+  const iso = isoDe(new Date());
+  const anio = new Date().getFullYear();
+  const lista = (datos.ausencias || []).slice().sort((a, b) => a.desde.localeCompare(b.desde));
+  const fila = (a) => {
+    const n = diasEntre(a.desde, a.hasta);
+    return '<button class="ausencia" data-au="' + a.id + '">' + avatarId(a.p) + '<span class="quien"><b>' + escapar(nombreDe(a.p)) + '</b><small>' + iconoAus(a.tipo) + ' ' + a.tipo + ' · ' + rangoAus(a) + '</small>' +
+      (a.nota ? '<small>' + escapar(a.nota) + '</small>' : '') + '</span><span class="dias-aus">' + n + (n === 1 ? ' día' : ' días') + '</span></button>';
+  };
+  const bloque = (titulo, l) => (l.length ? '<div class="grupo-stock">' + titulo + '</div>' + l.map(fila).join('') : '');
+  $('eqOtro').innerHTML = '<div class="acciones" style="margin:0 0 14px"><button class="btn principal" data-au-nueva>+ Apuntar vacaciones o ausencia</button></div>' +
+    '<div class="tarjeta">' + (lista.length
+      ? bloque('Ahora', lista.filter((a) => a.desde <= iso && a.hasta >= iso)) + bloque('Próximas', lista.filter((a) => a.desde > iso)) + bloque('Pasadas', lista.filter((a) => a.hasta < iso).reverse().slice(0, 30))
+      : '<div class="vacio">Aún no hay ausencias apuntadas.</div>') + '</div>' +
+    '<div class="tarjeta"><h3>Vacaciones ' + anio + '</h3><div class="sub">Días naturales apuntados de cada uno</div>' +
+    datos.equipo.map((p) => {
+      const usados = diasAusencia(p.id, 'Vacaciones', anio + '-01-01', anio + '-12-31');
+      const derecho = +(p.ficha || {}).vacaciones || VACACIONES_ANIO;
+      return '<div class="vac-fila">' + avatar(p) + '<span>' + escapar(p.nombre.toUpperCase()) + '</span><div class="vac-barra"><i style="width:' + Math.min(100, (usados / derecho) * 100) + '%"></i></div><b>' + usados + '/' + derecho + '</b></div>';
+    }).join('') + '</div>' +
+    '<p class="nota">Si alguien tiene turno un día de ausencia, sale un aviso en «Rellenar» y en el cuadro.</p>';
+}
+let ausUI = null;
+function abrirAusencia(idAus) {
+  const a = idAus ? (datos.ausencias || []).find((x) => x.id === idAus) : null;
+  const iso = isoDe(new Date());
+  ausUI = a ? { ...a, habia: true } : { id: nuevoId(), p: datos.equipo[0] ? datos.equipo[0].id : '', tipo: 'Vacaciones', desde: iso, hasta: iso, nota: '', habia: false };
+  pintarAusencia();
+}
+function textoDiasAus() {
+  const u = ausUI;
+  if (!u.desde || !u.hasta || u.hasta < u.desde) return 'Revisa las fechas';
+  const n = diasEntre(u.desde, u.hasta);
+  let txt = n + (n === 1 ? ' día natural' : ' días naturales');
+  if (u.tipo === 'Vacaciones' && u.p) {
+    const anio = u.desde.slice(0, 4);
+    const p = datos.equipo.find((x) => x.id === u.p);
+    const derecho = +((p && p.ficha) || {}).vacaciones || VACACIONES_ANIO;
+    const otros = (datos.ausencias || []).filter((a) => a.id !== u.id && a.p === u.p && a.tipo === 'Vacaciones' && a.desde.slice(0, 4) <= anio && a.hasta.slice(0, 4) >= anio)
+      .reduce((s, a) => s + diasEntre(a.desde < anio + '-01-01' ? anio + '-01-01' : a.desde, a.hasta > anio + '-12-31' ? anio + '-12-31' : a.hasta), 0);
+    const estas = diasEntre(u.desde < anio + '-01-01' ? anio + '-01-01' : u.desde, u.hasta > anio + '-12-31' ? anio + '-12-31' : u.hasta);
+    const quedan = derecho - otros - estas;
+    txt += ' · le ' + (quedan < 0 ? 'faltan ' + -quedan + ' días (se pasa)' : 'quedan ' + quedan + ' de ' + derecho + ' en ' + anio);
+  }
+  return txt;
+}
+function pintarAusencia() {
+  const u = ausUI;
+  abrirPanel('<h3>' + (u.habia ? 'Cambiar ausencia' : 'Apuntar ausencia') + '</h3><p class="sub">&nbsp;</p>' +
+    '<label class="campo"><span>Persona</span><select id="auP">' + datos.equipo.map((p) => '<option value="' + p.id + '"' + (p.id === u.p ? ' selected' : '') + '>' + escapar(p.nombre.toUpperCase()) + '</option>').join('') + '</select></label>' +
+    '<div class="grupo-stock">Qué es</div><div class="chips-inc">' + TIPOS_AUS.map(([t, i]) => '<button data-au-tipo="' + t + '" class="' + (u.tipo === t ? 'sel' : '') + '">' + i + ' ' + t + '</button>').join('') + '</div>' +
+    '<div class="campos-2"><label class="campo"><span>Desde</span><input type="date" id="auDesde" value="' + u.desde + '"></label><label class="campo"><span>Hasta (incluido)</span><input type="date" id="auHasta" value="' + u.hasta + '"></label></div>' +
+    '<p class="pista-campo" id="auDias">' + textoDiasAus() + '</p>' +
+    '<label class="campo"><span>Nota (opcional)</span><input id="auNota" value="' + escapar(u.nota || '') + '" placeholder="Ej.: viaje a casa"></label>' +
+    '<div class="acciones"><button class="btn principal" data-au-guardar>Guardar</button><button class="btn secundario" data-au-cerrar>Cancelar</button>' +
+    (u.habia ? '<button class="btn texto" data-au-quitar>Quitar esta ausencia</button>' : '') + '</div>');
+}
+function leerAusDOM() {
+  if (!$('auP')) return;
+  ausUI.p = $('auP').value; ausUI.desde = $('auDesde').value; ausUI.hasta = $('auHasta').value; ausUI.nota = $('auNota').value.trim();
+}
+$('panel').addEventListener('change', (e) => {
+  if (!ausUI || !['auP', 'auDesde', 'auHasta'].includes(e.target.id)) return;
+  leerAusDOM();
+  if (e.target.id === 'auDesde' && ausUI.desde && (!ausUI.hasta || ausUI.hasta < ausUI.desde)) { ausUI.hasta = ausUI.desde; $('auHasta').value = ausUI.desde; }
+  $('auDias').textContent = textoDiasAus();
+});
+$('panel').addEventListener('click', (e) => {
+  if (!ausUI) return;
+  const b = e.target.closest('button');
+  if (!b) return;
+  if (b.dataset.auTipo) { leerAusDOM(); ausUI.tipo = b.dataset.auTipo; pintarAusencia(); return; }
+  if (b.dataset.auCerrar !== undefined) { ausUI = null; cerrarPanel(); return; }
+  const quitar = b.dataset.auQuitar !== undefined;
+  if (!quitar && b.dataset.auGuardar === undefined) return;
+  leerAusDOM();
+  const u = ausUI;
+  const antes = (datos.ausencias || []).slice();
+  let lista = antes.filter((a) => a.id !== u.id);
+  if (!quitar) {
+    if (!u.p) { avisar('Elige a la persona'); return; }
+    if (!u.desde || !u.hasta || u.hasta < u.desde) { avisar('Revisa las fechas'); return; }
+    if (lista.some((a) => a.p === u.p && a.desde <= u.hasta && u.desde <= a.hasta)) { avisar('Ya tiene otra ausencia esos días'); return; }
+    lista = lista.concat({ id: u.id, p: u.p, tipo: u.tipo, desde: u.desde, hasta: u.hasta, nota: u.nota });
+  }
+  datos.ausencias = lista;
+  ausUI = null;
+  guardar(); cerrarPanel(); refrescar();
+  ofrecerDeshacer(quitar ? 'Ausencia quitada' : 'Ausencia guardada', () => { datos.ausencias = antes; });
+});
+$('segEquipo').addEventListener('click', (e) => {
+  const b = e.target.closest('[data-sub-eq]');
+  if (!b) return;
+  subEquipo = b.dataset.subEq;
+  pintarEquipo();
+  window.scrollTo(0, 0);
+});
+$('eqOtro').addEventListener('click', (e) => {
+  const t = (s) => e.target.closest(s);
+  let b;
+  if ((b = t('[data-fj]'))) { abrirFichaje(b.dataset.fj); return; }
+  if ((b = t('[data-rg-mes]'))) { mesRegistro = new Date(mesRegistro.getFullYear(), mesRegistro.getMonth() + +b.dataset.rgMes, 1); pintarRegistro(); return; }
+  if ((b = t('[data-rg-dia]'))) { abrirRegistroDia(b.dataset.rgP, b.dataset.rgDia); return; }
+  if (t('[data-rg-anadir]')) { abrirRegistroDia(null, null, true); return; }
+  if (t('[data-rg-pdf]')) { pdfRegistro(); return; }
+  if (t('[data-au-nueva]')) { abrirAusencia(); return; }
+  if ((b = t('[data-au]'))) abrirAusencia(b.dataset.au);
 });
 
 // --- Navegación ---
@@ -3311,7 +3856,7 @@ $('semanaAnterior').addEventListener('click', () => { lunes = sumarDias(lunes, -
 $('semanaSiguiente').addEventListener('click', () => { lunes = sumarDias(lunes, 7); refrescar(); });
 
 function refrescar() {
-  if (vista === 'inicio') { pintarInicio(); return; }
+  if (vista === 'inicio') { pintarInicio(); pintarFicharInicio(); return; }
   if (vista === 'horas') { pintarHoras(); return; }
   if (vista === 'stock') { pintarStock(); return; }
   if (vista === 'fichas') { pintarFichas(); return; }
@@ -3321,7 +3866,7 @@ function refrescar() {
   if (vista === 'equipo') pintarEquipo();
 }
 // El inicio muestra quién está en cocina «ahora»: se actualiza cada minuto.
-setInterval(() => { if (vista === 'inicio') pintarInicio(); }, 60000);
+setInterval(() => { if (vista === 'inicio') { pintarInicio(); pintarFicharInicio(); } }, 60000);
 
 let temporizador;
 function avisar(texto) {
@@ -3338,7 +3883,7 @@ history.replaceState({ vista: 'inicio', nivel: 0 }, '');
 window.addEventListener('popstate', (e) => {
   const st = e.state || { vista: 'inicio', nivel: 0 };
   if (!st.capa) {
-    if (!$('panelFondo').hidden) { $('panelFondo').hidden = true; incUI = null; serviciosUI = null; }
+    if (!$('panelFondo').hidden) { $('panelFondo').hidden = true; incUI = null; serviciosUI = null; empleadoUI = null; fichajeUI = null; regUI = null; ausUI = null; }
     if (!$('hojaFondo').hidden) { $('hojaFondo').hidden = true; repetir = null; }
   }
   const salirDeRecuento = enRecuento && !st.recuento;
