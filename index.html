@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="robots" content="noindex, nofollow">
-<meta name="theme-color" content="#ff5f80">
+<meta name="theme-color" content="#b04d6e">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -14,35 +14,41 @@
 <link rel="icon" href="icon-192.png">
 <title>Kumi Mara · horarios de cocina</title>
 <style>
-  @font-face { font-family: 'Playfair Display'; font-style: italic; font-weight: 400 900; font-display: swap; src: url(fuentes/PlayfairDisplay-Italic.woff2) format('woff2'); }
-  @font-face { font-family: 'Great Vibes'; font-weight: 400; font-display: swap; src: url(fuentes/GreatVibes.woff2) format('woff2'); }
+  @font-face { font-family: 'Shippori Mincho B1'; font-weight: 500; font-display: swap; src: url(fuentes/ShipporiMincho-500.woff2) format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+  @font-face { font-family: 'Shippori Mincho B1'; font-weight: 700; font-display: swap; src: url(fuentes/ShipporiMincho-700.woff2) format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+  @font-face { font-family: 'Shippori Mincho B1'; font-weight: 500; font-display: swap; src: url(fuentes/ShipporiMincho-jp-500.woff2) format('woff2'); unicode-range: U+3000-30FF, U+3400-4DBF, U+4E00-9FFF; }
+  @font-face { font-family: 'Shippori Mincho B1'; font-weight: 700; font-display: swap; src: url(fuentes/ShipporiMincho-jp-700.woff2) format('woff2'); unicode-range: U+3000-30FF, U+3400-4DBF, U+4E00-9FFF; }
+  @font-face { font-family: 'Josefin Sans'; font-weight: 300 700; font-display: swap; src: url(fuentes/JosefinSans.woff2) format('woff2'); }
   @font-face { font-family: 'Jost'; font-weight: 100 900; font-display: swap; src: url(fuentes/Jost.woff2) format('woff2'); }
 
   :root {
-    --rosa: #ff4d8d;
-    --coral: #ff7a59;
-    --violeta: #8e2de2;
-    --frambuesa: #b0135f;
-    --frambuesa-oscuro: #5a0f3c;
-    --rosa-medio: #ffc2d6;
-    --rosa-suave: #fff0f5;
-    --deg: linear-gradient(135deg, #ff4d8d 0%, #ff7a59 100%);
-    --deg-intenso: linear-gradient(150deg, #ff8a5c 0%, #ff4d8d 38%, #d6247a 70%, #8e2de2 100%);
-    --deg-oscuro: linear-gradient(135deg, #3a0d3f 0%, #7a1246 100%);
-    --tinta: #1f1418;
-    --gris: #7a6970;
-    --borde: #f6e1ea;
-    --fondo: #fff7f9;
+    --rosa: #d4698a;
+    --coral: #e9a3b6;
+    --violeta: #6c4a44;
+    --frambuesa: #b04d6e;
+    --frambuesa-oscuro: #5b2f3e;
+    --rosa-medio: #f3b9c8;
+    --rosa-suave: #fbe4ea;
+    --deg: linear-gradient(135deg, #d4698a 0%, #e9a3b6 100%);
+    --deg-intenso: linear-gradient(150deg, #eaa9b9 0%, #d4698a 38%, #c25a7c 70%, #6c4a44 100%);
+    --deg-oscuro: linear-gradient(135deg, #3e2a30 0%, #8a4a5c 100%);
+    --tinta: #44303a;
+    --gris: #866f77;
+    --borde: #ecd3d9;
+    --fondo: #fbf4f2;
     --blanco: #ffffff;
     --verde: #2fb37a;
-    --titulo: 'Playfair Display', Georgia, serif;
-    --firma: 'Great Vibes', 'Snell Roundhand', cursive;
+    --titulo: 'Shippori Mincho B1', 'Hiragino Mincho ProN', 'Yu Mincho', Georgia, serif;
+    --firma: 'Shippori Mincho B1', 'Hiragino Mincho ProN', 'Yu Mincho', Georgia, serif;
+    --letra: 'Josefin Sans', 'Jost', sans-serif;
   }
   * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
   html, body { margin: 0; }
+  /* Shippori Mincho no tiene cursiva: los títulos que pedían cursiva salen rectos, como en la carta de Hinoki. */
+  html { font-synthesis: none; }
   body {
     font-family: 'Jost', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    background: linear-gradient(180deg, #fff1f6 0%, #fff8f3 55%, #fff7f9 100%) fixed; background-color: var(--fondo); color: var(--tinta); font-size: 16px;
+    background: linear-gradient(180deg, #f9eceb 0%, #fbf4f1 55%, #fbf4f2 100%) fixed; background-color: var(--fondo); color: var(--tinta); font-size: 16px;
     padding-bottom: calc(80px + env(safe-area-inset-bottom));
   }
   button, select, input { font: inherit; color: inherit; }
@@ -54,23 +60,23 @@
     position: relative; overflow: hidden; color: #fff;
     background:
       url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='24' viewBox='0 0 48 24'%3E%3Cg fill='none' stroke='%23ffffff' stroke-opacity='.11' stroke-width='1.4'%3E%3Ccircle cx='24' cy='24' r='22'/%3E%3Ccircle cx='24' cy='24' r='15'/%3E%3Ccircle cx='24' cy='24' r='8'/%3E%3Ccircle cx='0' cy='24' r='22'/%3E%3Ccircle cx='0' cy='24' r='15'/%3E%3Ccircle cx='0' cy='24' r='8'/%3E%3Ccircle cx='48' cy='24' r='22'/%3E%3Ccircle cx='48' cy='24' r='15'/%3E%3Ccircle cx='48' cy='24' r='8'/%3E%3C/g%3E%3C/svg%3E"),
-      radial-gradient(90% 70% at 90% 0%, rgba(255, 184, 107, .85) 0%, transparent 60%),
-      radial-gradient(80% 80% at 0% 100%, rgba(142, 45, 226, .55) 0%, transparent 60%),
+      radial-gradient(90% 70% at 90% 0%, rgba(243, 185, 200, .8) 0%, transparent 60%),
+      radial-gradient(80% 80% at 0% 100%, rgba(108, 74, 68, .45) 0%, transparent 60%),
       var(--deg-intenso);
     padding: calc(18px + env(safe-area-inset-top)) 22px 78px;
   }
-  .barra-sup { display: flex; align-items: baseline; justify-content: space-between; }
-  .logo-txt { font-family: var(--firma); font-size: 34px; line-height: 1; }
-  .logo-txt small { font-family: 'Jost', sans-serif; font-size: 10px; letter-spacing: .3em; text-transform: uppercase; margin-left: 6px; opacity: .85; vertical-align: 4px; }
-  .marca { font-size: 11px; letter-spacing: .24em; text-transform: uppercase; opacity: .85; font-weight: 500; }
+  .barra-sup { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
+  .logo-txt { font-family: var(--firma); font-size: 22px; font-weight: 500; letter-spacing: .22em; line-height: 1; }
+  .logo-txt small { font-family: var(--letra); font-size: 10px; letter-spacing: .3em; text-transform: uppercase; margin-left: 6px; opacity: .85; vertical-align: 4px; }
+  .marca { font-family: var(--letra); white-space: nowrap; font-size: 11px; letter-spacing: .24em; text-transform: uppercase; opacity: .85; font-weight: 500; }
   .saludo { margin-top: 26px; position: relative; z-index: 1; }
   .saludo .t { font-size: 24px; font-weight: 500; opacity: .95; display: block; }
-  .saludo .nombre { font-family: var(--firma); font-size: 64px; line-height: .95; display: block; margin-top: 2px; text-shadow: 0 2px 18px rgba(92, 13, 47, .35); }
+  .saludo .nombre { font-family: var(--firma); font-weight: 700; font-size: 50px; letter-spacing: .04em; line-height: 1; display: block; margin-top: 2px; text-shadow: 0 2px 18px rgba(68, 48, 58, .3); }
   .fecha { font-size: 15px; opacity: .9; margin-top: 8px; letter-spacing: .02em; }
   .fecha::first-letter { text-transform: uppercase; }
-  .sushi { position: absolute; right: 6px; top: calc(66px + env(safe-area-inset-top)); width: 168px; height: 138px; filter: drop-shadow(0 12px 18px rgba(58, 13, 63, .35)); animation: flotar 5s ease-in-out infinite; }
+  .emblema { position: absolute; right: 6px; top: calc(66px + env(safe-area-inset-top)); width: 168px; height: 138px; filter: drop-shadow(0 12px 18px rgba(68, 48, 58, .3)); animation: flotar 5s ease-in-out infinite; }
   @keyframes flotar { 50% { transform: translateY(-6px); } }
-  @media (prefers-reduced-motion: reduce) { .sushi, .pulso::after { animation: none !important; } }
+  @media (prefers-reduced-motion: reduce) { .emblema, .pulso::after { animation: none !important; } }
 
   .ahora {
     position: absolute; left: 22px; bottom: 26px; display: inline-flex; align-items: center; gap: 10px;
@@ -85,7 +91,7 @@
   .tablero { padding: 0 14px; margin: -14px auto 0; position: relative; max-width: 720px; }
   .tarjeta {
     background: var(--blanco); border-radius: 22px; padding: 18px 16px; margin-bottom: 14px;
-    box-shadow: 0 8px 28px rgba(176, 19, 95, .08), 0 1px 2px rgba(176, 19, 95, .06);
+    box-shadow: 0 8px 28px rgba(176, 77, 110, .08), 0 1px 2px rgba(176, 77, 110, .06);
   }
   .tarjeta h3 { margin: 0; font-family: var(--titulo); font-style: italic; font-weight: 600; font-size: 22px; color: var(--frambuesa); }
   .tarjeta .sub { font-size: 13px; color: var(--gris); margin: 2px 0 14px; }
@@ -114,7 +120,7 @@
     display: flex; align-items: center; justify-content: center; white-space: nowrap; overflow: hidden;
     background: var(--deg);
   }
-  .tramo.noche { background: linear-gradient(90deg, #d6247a, #8e2de2); }
+  .tramo.noche { background: linear-gradient(90deg, #c25a7c, #6c4a44); }
   .horas-eje { position: relative; height: 18px; margin-left: 116px; font-size: 10.5px; color: var(--gris); }
   .horas-eje span { position: absolute; transform: translateX(-50%); }
   .ya { position: absolute; top: -6px; bottom: 16px; width: 2px; background: var(--tinta); border-radius: 2px; pointer-events: none; }
@@ -132,7 +138,7 @@
   .barras-dias { flex: 1; display: flex; gap: 6px; align-items: flex-end; height: 72px; }
   .barras-dias div { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; height: 100%; gap: 4px; }
   .barras-dias i { width: 100%; max-width: 22px; border-radius: 6px 6px 3px 3px; background: var(--rosa-suave); min-height: 6px; }
-  .barras-dias .ok i { background: linear-gradient(180deg, #ff7a59, #ff4d8d 60%, #d6247a); }
+  .barras-dias .ok i { background: linear-gradient(180deg, #e9a3b6, #d4698a 60%, #c25a7c); }
   .barras-dias span { font-size: 11px; color: var(--gris); }
   .barras-dias em { font-style: normal; font-size: 10px; font-weight: 600; color: var(--frambuesa); height: 12px; }
   .estado { font-size: 14px; margin: 0 0 14px; color: var(--gris); }
@@ -150,7 +156,7 @@
   .palabra .romaji { font-family: var(--titulo); font-style: italic; font-size: 24px; margin: 2px 0 6px; }
   .palabra p { margin: 0; font-size: 14px; color: var(--gris); }
   .firma { text-align: center; color: var(--gris); font-size: 12px; letter-spacing: .14em; text-transform: uppercase; margin: 22px 0 8px; }
-  .firma b { font-family: var(--firma); font-size: 24px; letter-spacing: 0; text-transform: none; color: var(--rosa); font-weight: 400; vertical-align: -3px; }
+  .firma b { font-family: var(--firma); font-size: 17px; letter-spacing: 0; text-transform: none; color: var(--rosa); font-weight: 400; vertical-align: -3px; }
 
   /* ---------- Cabecera con la semana ---------- */
   header.cabecera {
@@ -203,7 +209,7 @@
   .turno input::-webkit-calendar-picker-indicator { display: none; }
   .turno input::-webkit-date-and-time-value { text-align: center; }
   .turno input:not(.lleno)::-webkit-datetime-edit { color: #c9b5bd; }
-  .turno input:focus { border-color: var(--rosa); box-shadow: 0 0 0 3px rgba(255, 77, 141, .18); background: var(--blanco); }
+  .turno input:focus { border-color: var(--rosa); box-shadow: 0 0 0 3px rgba(212, 105, 138, .18); background: var(--blanco); }
   .turno input.lleno { background: var(--rosa-suave); border-color: var(--rosa-medio); color: var(--frambuesa); font-weight: 600; }
   .turno .a { color: var(--gris); font-size: 13px; }
   .turno .borrar { width: 40px; height: 46px; border: 0; background: none; font-size: 18px; color: #c9b5bd; }
@@ -211,7 +217,7 @@
   .acciones { display: grid; gap: 10px; margin: 16px 0; }
   .tarjeta .acciones { margin: 0; }
   .btn { display: block; width: 100%; min-height: 52px; border-radius: 16px; border: 0; font-weight: 600; font-size: 16.5px; padding: 12px; letter-spacing: .01em; }
-  .btn.principal { background: var(--deg); color: #fff; box-shadow: 0 8px 20px rgba(255, 77, 141, .35); }
+  .btn.principal { background: var(--deg); color: #fff; box-shadow: 0 8px 20px rgba(212, 105, 138, .35); }
   .btn.secundario { background: var(--blanco); border: 1px solid var(--rosa-medio); color: var(--frambuesa); }
   .btn.peligro { background: var(--blanco); border: 1px solid #f0c9c9; color: #b42318; }
   .btn:active { transform: scale(.985); }
@@ -237,7 +243,7 @@
   nav button.mas { position: relative; }
   nav .circulo {
     display: grid; place-items: center; width: 52px; height: 52px; margin: -24px auto 2px; border-radius: 50%; color: #fff;
-    background: var(--deg-intenso); box-shadow: 0 8px 20px rgba(214, 36, 122, .4); border: 4px solid var(--fondo);
+    background: var(--deg-intenso); box-shadow: 0 8px 20px rgba(176, 77, 110, .35); border: 4px solid var(--fondo);
   }
   nav .circulo svg { margin: 0; width: 24px; height: 24px; stroke-width: 2.4; }
   .accesos { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 16px; }
@@ -304,7 +310,7 @@
   .repetir { border: 0; background: var(--rosa-suave); color: var(--frambuesa); border-radius: 99px; padding: 5px 11px; font-size: 12.5px; font-weight: 600; }
   .repetir[hidden] { display: none; }
   .repetir svg, .btn svg { width: 14px; height: 14px; vertical-align: -2px; margin-right: 4px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
-  .hoja-fondo { position: fixed; inset: 0; z-index: 30; background: rgba(31, 20, 24, .45); display: flex; align-items: flex-end; }
+  .hoja-fondo { position: fixed; inset: 0; z-index: 30; background: rgba(68, 48, 58, .45); display: flex; align-items: flex-end; }
   .hoja-fondo[hidden] { display: none; }
   .hoja {
     background: var(--blanco); width: 100%; max-width: 720px; margin: 0 auto; border-radius: 26px 26px 0 0;
@@ -367,13 +373,13 @@
   /* Stock e inventario */
   .segmento { display: flex; background: var(--rosa-suave); border-radius: 14px; padding: 4px; margin-bottom: 14px; }
   .segmento button { flex: 1; border: 0; background: none; border-radius: 11px; padding: 9px 0; font-size: 14px; font-weight: 500; color: var(--frambuesa); }
-  .segmento button.activo { background: var(--blanco); font-weight: 600; box-shadow: 0 1px 4px rgba(176, 19, 95, .15); }
+  .segmento button.activo { background: var(--blanco); font-weight: 600; box-shadow: 0 1px 4px rgba(176, 77, 110, .15); }
   .fila-botones { display: flex; gap: 8px; margin-bottom: 14px; }
   .fila-botones .btn { min-height: 46px; font-size: 15px; padding: 10px 8px; }
   .pedir { background: var(--deg-oscuro); color: #fff; }
   .pedir h3 { color: #fff; }
   .pedir ul { margin: 8px 0 14px; padding-left: 18px; font-size: 14px; line-height: 1.6; opacity: .95; }
-  .grupo-stock { font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: var(--gris); margin: 6px 0 4px; }
+  .grupo-stock { font-family: var(--letra); font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: var(--gris); margin: 6px 0 4px; }
   .inv-scroll { overflow-x: auto; margin: 10px -16px 0; -webkit-overflow-scrolling: touch; }
   .tabla-inv { min-width: 100%; border-collapse: separate; border-spacing: 0; font-size: 14px; font-variant-numeric: tabular-nums; }
   .tabla-inv th, .tabla-inv td { padding: 9px 10px; min-width: 58px; border-bottom: 1px solid var(--borde); text-align: right; white-space: nowrap; }
@@ -412,7 +418,7 @@
   .fila-recuento select { font: inherit; font-size: 13px; padding: 6px 4px; border: 1px solid var(--borde); border-radius: 8px; background: transparent; color: inherit; }
   .foto-recuento .resultado { background: #fff8e6; border: 1px solid #f5d48b; color: #6b4b00; border-radius: 12px; padding: 10px 12px; font-size: 13.5px; line-height: 1.45; }
   .numero { height: 44px; width: 100%; border-radius: 12px; border: 1px solid var(--borde); background: var(--fondo); text-align: center; font-size: 17px; font-variant-numeric: tabular-nums; outline: none; }
-  .numero:focus { border-color: var(--rosa); background: var(--blanco); box-shadow: 0 0 0 3px rgba(255, 77, 141, .18); }
+  .numero:focus { border-color: var(--rosa); background: var(--blanco); box-shadow: 0 0 0 3px rgba(212, 105, 138, .18); }
   .compra { display: grid; grid-template-columns: 1fr auto 36px; gap: 8px; align-items: center; padding: 9px 0; border-top: 1px solid var(--borde); font-size: 14px; }
   .compra:first-of-type { border-top: 0; }
   .compra b { font-weight: 600; }
@@ -444,7 +450,7 @@
   .alergenos button i { font-style: normal; font-size: 18px; }
   .alergenos button em { font-style: normal; font-size: 10.5px; color: var(--gris); }
   .alergenos button.si { background: var(--frambuesa); color: #fff; border-color: transparent; }
-  .alergenos button.si em { color: #ffd3e1; }
+  .alergenos button.si em { color: #f6d3dc; }
   .alergenos button.trazas { border: 1.5px dashed var(--frambuesa); background: var(--rosa-suave); }
   .sugeridos { background: #fff7e0; border: 1px solid #f5d48b; color: #6b4b00; border-radius: 12px; padding: 9px 12px; font-size: 13px; margin-bottom: 12px; }
   .sugeridos button { margin-top: 6px; }
@@ -487,20 +493,20 @@
   .copia .sub b { color: var(--frambuesa); }
 
   #zonaImprimir { display: none; }
-  .inf { font-family: 'Jost', Arial, sans-serif; color: #1f1418; font-size: 11pt; }
-  .inf-marca { font-size: 8.5pt; letter-spacing: .18em; text-transform: uppercase; color: #b0135f; }
-  .inf h1 { font-family: 'Playfair Display', Georgia, serif; font-style: italic; font-size: 22pt; margin: 4px 0 2px; color: #b0135f; }
-  .inf .inf-sub { margin: 0 0 14px; color: #7a6970; font-size: 10pt; }
+  .inf { font-family: 'Jost', Arial, sans-serif; color: #44303a; font-size: 11pt; }
+  .inf-marca { font-family: var(--letra); font-size: 8.5pt; letter-spacing: .18em; text-transform: uppercase; color: #b04d6e; }
+  .inf h1 { font-family: 'Shippori Mincho B1', 'Hiragino Mincho ProN', Georgia, serif; font-weight: 700; font-size: 22pt; margin: 4px 0 2px; color: #b04d6e; }
+  .inf .inf-sub { margin: 0 0 14px; color: #866f77; font-size: 10pt; }
   .inf table { width: 100%; border-collapse: collapse; margin-bottom: 10px; }
-  .inf th { background: #ffd3e1; text-align: left; font-weight: 600; padding: 6px 8px; font-size: 9.5pt; }
+  .inf th { background: #f6d3dc; text-align: left; font-weight: 600; padding: 6px 8px; font-size: 9.5pt; }
   .inf td { padding: 5px 8px; border-bottom: 1px solid #ead6dd; font-variant-numeric: tabular-nums; }
   .inf td.n, .inf th.n { text-align: right; }
-  .inf tr.suma td { font-weight: 700; border-top: 2px solid #1f1418; border-bottom: 0; }
-  .inf .inf-nota { font-size: 9pt; color: #7a6970; margin: 0 0 16px; }
+  .inf tr.suma td { font-weight: 700; border-top: 2px solid #44303a; border-bottom: 0; }
+  .inf .inf-nota { font-size: 9pt; color: #866f77; margin: 0 0 16px; }
   .inf-persona { break-inside: avoid; margin-top: 14px; }
-  .inf h2 { font-size: 12pt; margin: 0 0 4px; display: flex; justify-content: space-between; border-bottom: 2px solid #b0135f; padding-bottom: 3px; }
+  .inf h2 { font-size: 12pt; margin: 0 0 4px; display: flex; justify-content: space-between; border-bottom: 2px solid #b04d6e; padding-bottom: 3px; }
   .inf-firmas { display: flex; gap: 40px; margin-top: 36px; break-inside: avoid; font-size: 10pt; }
-  .inf-firmas div { flex: 1; border-top: 1px solid #1f1418; padding-top: 6px; }
+  .inf-firmas div { flex: 1; border-top: 1px solid #44303a; padding-top: 6px; }
   /* ---------- Tablet: el móvil sigue igual; con más ancho, dos columnas y menú a la izquierda ---------- */
   @media (min-width: 700px) {
     .tablero { max-width: 1100px; padding: 0 24px; columns: 2; column-gap: 18px; }
@@ -536,61 +542,58 @@
   }
   .inf .ficha-alg { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; margin-bottom: 12px; }
   .inf .ficha-alg div { border: 1px solid #ead6dd; border-radius: 6px; padding: 4px 2px; text-align: center; font-size: 8.5pt; line-height: 1.2; color: #b9a9af; }
-  .inf .ficha-alg div.si { background: #b0135f; color: #fff; border-color: #b0135f; font-weight: 600; }
-  .inf .ficha-alg div.trazas { border: 1.5px dashed #b0135f; color: #b0135f; font-weight: 600; }
+  .inf .ficha-alg div.si { background: #b04d6e; color: #fff; border-color: #b04d6e; font-weight: 600; }
+  .inf .ficha-alg div.trazas { border: 1.5px dashed #b04d6e; color: #b04d6e; font-weight: 600; }
   .inf .ficha-txt { white-space: pre-line; margin: 0 0 12px; line-height: 1.45; }
   .ficha-ms .ficha-cab { display: flex; justify-content: space-between; gap: 8mm; align-items: flex-start; margin-bottom: 4mm; }
-  .ficha-ms .ficha-titulo { font-family: 'Jost', Arial, sans-serif; font-style: normal; text-transform: uppercase; font-size: 22pt; letter-spacing: .02em; color: #1f1418; line-height: 1.15; }
+  .ficha-ms .ficha-titulo { font-family: 'Jost', Arial, sans-serif; font-style: normal; text-transform: uppercase; font-size: 22pt; letter-spacing: .02em; color: #44303a; line-height: 1.15; }
   #zonaImprimir img.ficha-foto-ms { width: 80mm; height: 56mm; object-fit: cover; border-radius: 3mm; flex: none; }
   #zonaImprimir img.ficha-foto-ms.chica { width: 52mm; height: 38mm; }
   .inf table.ficha-ing td { border: 1px solid #ead6dd; }
-  .inf table.ficha-ing td.alg-txt { font-size: 9pt; text-transform: uppercase; color: #b0135f; font-weight: 600; }
+  .inf table.ficha-ing td.alg-txt { font-size: 9pt; text-transform: uppercase; color: #b04d6e; font-weight: 600; }
   .ficha-ms .ficha-servicio { display: flex; justify-content: space-between; align-items: center; gap: 8mm; }
   .ficha-ms .ficha-servicio b { display: block; font-size: 12pt; }
   .ficha-ms .ficha-servicio span { font-size: 12pt; }
   .inf .tira { break-inside: avoid; margin: 6mm 0 8mm; }
   .inf h2.tira-titulo { display: block; text-align: center; text-transform: uppercase; border: 0; font-weight: 500; font-size: 12pt; letter-spacing: .04em; margin-bottom: 2mm; }
   .inf table.tira-tabla { table-layout: fixed; border-collapse: collapse; }
-  .inf table.tira-tabla td { border: 1px solid #1f1418; padding: 0; vertical-align: bottom; text-align: center; }
+  .inf table.tira-tabla td { border: 1px solid #44303a; padding: 0; vertical-align: bottom; text-align: center; }
   .inf .tira-img { height: 30mm; display: grid; place-items: center; padding: 1.5mm; }
   #zonaImprimir .tira-img img { width: auto; max-width: 100%; height: 27mm; object-fit: contain; }
-  .inf .tira-txt { border-top: 1px solid #1f1418; font-size: 9pt; text-transform: uppercase; padding: 1mm; }
+  .inf .tira-txt { border-top: 1px solid #44303a; font-size: 9pt; text-transform: uppercase; padding: 1mm; }
   .inf td.tira-res .tira-txt { border-top: 0; }
   .inf .ficha-sec { break-inside: avoid; margin-top: 10px; }
   .inf table.matriz th { font-size: 7.5pt; text-align: center; padding: 4px 2px; vertical-align: bottom; }
   .inf table.matriz th:first-child { text-align: left; font-size: 9pt; }
   .inf table.matriz td { text-align: center; padding: 4px 2px; font-size: 11pt; }
   .inf table.matriz td:first-child { text-align: left; font-size: 9.5pt; }
-  .inf table.matriz tr.cat td { background: #fbeef2; font-weight: 600; font-size: 9pt; text-align: left; letter-spacing: .08em; text-transform: uppercase; color: #b0135f; }
+  .inf table.matriz tr.cat td { background: #fbeef2; font-weight: 600; font-size: 9pt; text-align: left; letter-spacing: .08em; text-transform: uppercase; color: #b04d6e; }
 </style>
 </head>
 <body>
 
 <section class="vista activa" id="vistaInicio">
   <div class="portada">
-    <div class="barra-sup"><span class="logo-txt">Kumi<small>Kitchen · 組</small></span><span class="marca">Miss Sushi · Cocina</span></div>
+    <div class="barra-sup"><span class="logo-txt">Kumi<small>組</small></span><span class="marca">Hinoki · Muelle Uno</span></div>
     <div class="saludo"><span class="t" id="saludo">Hola,</span><span class="nombre">Mara</span></div>
     <div class="fecha" id="fechaHoy"></div>
-    <svg class="sushi" viewBox="0 0 220 180" aria-hidden="true">
+    <svg class="emblema" viewBox="0 0 220 180" aria-hidden="true">
       <defs>
-        <linearGradient id="gSalmon" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ffb48c"/><stop offset=".55" stop-color="#ff7a59"/><stop offset="1" stop-color="#ef4f3f"/></linearGradient>
-        <linearGradient id="gArroz" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#f1e6ea"/></linearGradient>
-        <linearGradient id="gPalillo" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#2a161c"/><stop offset=".8" stop-color="#5a3440"/><stop offset="1" stop-color="#c98b6b"/></linearGradient>
+        <radialGradient id="ePetalo" cx="0" cy="0" r="34" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#e98aa6"/><stop offset=".45" stop-color="#f6c3d1"/><stop offset="1" stop-color="#fff5f8"/></radialGradient>
+        <symbol id="eFlor" viewBox="-40 -40 80 80"><g fill="url(#ePetalo)" stroke="#e7a2b5" stroke-width=".6"><path transform="rotate(0)" d="M0 -3 C -13 -9 -17 -25 -8 -33 C -5 -35 -2 -33 0 -29 C 2 -33 5 -35 8 -33 C 17 -25 13 -9 0 -3Z"/><path transform="rotate(72)" d="M0 -3 C -13 -9 -17 -25 -8 -33 C -5 -35 -2 -33 0 -29 C 2 -33 5 -35 8 -33 C 17 -25 13 -9 0 -3Z"/><path transform="rotate(144)" d="M0 -3 C -13 -9 -17 -25 -8 -33 C -5 -35 -2 -33 0 -29 C 2 -33 5 -35 8 -33 C 17 -25 13 -9 0 -3Z"/><path transform="rotate(216)" d="M0 -3 C -13 -9 -17 -25 -8 -33 C -5 -35 -2 -33 0 -29 C 2 -33 5 -35 8 -33 C 17 -25 13 -9 0 -3Z"/><path transform="rotate(288)" d="M0 -3 C -13 -9 -17 -25 -8 -33 C -5 -35 -2 -33 0 -29 C 2 -33 5 -35 8 -33 C 17 -25 13 -9 0 -3Z"/></g><circle r="6" fill="#c75479"/><g stroke="#b84a6c" stroke-width="1"><line transform="rotate(0)" x1="0" y1="-4" x2="0" y2="-12"/><line transform="rotate(45)" x1="0" y1="-4" x2="0" y2="-12"/><line transform="rotate(90)" x1="0" y1="-4" x2="0" y2="-12"/><line transform="rotate(135)" x1="0" y1="-4" x2="0" y2="-12"/><line transform="rotate(180)" x1="0" y1="-4" x2="0" y2="-12"/><line transform="rotate(225)" x1="0" y1="-4" x2="0" y2="-12"/><line transform="rotate(270)" x1="0" y1="-4" x2="0" y2="-12"/><line transform="rotate(315)" x1="0" y1="-4" x2="0" y2="-12"/></g></symbol>
       </defs>
-      <g transform="rotate(-24 120 50)"><rect x="18" y="34" width="210" height="7" rx="3.5" fill="url(#gPalillo)"/><rect x="26" y="48" width="200" height="7" rx="3.5" fill="url(#gPalillo)"/></g>
-      <ellipse cx="108" cy="152" rx="88" ry="10" fill="#3a0d3f" opacity=".22"/>
-      <path d="M35 122 C35 102 65 94 105 94 C145 94 175 102 175 122 C175 138 145 145 105 145 C65 145 35 138 35 122Z" fill="url(#gArroz)"/>
-      <g fill="#e6d8dd"><ellipse cx="60" cy="130" rx="4" ry="2" transform="rotate(20 60 130)"/><ellipse cx="82" cy="138" rx="4" ry="2" transform="rotate(-15 82 138)"/><ellipse cx="108" cy="134" rx="4" ry="2" transform="rotate(10 108 134)"/><ellipse cx="134" cy="139" rx="4" ry="2" transform="rotate(-25 134 139)"/><ellipse cx="156" cy="128" rx="4" ry="2" transform="rotate(15 156 128)"/></g>
-      <path d="M26 109 C30 81 72 67 110 69 C150 71 186 83 188 105 C189 115 178 118 165 113 C134 102 76 101 46 115 C35 120 25 118 26 109Z" fill="url(#gSalmon)"/>
-      <g fill="none" stroke="#fff" stroke-opacity=".78" stroke-width="5" stroke-linecap="round"><path d="M56 81 C66 93 70 103 67 112"/><path d="M86 72 C98 86 102 97 99 106"/><path d="M118 70 C130 83 134 94 131 104"/><path d="M150 75 C160 87 163 96 160 106"/></g>
-      <path d="M62 79 C84 71 112 69 134 72" fill="none" stroke="#fff" stroke-opacity=".55" stroke-width="3" stroke-linecap="round"/>
-      <g transform="translate(182 140)">
-        <circle r="31" fill="#1f1418"/><circle r="26" fill="url(#gArroz)"/>
-        <circle cx="-3" cy="-3" r="11" fill="#ff7a59"/><path d="M-9 -7 C-4 -10 2 -9 5 -5" stroke="#fff" stroke-opacity=".7" stroke-width="2" fill="none" stroke-linecap="round"/>
-        <ellipse cx="9" cy="7" rx="6.5" ry="4.5" fill="#8fd16a"/><circle cx="-9" cy="9" r="4" fill="#d4f59a"/>
-        <g fill="#f2dfb3"><ellipse cx="-16" cy="-12" rx="2" ry="1.2"/><ellipse cx="14" cy="-15" rx="2" ry="1.2" transform="rotate(30 14 -15)"/><ellipse cx="18" cy="12" rx="2" ry="1.2"/></g>
-      </g>
-      <g fill="#fff"><path d="M30 64 l3 -9 l3 9 l9 3 l-9 3 l-3 9 l-3 -9 l-9 -3z" opacity=".9"/><path d="M196 86 l2 -6 l2 6 l6 2 l-6 2 l-2 6 l-2 -6 l-6 -2z" opacity=".75"/></g>
+      <circle cx="132" cy="84" r="62" fill="#ffffff" fill-opacity=".08" stroke="#ffffff" stroke-opacity=".8" stroke-width="2"/>
+      <circle cx="132" cy="84" r="55" fill="none" stroke="#ffffff" stroke-opacity=".35" stroke-width="1"/>
+      <text x="132" y="105" text-anchor="middle" font-family="'Shippori Mincho B1', 'Hiragino Mincho ProN', serif" font-weight="700" font-size="60" fill="#ffffff">檜</text>
+      <path d="M4 176 C40 150 62 140 92 128 C118 118 140 104 168 74 C182 60 196 52 216 48" fill="none" stroke="#6c4a44" stroke-width="3.2" stroke-linecap="round"/>
+      <path d="M92 128 C96 142 108 150 122 154" fill="none" stroke="#6c4a44" stroke-width="2" stroke-linecap="round"/>
+      <path d="M168 74 C170 60 178 50 190 44" fill="none" stroke="#6c4a44" stroke-width="1.8" stroke-linecap="round"/>
+      <use href="#eFlor" x="66" y="122" width="30" height="30"/>
+      <use href="#eFlor" x="110" y="140" width="24" height="24"/>
+      <use href="#eFlor" x="176" y="54" width="28" height="28"/>
+      <use href="#eFlor" x="186" y="30" width="20" height="20"/>
+      <use href="#eFlor" x="24" y="146" width="20" height="20"/>
+      <circle cx="150" cy="96" r="3" fill="#f6c3d1"/><circle cx="44" cy="150" r="2.5" fill="#f6c3d1"/>
     </svg>
     <div class="ahora"><span class="pulso" id="pulso"></span><span id="ahoraTxt"></span></div>
   </div>
@@ -721,7 +724,7 @@
   <section class="vista" id="vistaEquipo">
     <button class="volver" data-volver><span>‹</span> Inicio</button>
     <h2 class="titulo-equipo"><span class="jp-equipo">仲間</span> Tu equipo</h2>
-    <p class="sub-equipo">El equipo de Miss Sushi</p>
+    <p class="sub-equipo">El equipo de cocina de Hinoki</p>
     <div id="equipo"></div>
     <div class="acciones">
       <button class="btn secundario" id="btnAnadir">+ Añadir persona</button>
@@ -773,7 +776,7 @@ const DIAS_CORTOS = ['L', 'M', 'X', 'J', 'V', 'S', 'D'];
 const MESES = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
 const MESES_CORTOS = ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sept', 'oct', 'nov', 'dic'];
 const EQUIPO_INICIAL = ['MARA', 'SHEENA', 'MAHJOUB', 'RAÚL', 'DANI', 'ALEJANDRO', 'MARI'];
-const COLORES = ['#e8336f', '#b0135f', '#f2614a', '#7b2bd1', '#d6247a', '#8f1150', '#e2553a', '#5d1fa3'];
+const COLORES = ['#d4698a', '#9c4a62', '#c98b6b', '#6c4a44', '#e08aa3', '#7d4757', '#a8735f', '#5b3a40'];
 const PALABRAS = [
   ['板前', 'Itamae', 'El cocinero que corta y sirve frente al cliente.'],
   ['お任せ', 'Omakase', '«Lo dejo en tus manos»: el menú lo elige el chef.'],
@@ -1151,7 +1154,7 @@ function pintarInicio() {
     '<div class="' + (porDia[d] ? 'ok' : '') + '"><em>' + (porDia[d] || '') + '</em><i style="height:' + (porDia[d] ? 14 + (porDia[d] / maxDia) * 40 : 6) + 'px"></i><span>' + l + '</span></div>').join('');
   const r = 36, circ = 2 * Math.PI * r;
   $('proxAnillo').innerHTML =
-    '<svg width="86" height="86" viewBox="0 0 86 86"><defs><linearGradient id="gAnillo" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ff7a59"/><stop offset="1" stop-color="#ff4d8d"/></linearGradient></defs>' +
+    '<svg width="86" height="86" viewBox="0 0 86 86"><defs><linearGradient id="gAnillo" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#e9a3b6"/><stop offset="1" stop-color="#d4698a"/></linearGradient></defs>' +
     '<circle cx="43" cy="43" r="' + r + '" fill="none" stroke="#fce8ef" stroke-width="9"/>' +
     '<circle cx="43" cy="43" r="' + r + '" fill="none" stroke="url(#gAnillo)" stroke-width="9" stroke-linecap="round" stroke-dasharray="' + circ + '" stroke-dashoffset="' + (circ * (1 - listos / 7)) + '"/></svg>' +
     '<div class="cifra"><b>' + listos + '/7</b><small>días</small></div>';
@@ -1571,18 +1574,18 @@ function dibujarCuadro() {
 
   const fuente = 'Jost, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif';
   ctx.textBaseline = 'middle';
-  ctx.fillStyle = '#b0135f'; ctx.textAlign = 'left';
-  ctx.font = 'italic 700 30px "Playfair Display", Georgia, serif';
+  ctx.fillStyle = '#b04d6e'; ctx.textAlign = 'left';
+  ctx.font = '700 30px "Shippori Mincho B1", Georgia, serif';
   ctx.fillText('Horario · semana del ' + rango(lunes, true) + ' ' + sumarDias(lunes, 6).getFullYear(), M, M + TIT / 2 - 8);
 
   const x0 = M, y0 = M + TIT, xd = x0 + NOM, yp = y0 + CAB;
   const finX = xd + COL * 14, finY = yp + equipo.length * FIL * 2;
 
-  ctx.fillStyle = '#ffd3e1';
+  ctx.fillStyle = '#f6d3dc';
   ctx.fillRect(xd, y0, COL * 14, CAB);
   ctx.fillRect(x0, yp, NOM, finY - yp);
 
-  ctx.fillStyle = '#1f1418';
+  ctx.fillStyle = '#44303a';
   for (let d = 0; d < 7; d++) {
     const x = xd + d * COL * 2;
     ctx.font = '600 19px ' + fuente;
@@ -1620,10 +1623,10 @@ function dibujarCuadro() {
     ctx.fillStyle = '#1f7a4d'; ctx.font = 'italic 600 19px ' + fuente; ctx.textAlign = 'center';
     ctx.fillText('Libre', x + COL, y + FIL + 1);
   });
-  for (let d = 0; d <= 7; d++) linea(xd + d * COL * 2, y0, xd + d * COL * 2, finY, 2.5, '#1f1418');
-  for (let i = 0; i <= equipo.length; i++) linea(x0, yp + i * FIL * 2, finX, yp + i * FIL * 2, 2.5, '#1f1418');
-  linea(xd, y0, finX, y0, 2.5, '#1f1418');
-  linea(x0, yp, x0, finY, 2.5, '#1f1418');
+  for (let d = 0; d <= 7; d++) linea(xd + d * COL * 2, y0, xd + d * COL * 2, finY, 2.5, '#44303a');
+  for (let i = 0; i <= equipo.length; i++) linea(x0, yp + i * FIL * 2, finX, yp + i * FIL * 2, 2.5, '#44303a');
+  linea(xd, y0, finX, y0, 2.5, '#44303a');
+  linea(x0, yp, x0, finY, 2.5, '#44303a');
 
   return c;
 }
@@ -1631,7 +1634,7 @@ function dibujarCuadro() {
 function fuentesListas() {
   if (!document.fonts) return Promise.resolve();
   return Promise.all([
-    document.fonts.load('italic 700 30px "Playfair Display"'),
+    document.fonts.load('700 30px "Shippori Mincho B1"'),
     document.fonts.load('600 19px Jost'),
     document.fonts.load('500 20px Jost'),
   ]).catch(() => {});
@@ -1831,7 +1834,7 @@ $('btnInforme').addEventListener('click', async () => {
   const zona = $('zonaImprimir');
   zona.className = 'informe';
   zona.innerHTML = '<div class="inf">' +
-    '<div class="inf-marca">Kumi Mara · Miss Sushi · Cocina</div>' +
+    '<div class="inf-marca">Kumi Mara · Hinoki · Cocina</div>' +
     '<h1>Horas trabajadas · ' + nombreMes + '</h1>' +
     '<p class="inf-sub">Del 1 al ' + ultimo + ' de ' + MESES[mes] + ' de ' + anio + ' · Generado el ' + generado + '</p>' +
     '<table><thead><tr><th>Persona</th><th class="n">Días</th><th class="n">Faltas</th><th class="n">Horas totales</th><th class="n">Nocturnas (22–6 h)</th><th class="n">En domingo</th></tr></thead><tbody>' +
@@ -2206,7 +2209,7 @@ function imprimirHoja() {
   const cols = columnasHoja().slice(-8);
   const zona = $('zonaImprimir');
   zona.className = 'informe';
-  zona.innerHTML = '<div class="inf"><div class="inf-marca">Kumi Mara · Miss Sushi · Cocina</div><h1>Inventario</h1>' +
+  zona.innerHTML = '<div class="inf"><div class="inf-marca">Kumi Mara · Hinoki · Cocina</div><h1>Inventario</h1>' +
     '<p class="inf-sub">Últimos ' + cols.length + ' recuentos · Generado el ' + hoy.getDate() + '/' + (hoy.getMonth() + 1) + '/' + hoy.getFullYear() + '</p>' +
     '<table><thead><tr><th>Producto</th><th>Unidad</th>' + cols.map((c) => { const d = new Date(c.ts); return '<th class="n">' + d.getDate() + '/' + (d.getMonth() + 1) + (c.mes ? ' (mes)' : '') + '</th>'; }).join('') + '</tr></thead><tbody>' +
     productosEnOrden().map((p) => '<tr><td>' + escapar(p.nombre) + '</td><td>' + p.unidad + '</td>' + cols.map((c) => '<td class="n">' + (c.valores[p.id] == null ? '' : cifra.format(c.valores[p.id])) + '</td>').join('') + '</tr>').join('') +
@@ -2280,7 +2283,7 @@ function imprimirInformeStock() {
   const compras = comprasDelMes(anio, mes).sort((a, b) => a.ts - b.ts);
   const zona = $('zonaImprimir');
   zona.className = 'informe';
-  zona.innerHTML = '<div class="inf"><div class="inf-marca">Kumi Mara · Miss Sushi · Cocina</div>' +
+  zona.innerHTML = '<div class="inf"><div class="inf-marca">Kumi Mara · Hinoki · Cocina</div>' +
     '<h1>Stock y compras · ' + nombreMes + '</h1>' +
     '<p class="inf-sub">Del 1 al ' + new Date(anio, mes + 1, 0).getDate() + ' de ' + MESES[mes] + ' de ' + anio + ' · Generado el ' + hoy.getDate() + '/' + (hoy.getMonth() + 1) + '/' + hoy.getFullYear() + '</p>' +
     '<table><thead><tr><th>Producto</th><th class="n">Comprado</th><th class="n">Gastado</th><th class="n">Consumido</th><th class="n">Coste consumo</th></tr></thead><tbody>' +
@@ -2356,7 +2359,7 @@ function abrirCompra() {
 
 function mandarPedido() {
   const pedir = listaPedir();
-  const texto = 'Pedido Miss Sushi · ' + hoy.getDate() + '/' + (hoy.getMonth() + 1) + '\n' +
+  const texto = 'Pedido Hinoki · ' + hoy.getDate() + '/' + (hoy.getMonth() + 1) + '\n' +
     pedir.map((x) => '• ' + x.p.nombre + ': pedir ' + cantidadTxt(cantidadSugerida(x.p, x.e.cantidad), x.p) + ' (quedan ' + cantidadTxt(x.e.cantidad, x.p) + ')').join('\n');
   if (navigator.share) navigator.share({ text: texto }).catch(() => {});
   else window.open('https://wa.me/?text=' + encodeURIComponent(texto), '_blank');
@@ -2407,7 +2410,7 @@ function pdfDeImagenes(paginas) {
 function hojaPedido(fecha, filas, cuantos, num, de, total) {
   const ANCHO = 1240, ALTO = 1754, IZQ = 90, DER = 1150, FILA = 50;
   const COL = { quedan: 640, minimo: 800, pedir: 960, importe: DER - 12 };
-  const TINTA = '#1f1418', GRIS = '#7a6970', TITULO = '#b0135f', CABECERA = '#ffd3e1';
+  const TINTA = '#44303a', GRIS = '#866f77', TITULO = '#b04d6e', CABECERA = '#f6d3dc';
   const c = document.createElement('canvas');
   c.width = ANCHO; c.height = ALTO;
   const g = c.getContext('2d');
@@ -2415,7 +2418,7 @@ function hojaPedido(fecha, filas, cuantos, num, de, total) {
   g.fillStyle = '#ffffff'; g.fillRect(0, 0, ANCHO, ALTO);
   g.fillStyle = TITULO; g.font = '600 22px Jost, Arial, sans-serif';
   g.fillText('KUMI MARA · MISS SUSHI · COCINA', IZQ, 120);
-  g.font = 'italic 700 58px "Playfair Display", Georgia, serif';
+  g.font = '700 58px "Shippori Mincho B1", Georgia, serif';
   g.fillText('Pedido · ' + fecha, IZQ, 200);
   g.fillStyle = GRIS; g.font = '400 26px Jost, Arial, sans-serif';
   g.fillText(cuantos + (cuantos === 1 ? ' producto' : ' productos') + ' por debajo del mínimo' + (de > 1 ? ' · Hoja ' + num + ' de ' + de : ''), IZQ, 250);
@@ -2479,7 +2482,7 @@ async function enviarPedidoPdf() {
   const archivo = await archivoPedido();
   if (!archivo) return;
   if (navigator.canShare && navigator.canShare({ files: [archivo] })) {
-    try { await navigator.share({ files: [archivo], title: 'Pedido Miss Sushi' }); }
+    try { await navigator.share({ files: [archivo], title: 'Pedido Hinoki' }); }
     catch (e) { if (e.name !== 'AbortError') throw e; }
   } else {
     descargar(archivo);
@@ -2917,7 +2920,7 @@ function imprimirFicha(f) {
   const zona = $('zonaImprimir');
   zona.className = 'informe';
   const seccion = (t, txt) => txt && txt.trim() ? '<div class="ficha-sec"><h2><span>' + t + '</span></h2><p class="ficha-txt">' + escapar(txt.trim()) + '</p></div>' : '';
-  zona.innerHTML = '<div class="inf ficha-ms"><div class="ficha-cab"><div><div class="inf-marca">Ficha técnica Miss Sushi</div>' +
+  zona.innerHTML = '<div class="inf ficha-ms"><div class="ficha-cab"><div><div class="inf-marca">Ficha técnica Hinoki</div>' +
     '<h1 class="ficha-titulo">' + escapar(f.nombre) + '</h1>' +
     '<p class="inf-sub">' + escapar(f.categoria) + (f.raciones ? ' · ' + f.raciones + (f.raciones === 1 ? ' ración' : ' raciones') : '') + ' · Actualizada el ' + fechaLarga(f.actualizada || Date.now()) + '</p></div>' +
     (f.foto ? '<img class="ficha-foto-ms" src="' + f.foto + '" alt="">' : '') + '</div>' +
@@ -3060,7 +3063,7 @@ $('panel').addEventListener('click', (e) => {
 function imprimirMontajes(lista) {
   const zona = $('zonaImprimir');
   zona.className = 'informe';
-  zona.innerHTML = '<div class="inf"><div class="inf-marca">Kumi Mara · Miss Sushi · Hojas de montaje</div>' +
+  zona.innerHTML = '<div class="inf"><div class="inf-marca">Kumi Mara · Hinoki · Hojas de montaje</div>' +
     lista.map((m) => '<div class="tira"><h2 class="tira-titulo">' + escapar(m.nombre) + '</h2><table class="tira-tabla"><tr>' +
       m.pasos.map((p) => { const f = fotoPaso(p); return '<td><div class="tira-img">' + (f ? '<img src="' + f + '" alt="">' : '') + '</div><div class="tira-txt">' + escapar(p) + '</div></td>'; }).join('') +
       (m.resultado ? '<td class="tira-res"><div class="tira-img"><img src="' + m.resultado + '" alt=""></div><div class="tira-txt">&nbsp;</div></td>' : '') +
@@ -3079,7 +3082,7 @@ function imprimirMatrizAlergenos() {
     filas += '<tr class="cat"><td colspan="' + (ALERGENOS.length + 1) + '">' + cat + '</td></tr>' +
       deCat.map((f) => { const pa = alergenosPlato(f); return '<tr><td>' + escapar(f.nombre) + '</td>' + ALERGENOS.map(([k]) => '<td>' + (pa[k] === 'si' ? '●' : pa[k] === 'trazas' ? '○' : '') + '</td>').join('') + '</tr>'; }).join('');
   });
-  zona.innerHTML = '<div class="inf"><div class="inf-marca">Kumi Mara · Miss Sushi</div><h1>Alérgenos de la carta</h1>' +
+  zona.innerHTML = '<div class="inf"><div class="inf-marca">Kumi Mara · Hinoki</div><h1>Alérgenos de la carta</h1>' +
     '<p class="inf-sub">● contiene · ○ puede contener (trazas) · Actualizado el ' + fechaLarga(Date.now()) + '</p>' +
     '<table class="matriz"><thead><tr><th>Plato</th>' + ALERGENOS.map(([, n, ico]) => '<th>' + ico + '<br>' + n + '</th>').join('') + '</tr></thead><tbody>' + filas + '</tbody></table>' +
     '<p class="inf-nota">Información sobre los 14 alérgenos del Reglamento (UE) 1169/2011. Si tienes alguna alergia o intolerancia, consulta a nuestro equipo antes de pedir.</p></div>';
