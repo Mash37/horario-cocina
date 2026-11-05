@@ -235,6 +235,26 @@
   .fila-equipo .linea2 button { height: 36px; width: 40px; border-radius: 10px; font-size: 15px; }
   .fila-equipo .linea2 button.ficha-btn { width: auto; padding: 0 14px; font-size: 14px; font-weight: 600; background: var(--rosa-suave); border-color: var(--rosa-medio); }
   .titulo-ficha { display: flex; align-items: center; gap: 10px; }
+  .fe-cab { display: flex; gap: 14px; align-items: center; margin-bottom: 12px; }
+  .fe-cab h3 { margin: 0; }
+  .fe-cab .sub { margin: 2px 0 6px; }
+  .fe-cab .fe-pdf { margin: 0; }
+  .fe-cara { position: relative; width: 68px; height: 68px; border-radius: 50%; border: 0; padding: 0; background: none; flex: none; }
+  .fe-cara img, .fe-cara .avatar { width: 68px; height: 68px; border-radius: 50%; object-fit: cover; display: grid; place-items: center; font-size: 22px; }
+  .fe-cara i { position: absolute; right: -2px; bottom: -2px; width: 28px; height: 28px; border-radius: 50%; background: var(--blanco); display: grid; place-items: center; font-style: normal; font-size: 14px; box-shadow: 0 1px 4px rgba(68, 48, 58, .25); }
+  .fe-nie { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 10px; margin-bottom: 14px; }
+  .fe-slot { width: 100%; aspect-ratio: 1.585; padding: 0; overflow: hidden; border: 1.5px dashed var(--rosa-medio); border-radius: 12px; background: var(--rosa-suave); color: var(--frambuesa); font-size: 13px; font-weight: 600; line-height: 1.5; display: grid; place-items: center; }
+  .fe-slot.lleno { border: 1px solid var(--borde); background: var(--blanco); }
+  .fe-slot img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .fe-slot-pie { display: flex; justify-content: space-between; margin-top: 4px; }
+  .fe-slot-pie button { border: 0; background: none; color: var(--frambuesa); font-size: 13px; font-weight: 600; padding: 6px 2px; }
+  .fe-otro { display: grid; grid-template-columns: 56px minmax(0, 1fr) 44px; gap: 10px; align-items: center; margin-bottom: 8px; }
+  .fe-mini { width: 56px; height: 56px; padding: 0; overflow: hidden; border: 1px solid var(--borde); border-radius: 10px; background: var(--rosa-suave); }
+  .fe-mini img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .fe-otro > button:last-child { height: 44px; border-radius: 10px; }
+  #visorDoc { position: fixed; inset: 0; z-index: 50; background: rgba(30, 18, 24, .94); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; padding: 16px; }
+  #visorDoc img { max-width: 100%; max-height: calc(100% - 30px); object-fit: contain; border-radius: 8px; }
+  #visorDoc small { color: #fff; opacity: .7; }
   .ficha-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 0 10px; }
   .ficha-grid input, .campos-2 input[type=date] { min-width: 0; max-width: 100%; }
   .ficha-grid input[type=date], .campos-2 input[type=date] { padding: 0 8px; font-size: 15px; }
@@ -635,6 +655,14 @@
   .ficha-ms .ficha-titulo { font-family: 'Jost', Arial, sans-serif; font-style: normal; text-transform: uppercase; font-size: 22pt; letter-spacing: .02em; color: #44303a; line-height: 1.15; }
   #zonaImprimir img.ficha-foto-ms { width: 80mm; height: 56mm; object-fit: cover; border-radius: 3mm; flex: none; }
   #zonaImprimir img.ficha-foto-ms.chica { width: 52mm; height: 38mm; }
+  #zonaImprimir img.fe-cara-inf { width: 34mm; height: 34mm; object-fit: cover; border-radius: 50%; flex: none; }
+  .inf table.fe-tabla td:first-child { width: 42%; color: #866f77; }
+  .fe-nie-inf { display: grid; grid-template-columns: 1fr 1fr; gap: 6mm; }
+  .fe-nie-inf figure { margin: 0; text-align: center; font-size: 9pt; color: #866f77; }
+  #zonaImprimir .fe-nie-inf img { width: 100%; max-height: 60mm; object-fit: contain; }
+  .fe-falta { height: 50mm; border: 1px dashed #ead6dd; display: grid; place-items: center; }
+  .fe-doc-sec { text-align: center; }
+  #zonaImprimir img.fe-doc-inf { width: auto; max-width: 100%; max-height: 150mm; }
   .inf table.ficha-ing td { border: 1px solid #ead6dd; }
   .inf table.ficha-ing td.alg-txt { font-size: 9pt; text-transform: uppercase; color: #b04d6e; font-weight: 600; }
   .ficha-ms .ficha-servicio { display: flex; justify-content: space-between; align-items: center; gap: 8mm; }
@@ -3224,7 +3252,11 @@ function textoUltimaCopia() {
 async function guardarCopia() {
   const ahora = new Date();
   // La copia lleva su propia fecha: al recuperarla, la app sabe cuándo se hizo.
-  const contenido = JSON.stringify({ app: 'kumi-kitchen', version: 1, fecha: ahora.toISOString(), datos: { ...datos, ultimaCopia: ahora.getTime() } }, null, 1);
+  // Las fotos de las fichas del equipo viven fuera de «datos» (IndexedDB): la copia las lleva aparte, para que la tablet y el móvil queden iguales.
+  const documentos = {};
+  try { await Promise.all(datos.equipo.flatMap((p) => idsDocs(p.docs)).map(async (id) => { const url = await leerDoc(id); if (url) documentos[id] = url; })); }
+  catch (e) { avisar('No se pudieron leer las fotos del equipo: la copia no las lleva'); }
+  const contenido = JSON.stringify({ app: 'kumi-kitchen', version: 1, fecha: ahora.toISOString(), datos: { ...datos, ultimaCopia: ahora.getTime() }, documentos }, null, 1);
   const nombre = 'kumi-kitchen-copia-' + claveSemana(ahora) + '.json';
   const archivo = new File([contenido], nombre, { type: 'application/json' });
   let hecho = false;
@@ -3243,7 +3275,7 @@ function leerCopia(texto) {
   try { obj = JSON.parse(texto); } catch (e) { return null; }
   const d = obj && obj.app === 'kumi-kitchen' ? obj.datos : obj;
   if (!d || !Array.isArray(d.equipo) || typeof d.semanas !== 'object') return null;
-  return { datos: d, fecha: obj.fecha ? new Date(obj.fecha) : null };
+  return { datos: d, fecha: obj.fecha ? new Date(obj.fecha) : null, documentos: (obj && obj.documentos) || {} };
 }
 $('archivoCopia').addEventListener('change', async (e) => {
   const archivo = e.target.files[0];
@@ -3253,6 +3285,10 @@ $('archivoCopia').addEventListener('change', async (e) => {
   if (!copia) { avisar('Ese archivo no es una copia de Kumi Mara'); return; }
   const cuando = copia.fecha ? ' del ' + copia.fecha.getDate() + ' de ' + MESES[copia.fecha.getMonth()] + ' de ' + copia.fecha.getFullYear() : '';
   if (!confirm('Se va a cambiar todo lo que hay en este móvil por la copia' + cuando + ' (' + copia.datos.equipo.length + ' personas en el equipo). ¿Seguir?')) return;
+  if (Object.keys(copia.documentos).length) {
+    try { await escribirDocs(copia.documentos, []); }
+    catch (err) { avisar('No se pudieron recuperar las fotos del equipo. ¿Le queda espacio a este dispositivo?'); return; }
+  }
   const antes = datos;
   // Por si acaso: lo que había queda guardado aparte antes de restaurar.
   escribirLocal('horario-cocina-antes-de-restaurar', JSON.stringify(antes));
@@ -3384,7 +3420,7 @@ $('equipo').addEventListener('change', (e) => { if (e.target.tagName === 'INPUT'
 $('equipo').addEventListener('click', (e) => {
   const b = e.target.closest('button');
   if (!b) return;
-  if (b.dataset.ficha) { abrirFichaEmpleado(b.dataset.ficha); return; }
+  if (b.dataset.ficha) { abrirFichaConCodigo(b.dataset.ficha); return; }
   const eq = datos.equipo;
   if (b.dataset.subir) { const i = +b.dataset.subir; [eq[i - 1], eq[i]] = [eq[i], eq[i - 1]]; }
   if (b.dataset.bajar) { const i = +b.dataset.bajar; [eq[i + 1], eq[i]] = [eq[i], eq[i + 1]]; }
@@ -3469,11 +3505,108 @@ const CAMPOS_FICHA = [
   ['pin', 'Código para fichar (opcional)', 'pin'],
   ['notas', 'Notas', 'area'],
 ];
+// --- Fotos y documentos de cada persona. Una foto de NIE pesa ~200 KB y el almacén normal del navegador da ~5 MB
+// para todo Kumi Mara: las imágenes van en IndexedDB y la persona solo guarda sus ids en p.docs = { foto, nieDelante, nieDetras, otros: [{ id, nombre }] }.
+const DOCS_BD = 'kumi-mara-documentos', LADO_DOC = 1600, LADO_CARA = 360;
+let bdDocs = null;
+function abrirBdDocs() {
+  if (!bdDocs) bdDocs = new Promise((ok, mal) => {
+    const r = indexedDB.open(DOCS_BD, 1);
+    r.onupgradeneeded = () => r.result.createObjectStore('docs');
+    r.onsuccess = () => ok(r.result);
+    r.onerror = () => { bdDocs = null; mal(r.error); };
+  });
+  return bdDocs;
+}
+async function tablaDocs(modo, hacer) {
+  const bd = await abrirBdDocs();
+  return new Promise((ok, mal) => {
+    const t = bd.transaction('docs', modo);
+    const r = hacer(t.objectStore('docs'));
+    t.oncomplete = () => ok(r && r.result);
+    t.onerror = t.onabort = () => mal(t.error);
+  });
+}
+const leerDoc = (id) => tablaDocs('readonly', (s) => s.get(id));
+function escribirDocs(nuevos, quitar) {
+  return tablaDocs('readwrite', (s) => { Object.entries(nuevos).forEach(([id, url]) => s.put(url, id)); quitar.forEach((id) => s.delete(id)); });
+}
+function idsDocs(d) { return d ? [d.foto, d.nieDelante, d.nieDetras].concat((d.otros || []).map((o) => o.id)).filter(Boolean) : []; }
+async function imagenReducida(archivo, lado, cuadrada) {
+  const img = await createImageBitmap(archivo);
+  const c = document.createElement('canvas');
+  if (cuadrada) {
+    const l = Math.min(img.width, img.height);
+    c.width = c.height = Math.min(lado, l);
+    c.getContext('2d').drawImage(img, (img.width - l) / 2, (img.height - l) / 2, l, l, 0, 0, c.width, c.height);
+  } else {
+    const k = Math.min(1, lado / Math.max(img.width, img.height));
+    c.width = Math.round(img.width * k); c.height = Math.round(img.height * k);
+    c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
+  }
+  return c.toDataURL('image/jpeg', 0.82);
+}
+function verDoc(url) {
+  const v = document.createElement('div');
+  v.id = 'visorDoc';
+  v.innerHTML = '<img src="' + url + '" alt=""><small>Toca para cerrar</small>';
+  v.addEventListener('click', () => v.remove());
+  document.body.appendChild(v);
+}
+
+// --- Código de las fichas: la tablet está en la cocina y cualquiera puede abrir Equipo; las fichas (NIE, cuenta, código para fichar) solo con el código de Mara.
+// Se guarda en datos.codigoFichas, así viaja en la copia y vale igual en el móvil y en la tablet. Abierto, dura unos minutos y no sobrevive a cerrar la app.
+const ABIERTO_FICHAS = 5 * 60000;
+let fichasAbiertasHasta = 0;
+let codigoUI = null;
+function abrirFichaConCodigo(id) {
+  if (datos.codigoFichas && Date.now() < fichasAbiertasHasta) { abrirFichaEmpleado(id); return; }
+  pedirCodigoFichas(datos.codigoFichas ? 'pedir' : 'crear', id);
+}
+function pedirCodigoFichas(modo, id) {
+  codigoUI = { modo, id };
+  const textos = {
+    pedir: ['🔒 Fichas del equipo', 'Escribe tu código para ver las fichas.'],
+    crear: ['🔒 Protege las fichas', 'Elige un código de 4 cifras que solo sepas tú. Se pedirá para abrir las fichas del equipo, también en la tablet.'],
+    cambiar: ['🔒 Código nuevo', 'Escribe el código nuevo de 4 cifras.'],
+  }[modo];
+  const caja = (cid, txt) => '<label class="campo"><span>' + txt + '</span><input id="' + cid + '" type="password" inputmode="numeric" maxlength="4" autocomplete="off" placeholder="4 cifras"></label>';
+  abrirPanel('<h3>' + textos[0] + '</h3><p class="sub">' + textos[1] + '</p>' +
+    caja('codF1', modo === 'pedir' ? 'Código' : 'Código nuevo') + (modo === 'pedir' ? '' : caja('codF2', 'Repítelo')) +
+    (modo === 'pedir' ? '<p class="pista-campo">¿Lo olvidaste? Pídeselo a Mariale.</p>' : '') +
+    '<div class="acciones"><button class="btn principal" data-cod-ok>' + (modo === 'pedir' ? 'Abrir' : 'Guardar código') + '</button><button class="btn secundario" data-cod-cerrar>Cancelar</button></div>');
+  setTimeout(() => { if (codigoUI && $('codF1')) $('codF1').focus(); }, 50);
+}
+$('panel').addEventListener('keydown', (e) => {
+  if (codigoUI && e.key === 'Enter' && e.target.id && e.target.id.startsWith('codF')) $('panel').querySelector('[data-cod-ok]').click();
+});
+$('panel').addEventListener('click', (e) => {
+  if (!codigoUI) return;
+  if (e.target.closest('[data-cod-cerrar]')) { codigoUI = null; cerrarPanel(); return; }
+  if (!e.target.closest('[data-cod-ok]')) return;
+  const ui = codigoUI, c1 = $('codF1').value.trim();
+  if (!/^\d{4}$/.test(c1)) { avisar('El código tiene que ser de 4 cifras'); return; }
+  if (ui.modo === 'pedir') {
+    if (c1 !== datos.codigoFichas) { avisar('Ese no es el código'); $('codF1').value = ''; $('codF1').focus(); return; }
+  } else {
+    if (c1 !== $('codF2').value.trim()) { avisar('Los dos códigos no coinciden'); return; }
+    datos.codigoFichas = c1;
+    guardar();
+    avisar(ui.modo === 'crear' ? 'Código guardado. Haz una copia para llevarlo a la tablet.' : 'Código cambiado');
+  }
+  codigoUI = null;
+  fichasAbiertasHasta = Date.now() + ABIERTO_FICHAS;
+  if (ui.id) abrirFichaEmpleado(ui.id); else cerrarPanel();
+});
+
+const NIE_LADOS = [['nieDelante', 'Por delante'], ['nieDetras', 'Por detrás']];
 let empleadoUI = null;
 function abrirFichaEmpleado(id) {
   const p = datos.equipo.find((x) => x.id === id);
   if (!p) return;
-  empleadoUI = { id };
+  const docs = JSON.parse(JSON.stringify(p.docs || { otros: [] }));
+  if (!docs.otros) docs.otros = [];
+  empleadoUI = { id, pestana: 'personal', docs, urls: {}, nuevos: {} };
   const f = p.ficha || {};
   const campo = ([k, txt, tipo, mitad]) => {
     if (!txt) return '<div class="grupo-stock">' + k + '</div>';
@@ -3485,31 +3618,151 @@ function abrirFichaEmpleado(id) {
     else control = '<input data-fe="' + k + '" type="' + tipo + '"' + (tipo === 'number' ? ' inputmode="numeric" min="0"' : '') + (k === 'vacaciones' ? ' placeholder="' + VACACIONES_ANIO + '"' : '') + (k === 'iban' ? ' placeholder="ES00 0000…"' : '') + ' value="' + escapar(v) + '">';
     return '<label class="campo' + (mitad ? '' : ' ancho') + '"><span>' + txt + '</span>' + control + '</label>';
   };
+  const corte = CAMPOS_FICHA.findIndex((c) => c[0] === 'Trabajo');
   const anio = new Date().getFullYear();
   const usados = diasAusencia(id, 'Vacaciones', anio + '-01-01', anio + '-12-31');
   const derecho = +f.vacaciones || VACACIONES_ANIO;
   const lineas = [f.alta ? antiguedad(f.alta) + ' en Hinoki' : '', 'Vacaciones ' + anio + ': ' + usados + ' de ' + derecho + ' días · quedan <b>' + Math.max(0, derecho - usados) + '</b>'].filter(Boolean);
   const alertas = alertasFicha(p);
-  abrirPanel('<h3 class="titulo-ficha">' + avatar(p) + escapar(p.nombre.toUpperCase()) + '</h3><p class="sub">' + lineas.join('<br>') + '</p>' +
+  abrirPanel('<div class="fe-cab"><span id="feCara"></span><div><h3>' + escapar(p.nombre.toUpperCase()) + '</h3><p class="sub">' + lineas.join('<br>') + '</p><button class="btn secundario chico fe-pdf" data-fe-pdf>📄 PDF de la ficha</button></div></div>' +
     (alertas.length ? '<div class="alerta">⚠️ ' + alertas.join(' · ') + '</div>' : '') +
-    '<div class="ficha-grid">' + CAMPOS_FICHA.map(campo).join('') + '</div>' +
-    '<p class="pista-campo">Con código, al fichar se lo pide (así nadie ficha por otro). Estos datos se guardan solo en este dispositivo y en las copias que guardes.</p>' +
+    '<div class="segmento"><button data-fe-pestana="personal" class="activo">Personal</button><button data-fe-pestana="trabajo">Trabajo</button><button data-fe-pestana="documentos">Documentos</button></div>' +
+    '<div data-fe-sec="personal"><div class="ficha-grid">' + CAMPOS_FICHA.slice(1, corte).map(campo).join('') + '</div></div>' +
+    '<div data-fe-sec="trabajo" hidden><div class="ficha-grid">' + CAMPOS_FICHA.slice(corte + 1).map(campo).join('') + '</div>' +
+    '<p class="pista-campo">Con código, al fichar se lo pide (así nadie ficha por otro).</p></div>' +
+    '<div data-fe-sec="documentos" hidden id="feDocs"></div>' +
+    '<p class="pista-campo">Estos datos y fotos se guardan solo en este dispositivo y en las copias que guardes.</p>' +
     '<div class="acciones"><button class="btn principal" data-fe-guardar>Guardar</button><button class="btn secundario" data-fe-cerrar>Cancelar</button></div>');
+  pintarDocsEmpleado();
+  const ui = empleadoUI;
+  Promise.all(idsDocs(docs).map(async (d) => { ui.urls[d] = await leerDoc(d); })).catch(() => {}).then(() => { if (empleadoUI === ui) pintarDocsEmpleado(); });
 }
-$('panel').addEventListener('click', (e) => {
-  if (!empleadoUI) return;
-  if (e.target.closest('[data-fe-cerrar]')) { empleadoUI = null; cerrarPanel(); return; }
-  if (!e.target.closest('[data-fe-guardar]')) return;
+function pintarDocsEmpleado() {
+  const ui = empleadoUI, d = ui.docs;
+  const p = datos.equipo.find((x) => x.id === ui.id);
+  const url = (id) => (id && ui.urls[id]) || '';
+  $('feCara').innerHTML = '<button class="fe-cara" data-fe-foto="foto" aria-label="' + (d.foto ? 'Cambiar la foto' : 'Añadir foto') + '">' +
+    (url(d.foto) ? '<img src="' + url(d.foto) + '" alt="">' : avatar(p)) + '<i>📷</i></button>';
+  const lado = ([k, txt]) => '<div><button class="fe-slot' + (d[k] ? ' lleno' : '') + '" ' + (d[k] ? 'data-fe-ver="' + d[k] + '"' : 'data-fe-foto="' + k + '"') + '>' +
+    (d[k] ? (url(d[k]) ? '<img src="' + url(d[k]) + '" alt="' + txt + '">' : '…') : '<span>📷<br>' + txt + '</span>') + '</button>' +
+    (d[k] ? '<div class="fe-slot-pie"><button data-fe-foto="' + k + '">Cambiar</button><button data-fe-quitar="' + k + '">Quitar</button></div>' : '') + '</div>';
+  $('feDocs').innerHTML = '<div class="grupo-stock">DNI o NIE</div><div class="fe-nie">' + NIE_LADOS.map(lado).join('') + '</div>' +
+    '<div class="grupo-stock">Otros documentos</div>' +
+    d.otros.map((o, i) => '<div class="fe-otro"><button class="fe-mini" data-fe-ver="' + o.id + '">' + (url(o.id) ? '<img src="' + url(o.id) + '" alt="">' : '…') + '</button>' +
+      '<input data-fe-otro="' + i + '" value="' + escapar(o.nombre) + '" placeholder="¿Qué es? Contrato, carné…" aria-label="Nombre del documento">' +
+      '<button data-fe-quitar-otro="' + i + '" aria-label="Quitar">🗑</button></div>').join('') +
+    (d.otros.length ? '' : '<p class="pista-campo">Contrato, carné de manipulador, títulos… Haz una foto a cada uno.</p>') +
+    '<button class="btn secundario chico" data-fe-foto="otro">＋ Añadir documento</button>' +
+    '<div class="grupo-stock">Privacidad</div><button class="btn secundario chico" data-fe-codigo>🔒 Cambiar el código de las fichas</button>';
+}
+function pedirFotoEmpleado(destino) {
+  const entrada = document.createElement('input');
+  entrada.type = 'file'; entrada.accept = 'image/*';
+  const ui = empleadoUI;
+  entrada.onchange = async () => {
+    if (!entrada.files[0] || empleadoUI !== ui) return;
+    let url;
+    try { url = await imagenReducida(entrada.files[0], destino === 'foto' ? LADO_CARA : LADO_DOC, destino === 'foto'); }
+    catch (err) { avisar('No se pudo usar esa foto'); return; }
+    const id = nuevoId();
+    ui.urls[id] = url; ui.nuevos[id] = url;
+    if (destino === 'otro') ui.docs.otros.push({ id, nombre: '' });
+    else ui.docs[destino] = id;
+    pintarDocsEmpleado();
+    if (destino === 'otro') { const ins = $('feDocs').querySelectorAll('[data-fe-otro]'); ins[ins.length - 1].focus(); }
+  };
+  entrada.click();
+}
+function leerCamposEmpleado() {
   const f = {};
   $('panel').querySelectorAll('[data-fe]').forEach((c) => { const v = c.value.trim(); if (v) f[c.dataset.fe] = v; });
+  return f;
+}
+$('panel').addEventListener('input', (e) => {
+  if (!empleadoUI || !e.target.dataset.feOtro) return;
+  empleadoUI.docs.otros[+e.target.dataset.feOtro].nombre = e.target.value;
+});
+$('panel').addEventListener('click', async (e) => {
+  if (!empleadoUI) return;
+  const ui = empleadoUI, b = e.target.closest('button');
+  if (!b) return;
+  if (b.dataset.fePestana) {
+    ui.pestana = b.dataset.fePestana;
+    $('panel').querySelectorAll('[data-fe-pestana]').forEach((x) => x.classList.toggle('activo', x === b));
+    $('panel').querySelectorAll('[data-fe-sec]').forEach((x) => { x.hidden = x.dataset.feSec !== ui.pestana; });
+    return;
+  }
+  if (b.dataset.feFoto) { pedirFotoEmpleado(b.dataset.feFoto); return; }
+  if (b.dataset.feVer) { if (ui.urls[b.dataset.feVer]) verDoc(ui.urls[b.dataset.feVer]); return; }
+  if (b.dataset.feQuitar) { ui.docs[b.dataset.feQuitar] = null; pintarDocsEmpleado(); return; }
+  if (b.dataset.feQuitarOtro) {
+    const o = ui.docs.otros[+b.dataset.feQuitarOtro];
+    if (!confirm('¿Quitar «' + (o.nombre || 'este documento') + '»?')) return;
+    ui.docs.otros.splice(+b.dataset.feQuitarOtro, 1); pintarDocsEmpleado(); return;
+  }
+  if (b.hasAttribute('data-fe-pdf')) { imprimirFichaEmpleado(); return; }
+  if (b.hasAttribute('data-fe-codigo')) {
+    if (!confirm('Lo que no hayas guardado de esta ficha se pierde. ¿Cambiar el código?')) return;
+    empleadoUI = null; pedirCodigoFichas('cambiar', ui.id); return;
+  }
+  if (b.hasAttribute('data-fe-cerrar')) { empleadoUI = null; cerrarPanel(); return; }
+  if (!b.hasAttribute('data-fe-guardar')) return;
+  const f = leerCamposEmpleado();
   if (f.pin && !/^\d{4}$/.test(f.pin)) { avisar('El código tiene que ser de 4 cifras'); return; }
   if (f.fin && f.alta && f.fin < f.alta) { avisar('El fin del contrato es antes de que empezara'); return; }
-  const p = datos.equipo.find((x) => x.id === empleadoUI.id);
-  if (p) p.ficha = f;
+  const p = datos.equipo.find((x) => x.id === ui.id);
+  if (!p) return;
+  const quedan = idsDocs(ui.docs);
+  const nuevos = Object.fromEntries(Object.entries(ui.nuevos).filter(([id]) => quedan.includes(id)));
+  const quitar = idsDocs(p.docs).filter((id) => !quedan.includes(id));
+  if (Object.keys(nuevos).length || quitar.length) {
+    b.disabled = true;
+    try { await escribirDocs(nuevos, quitar); }
+    catch (err) { b.disabled = false; avisar('No se pudieron guardar las fotos. ¿Le queda espacio a este dispositivo?'); return; }
+  }
+  if (empleadoUI !== ui) return;
+  p.ficha = f;
+  ui.docs.otros.forEach((o) => { o.nombre = o.nombre.trim(); });
+  p.docs = ui.docs;
   empleadoUI = null;
   guardar(); cerrarPanel(); refrescar();
   avisar('Ficha guardada');
 });
+// El PDF sale con lo que se ve en la ventana, aunque aún no se haya guardado. El código para fichar no sale.
+function imprimirFichaEmpleado() {
+  const ui = empleadoUI, f = leerCamposEmpleado(), d = ui.docs;
+  const p = datos.equipo.find((x) => x.id === ui.id);
+  const url = (id) => (id && ui.urls[id]) || '';
+  const valor = ([k, , tipo]) => {
+    const v = f[k];
+    if (!v) return '';
+    if (tipo === 'date') return fechaIsoLarga(v);
+    if (k === 'jornada') return v + ' h';
+    return escapar(v);
+  };
+  let html = '', filas = [];
+  const cerrarGrupo = () => { if (filas.length) html += '<table class="fe-tabla"><tbody>' + filas.join('') + '</tbody></table></div>'; filas = []; };
+  CAMPOS_FICHA.forEach((c) => {
+    if (!c[1]) { cerrarGrupo(); html += '<div class="ficha-sec"><h2><span>' + c[0] + '</span></h2>'; return; }
+    if (c[0] === 'pin' || c[0] === 'notas') return;
+    filas.push('<tr><td>' + c[1] + '</td><td>' + valor(c) + '</td></tr>');
+  });
+  cerrarGrupo();
+  if (f.notas) html += '<div class="ficha-sec"><h2><span>Notas</span></h2><p class="ficha-txt">' + escapar(f.notas) + '</p></div>';
+  if (d.nieDelante || d.nieDetras) html += '<div class="ficha-sec"><h2><span>DNI o NIE</span></h2><div class="fe-nie-inf">' +
+    NIE_LADOS.map(([k, txt]) => '<figure>' + (url(d[k]) ? '<img src="' + url(d[k]) + '" alt="">' : '<div class="fe-falta">Sin foto</div>') + '<figcaption>' + txt + '</figcaption></figure>').join('') + '</div></div>';
+  d.otros.filter((o) => url(o.id)).forEach((o) => {
+    html += '<div class="ficha-sec fe-doc-sec"><h2><span>' + escapar(o.nombre.trim() || 'Documento') + '</span></h2><img class="fe-doc-inf" src="' + url(o.id) + '" alt=""></div>';
+  });
+  const zona = $('zonaImprimir');
+  zona.className = 'informe';
+  zona.innerHTML = '<div class="inf ficha-ms"><div class="ficha-cab"><div><div class="inf-marca">Ficha del equipo · Hinoki</div>' +
+    '<h1 class="ficha-titulo">' + escapar(f.nombreCompleto || p.nombre) + '</h1>' +
+    '<p class="inf-sub">' + [f.puesto, f.alta ? antiguedad(f.alta) : '', 'Impresa el ' + fechaLarga(Date.now())].filter(Boolean).map(escapar).join(' · ') + '</p></div>' +
+    (url(d.foto) ? '<img class="fe-cara-inf" src="' + url(d.foto) + '" alt="">' : '') + '</div>' + html +
+    '<div class="inf-firmas"><div>Firma de la persona</div><div>Firma de la empresa</div></div></div>';
+  fuentesListas().then(() => imprimir('Ficha ' + (f.nombreCompleto || p.nombre) + ' - Kumi Mara'));
+}
 
 // --- Fichaje: cada persona toca su nombre al entrar y al salir, en la tablet de la cocina. ---
 // Por mes: datos.fichajes['2026-11'] = [{ id, e, s }], horas en milisegundos; s = null mientras está dentro; ed = corregido a mano.
@@ -4041,7 +4294,7 @@ history.replaceState({ vista: 'inicio', nivel: 0 }, '');
 window.addEventListener('popstate', (e) => {
   const st = e.state || { vista: 'inicio', nivel: 0 };
   if (!st.capa) {
-    if (!$('panelFondo').hidden) { $('panelFondo').hidden = true; incUI = null; serviciosUI = null; empleadoUI = null; fichajeUI = null; regUI = null; ausUI = null; puestoUI = null; }
+    if (!$('panelFondo').hidden) { $('panelFondo').hidden = true; incUI = null; serviciosUI = null; empleadoUI = null; fichajeUI = null; regUI = null; ausUI = null; puestoUI = null; codigoUI = null; }
     if (!$('hojaFondo').hidden) { $('hojaFondo').hidden = true; repetir = null; }
   }
   const salirDeRecuento = enRecuento && !st.recuento;
