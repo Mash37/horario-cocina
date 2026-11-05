@@ -276,6 +276,29 @@
   .vac-barra i { display: block; height: 100%; background: var(--deg); border-radius: 99px; }
   .aus-dia { margin: 4px 0 8px; padding: 7px 12px; border-radius: 12px; background: #fff6e5; color: #7a4b00; font-size: 13.5px; font-weight: 500; }
   .segmento.cuatro button { font-size: 13px; }
+  .org-tarjeta { padding: 14px 6px; }
+  .org { overflow-x: auto; padding: 4px 0 8px; -webkit-overflow-scrolling: touch; }
+  .org ul { display: flex; justify-content: center; margin: 0; padding: 18px 0 0; position: relative; }
+  .org > ul { width: max-content; min-width: 100%; padding-top: 0; }
+  .org li { list-style: none; position: relative; padding: 18px 4px 0; text-align: center; }
+  .org li::before, .org li::after { content: ''; position: absolute; top: 0; right: 50%; width: 50%; height: 18px; border-top: 2px solid var(--rosa-medio); }
+  .org li::after { right: auto; left: 50%; border-left: 2px solid var(--rosa-medio); }
+  .org li:only-child { padding-top: 18px; }
+  .org li:only-child::before { display: none; }
+  .org li:only-child::after { border-top: 0; }
+  .org > ul > li:only-child { padding-top: 0; }
+  .org > ul > li:only-child::after { display: none; }
+  .org li:first-child::before, .org li:last-child::after { border: 0 none; }
+  .org li:last-child::before { border-right: 2px solid var(--rosa-medio); border-radius: 0 10px 0 0; }
+  .org li:first-child::after { border-radius: 10px 0 0 0; }
+  .org li:only-child::after { border-radius: 0; }
+  .org ul ul::before { content: ''; position: absolute; top: 0; left: 50%; height: 18px; border-left: 2px solid var(--rosa-medio); }
+  .org-caja { display: inline-flex; flex-direction: column; align-items: center; gap: 1px; min-width: 92px; max-width: 150px; padding: 8px 10px; border-radius: 14px; border: 1px solid var(--rosa-medio); background: var(--blanco); font: inherit; color: var(--tinta); box-shadow: 0 3px 10px rgba(176, 77, 110, .08); }
+  .org-caja small { font-family: var(--letra); font-size: 10px; letter-spacing: .1em; text-transform: uppercase; color: var(--frambuesa); line-height: 1.25; margin-bottom: 3px; }
+  .org-caja b { font-size: 13.5px; font-weight: 600; line-height: 1.3; }
+  .org-caja i { font-size: 12.5px; color: var(--gris); }
+  .org > ul > li > .org-caja { background: var(--deg); border: 0; color: #fff; }
+  .org > ul > li > .org-caja small { color: #fff; opacity: .9; }
   .fila-equipo input { flex: 1; min-width: 0; height: 48px; border-radius: 12px; border: 1px solid var(--borde); background: var(--blanco); padding: 0 14px; font-size: 16px; font-weight: 500; text-transform: uppercase; }
   .fila-equipo > button { width: 44px; height: 48px; border-radius: 12px; border: 1px solid var(--borde); background: var(--blanco); font-size: 17px; color: var(--frambuesa); }
   .fila-equipo button:disabled { opacity: .3; }
@@ -555,6 +578,17 @@
   .inf .inf-nota { font-size: 9pt; color: #866f77; margin: 0 0 16px; }
   .inf-persona { break-inside: avoid; margin-top: 14px; }
   .inf-persona.salto { break-before: page; break-inside: auto; }
+  .inf-org .org { overflow: visible; margin-top: 10mm; }
+  .inf-org .org li::before, .inf-org .org li::after, .inf-org .org ul ul::before { border-color: #b04d6e; }
+  .inf-org .org li:last-child::before { border-right-color: #b04d6e; }
+  .inf-org .org-caja { box-shadow: none; border-color: #b04d6e; min-width: 38mm; max-width: 58mm; padding: 3mm 4mm; }
+  .inf-org .org-caja b { font-size: 13pt; }
+  .inf-org .org-caja small { font-size: 8.5pt; }
+  .inf-org .org li { padding: 9mm 2mm 0; }
+  .inf-org .org ul { padding-top: 9mm; }
+  .inf-org .org > ul { padding-top: 0; }
+  .inf-org .org li::before, .inf-org .org li::after, .inf-org .org ul ul::before { height: 9mm; }
+  .inf-org .org > ul > li > .org-caja { background: #b04d6e; color: #fff; }
   .inf h2 { font-size: 12pt; margin: 0 0 4px; display: flex; justify-content: space-between; border-bottom: 2px solid #b04d6e; padding-bottom: 3px; }
   .inf-firmas { display: flex; gap: 40px; margin-top: 36px; break-inside: avoid; font-size: 10pt; }
   .inf-firmas div { flex: 1; border-top: 1px solid #44303a; padding-top: 6px; }
@@ -567,6 +601,7 @@
     header.cabecera > * { max-width: 1052px; margin-left: auto; margin-right: auto; }
     #personas { display: grid; grid-template-columns: 1fr 1fr; gap: 0 14px; align-items: start; }
     #vistaStock, #vistaHoras, #vistaEquipo, #vistaFichas { max-width: 760px; margin: 0 auto; }
+    #vistaOrganigrama { max-width: 1000px; margin: 0 auto; }
     #vistaCuadro { max-width: 900px; margin: 0 auto; }
     .hoja-fondo { align-items: center; }
     .hoja { max-width: 600px; border-radius: 26px; }
@@ -779,6 +814,12 @@
     <div id="fichasContenido"></div>
   </section>
 
+  <section class="vista" id="vistaOrganigrama">
+    <button class="volver" data-volver><span>‹</span> Inicio</button>
+    <h2 class="titulo-equipo"><span class="jp-equipo">組織</span> Organigrama</h2>
+    <div id="organigramaContenido"></div>
+  </section>
+
   <section class="vista" id="vistaEquipo">
     <button class="volver" data-volver><span>‹</span> Inicio</button>
     <h2 class="titulo-equipo"><span class="jp-equipo">仲間</span> Tu equipo</h2>
@@ -837,7 +878,7 @@ const DIAS = ['lunes', 'martes', 'miércoles', 'jueves', 'viernes', 'sábado', '
 const DIAS_CORTOS = ['L', 'M', 'X', 'J', 'V', 'S', 'D'];
 const MESES = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
 const MESES_CORTOS = ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sept', 'oct', 'nov', 'dic'];
-const EQUIPO_INICIAL = ['MARA', 'SHEENA', 'MAHJOUB', 'RAÚL', 'DANI', 'ALEJANDRO', 'MARI'];
+const EQUIPO_INICIAL = ['MARA', 'SHEENA', 'OSNA', 'TASHI', 'DIEGO', 'ALEJANDRO', 'JAVIER', 'DANIEL', 'ELIAS'];
 const COLORES = ['#d4698a', '#9c4a62', '#c98b6b', '#6c4a44', '#e08aa3', '#7d4757', '#a8735f', '#5b3a40'];
 const PALABRAS = [
   ['板前', 'Itamae', 'El cocinero que corta y sirve frente al cliente.'],
@@ -894,9 +935,22 @@ function cargar() {
     const datos = JSON.parse(localStorage.getItem(CLAVE));
     if (datos && Array.isArray(datos.equipo)) return datos;
   } catch (e) {}
-  return { equipo: EQUIPO_INICIAL.map((nombre) => ({ id: nuevoId(), nombre })), semanas: {} };
+  return { equipo: EQUIPO_INICIAL.map((nombre) => ({ id: nuevoId(), nombre })), semanas: {}, equipoHinoki: true };
 }
 let datos = cargar();
+// Una sola vez: el equipo pasa a ser el de Hinoki. Quien ya no está pasa a «bajas», así sus horas pasadas siguen en los informes;
+// quien sigue conserva su ficha, sus turnos y sus fichajes porque se queda con el mismo id.
+function pasarAEquipoHinoki() {
+  if (datos.equipoHinoki) return;
+  const mismo = (p, n) => p.nombre.trim().toUpperCase() === n;
+  const nuevo = EQUIPO_INICIAL.map((n) => datos.equipo.find((p) => mismo(p, n)) || { id: nuevoId(), nombre: n });
+  datos.equipo.filter((p) => !nuevo.includes(p)).forEach((p) => { datos.bajas = datos.bajas || {}; datos.bajas[p.id] = p.nombre; });
+  datos.equipo = nuevo;
+  datos.equipoHinoki = true;
+  // Aún no existe el aviso flotante (se define más abajo): si no se puede guardar, se reintenta con el siguiente cambio.
+  try { guardar(); } catch (e) {}
+}
+pasarAEquipoHinoki();
 function guardar() {
   try { localStorage.setItem(CLAVE, JSON.stringify(datos)); }
   catch (e) { avisar('No se pudo guardar en este móvil'); }
@@ -3221,6 +3275,7 @@ function abrirMas() {
     '</div><div class="grupo-stock">Más</div><div class="accesos">' +
     acceso('horas', '🕒', 'Horas del mes', 'Informe en PDF para la nómina', vista === 'horas') +
     acceso('fichas', '📋', 'Fichas técnicas', (datos.fichas || []).length ? datos.fichas.length + ' platos con alérgenos' : 'Platos, alérgenos y coste', vista === 'fichas') +
+    acceso('organigrama', '🌳', 'Organigrama', organigrama().length + ' puestos · PDF', vista === 'organigrama') +
     acceso('equipo', '👥', 'Tu equipo', datos.equipo.length + (datos.equipo.length === 1 ? ' persona' : ' personas'), vista === 'equipo') +
     acceso('servicios', '🍽️', 'Servicios y mínimos', franjas().map((f) => f.nombre + ' ' + f.minimo).join(' · ') || 'Sin servicios') +
     '</div><div class="grupo-stock">Tus datos</div><div class="accesos">' +
@@ -3234,10 +3289,10 @@ $('panel').addEventListener('click', (e) => {
   if (!b) return;
   const que = b.dataset.mas;
   if (que === 'servicios') { abrirServicios(); return; }
-  const navega = ['horas', 'equipo', 'fichas', 'recuento', 'compra', 'fichar', 'ausencias'].includes(que);
+  const navega = ['horas', 'equipo', 'fichas', 'recuento', 'compra', 'fichar', 'ausencias', 'organigrama'].includes(que);
   cerrarPanel(navega);
   if (que === 'equipo' || que === 'fichar' || que === 'ausencias') { subEquipo = que === 'equipo' ? 'equipo' : que; irA('equipo'); }
-  if (que === 'horas' || que === 'fichas') irA(que);
+  if (que === 'horas' || que === 'fichas' || que === 'organigrama') irA(que);
   if (que === 'recuento' || que === 'compra') {
     if (!productosActivos().length) { subStock = 'lista'; irA('stock'); avisar('Primero añade los productos'); return; }
     subStock = que === 'compra' ? 'compras' : 'lista';
@@ -3812,6 +3867,108 @@ $('eqOtro').addEventListener('click', (e) => {
   if ((b = t('[data-au]'))) abrirAusencia(b.dataset.au);
 });
 
+// --- Organigrama: puestos con sus personas y de quién depende cada uno. datos.organigrama = [{ id, titulo, personas: [], depende }] ---
+const ORGANIGRAMA_INICIAL = [
+  { id: 'oJefa', titulo: 'Jefa de cocina', personas: ['Mara'], depende: null },
+  { id: 'oSous', titulo: 'Sous chef', personas: ['Sheena'], depende: 'oJefa' },
+  { id: 'oSushiW', titulo: 'Sushi woman', personas: ['Osna'], depende: 'oSous' },
+  { id: 'oSushiman', titulo: 'Sushiman', personas: ['Tashi', 'Diego', 'Alejandro'], depende: 'oSushiW' },
+  { id: 'oCocinero', titulo: 'Cocinero / ayudante de cocina', personas: ['Javier', 'Daniel'], depende: 'oSous' },
+  { id: 'oAyudante', titulo: 'Ayudante de cocina', personas: ['Elias'], depende: 'oCocinero' },
+  { id: 'oOffice', titulo: 'Office', personas: [], depende: 'oSous' },
+];
+function organigrama() {
+  if (!datos.organigrama) datos.organigrama = JSON.parse(JSON.stringify(ORGANIGRAMA_INICIAL));
+  return datos.organigrama;
+}
+// Un puesto cuyo jefe ya no existe se pinta arriba, para que nunca desaparezca del dibujo.
+function raicesOrganigrama(lista) { return lista.filter((p) => !p.depende || !lista.some((x) => x.id === p.depende)); }
+function htmlNodoOrg(p, lista, conBotones) {
+  const hijos = lista.filter((x) => x.depende === p.id);
+  const gente = p.personas.length ? p.personas.map((n) => '<b>' + escapar(n) + '</b>').join('') : '<i>Sin asignar</i>';
+  const caja = conBotones
+    ? '<button class="org-caja" data-org="' + p.id + '"><small>' + escapar(p.titulo) + '</small>' + gente + '</button>'
+    : '<div class="org-caja"><small>' + escapar(p.titulo) + '</small>' + gente + '</div>';
+  return '<li>' + caja + (hijos.length ? '<ul>' + hijos.map((h) => htmlNodoOrg(h, lista, conBotones)).join('') + '</ul>' : '') + '</li>';
+}
+function htmlOrganigrama(conBotones) {
+  const lista = organigrama();
+  return '<div class="org"><ul>' + raicesOrganigrama(lista).map((p) => htmlNodoOrg(p, lista, conBotones)).join('') + '</ul></div>';
+}
+function pintarOrganigrama() {
+  const lista = organigrama();
+  const personas = lista.reduce((s, p) => s + p.personas.length, 0);
+  $('organigramaContenido').innerHTML =
+    '<p class="sub-equipo">' + lista.length + (lista.length === 1 ? ' puesto' : ' puestos') + ' · ' + personas + (personas === 1 ? ' persona' : ' personas') + ' · Toca un puesto para cambiarlo</p>' +
+    '<div class="tarjeta org-tarjeta">' + (lista.length ? htmlOrganigrama(true) : '<div class="vacio">Todavía no hay puestos.</div>') + '</div>' +
+    '<div class="acciones"><button class="btn secundario" data-org-accion="nuevo">+ Añadir puesto</button>' +
+    '<button class="btn principal" data-org-accion="pdf"' + (lista.length ? '' : ' disabled') + '>Guardar PDF del organigrama</button></div>' +
+    '<p class="nota">Si el dibujo no cabe en la pantalla, desliza hacia los lados. En el PDF sale entero, en horizontal.</p>';
+}
+// Los que dependen de un puesto (y los que dependen de esos): no pueden ser su jefe, o el dibujo daría vueltas.
+function debajoDe(id, lista) {
+  const fuera = new Set([id]);
+  let crece = true;
+  while (crece) { crece = false; lista.forEach((p) => { if (p.depende && fuera.has(p.depende) && !fuera.has(p.id)) { fuera.add(p.id); crece = true; } }); }
+  return fuera;
+}
+let puestoUI = null;
+function abrirPuesto(id) {
+  const lista = organigrama();
+  const p = id ? lista.find((x) => x.id === id) : null;
+  puestoUI = p ? { ...p, personas: [...p.personas], nuevo: false } : { id: nuevoId(), titulo: '', personas: [], depende: lista[0] ? lista[0].id : null, nuevo: true };
+  const prohibidos = p ? debajoDe(p.id, lista) : new Set();
+  const opciones = '<option value="">Nadie (arriba del todo)</option>' + lista.filter((x) => !prohibidos.has(x.id))
+    .map((x) => '<option value="' + x.id + '"' + (x.id === puestoUI.depende ? ' selected' : '') + '>' + escapar(x.titulo + (x.personas.length ? ' · ' + x.personas.join(', ') : '')) + '</option>').join('');
+  abrirPanel('<h3>' + (puestoUI.nuevo ? 'Nuevo puesto' : 'Cambiar puesto') + '</h3><p class="sub">&nbsp;</p>' +
+    '<label class="campo"><span>Puesto</span><input id="orgTitulo" value="' + escapar(puestoUI.titulo) + '" placeholder="Ej.: Sushiman"></label>' +
+    '<label class="campo"><span>Personas (una por línea)</span><textarea id="orgPersonas" placeholder="Déjalo vacío si está sin cubrir">' + escapar(puestoUI.personas.join('\n')) + '</textarea></label>' +
+    '<label class="campo"><span>Depende de</span><select id="orgDepende">' + opciones + '</select></label>' +
+    '<div class="acciones"><button class="btn principal" data-org-guardar>Guardar</button><button class="btn secundario" data-org-cerrar>Cancelar</button>' +
+    (puestoUI.nuevo ? '' : '<button class="btn texto" data-org-quitar>Quitar este puesto</button>') + '</div>');
+  if (puestoUI.nuevo) setTimeout(() => { if ($('orgTitulo')) $('orgTitulo').focus(); }, 60);
+}
+$('panel').addEventListener('click', (e) => {
+  if (!puestoUI) return;
+  const b = e.target.closest('button');
+  if (!b) return;
+  if (b.dataset.orgCerrar !== undefined) { puestoUI = null; cerrarPanel(); return; }
+  const quitar = b.dataset.orgQuitar !== undefined;
+  if (!quitar && b.dataset.orgGuardar === undefined) return;
+  const u = puestoUI;
+  const antes = JSON.parse(JSON.stringify(organigrama()));
+  if (quitar) {
+    if (!confirm('¿Quitar el puesto «' + u.titulo + '»? Los puestos que dependían de él pasan a depender de su jefe.')) return;
+    datos.organigrama = organigrama().filter((p) => p.id !== u.id).map((p) => (p.depende === u.id ? { ...p, depende: u.depende } : p));
+  } else {
+    const titulo = $('orgTitulo').value.trim();
+    if (!titulo) { avisar('Ponle nombre al puesto'); return; }
+    const personas = $('orgPersonas').value.split('\n').map((x) => x.trim()).filter(Boolean);
+    const p = { id: u.id, titulo, personas, depende: $('orgDepende').value || null };
+    const lista = organigrama();
+    const i = lista.findIndex((x) => x.id === u.id);
+    if (i >= 0) lista[i] = p; else lista.push(p);
+  }
+  puestoUI = null;
+  guardar(); cerrarPanel(); pintarOrganigrama();
+  ofrecerDeshacer(quitar ? 'Puesto quitado' : 'Organigrama guardado', () => { datos.organigrama = antes; });
+});
+$('organigramaContenido').addEventListener('click', (e) => {
+  const caja = e.target.closest('[data-org]');
+  if (caja) { abrirPuesto(caja.dataset.org); return; }
+  const b = e.target.closest('[data-org-accion]');
+  if (!b) return;
+  if (b.dataset.orgAccion === 'nuevo') abrirPuesto(null);
+  if (b.dataset.orgAccion === 'pdf') imprimirOrganigrama();
+});
+function imprimirOrganigrama() {
+  const zona = $('zonaImprimir');
+  zona.className = 'informe matriz';
+  zona.innerHTML = '<div class="inf inf-org"><div class="inf-marca">Kumi Mara · Hinoki · Cocina</div><h1>Organigrama de cocina</h1>' +
+    '<p class="inf-sub">Actualizado el ' + fechaLarga(Date.now()) + '</p>' + htmlOrganigrama(false) + '</div>';
+  fuentesListas().then(() => imprimir('Organigrama de cocina - Kumi Mara'));
+}
+
 // --- Navegación ---
 let vista = 'inicio';
 // «Atrás» (gesto o botón de Android): cierra la ventana abierta o vuelve al inicio; desde el inicio, sale.
@@ -3838,8 +3995,8 @@ function irA(nombre, desdeHistorial) {
   if (nombre !== 'stock') enRecuento = false;
   vista = nombre;
   document.querySelectorAll('.vista').forEach((v) => v.classList.toggle('activa', v.id === 'vista' + nombre[0].toUpperCase() + nombre.slice(1)));
-  document.querySelectorAll('nav button').forEach((b) => b.classList.toggle('activo', b.dataset.ir === nombre || (b.id === 'btnMas' && ['horas', 'equipo', 'fichas'].includes(nombre))));
-  $('cabecera').hidden = ['inicio', 'equipo', 'horas', 'stock', 'fichas'].includes(nombre);
+  document.querySelectorAll('nav button').forEach((b) => b.classList.toggle('activo', b.dataset.ir === nombre || (b.id === 'btnMas' && ['horas', 'equipo', 'fichas', 'organigrama'].includes(nombre))));
+  $('cabecera').hidden = ['inicio', 'equipo', 'horas', 'stock', 'fichas', 'organigrama'].includes(nombre);
   $('dias').style.display = nombre === 'rellenar' ? '' : 'none';
   refrescar();
   window.scrollTo(0, 0);
@@ -3860,6 +4017,7 @@ function refrescar() {
   if (vista === 'horas') { pintarHoras(); return; }
   if (vista === 'stock') { pintarStock(); return; }
   if (vista === 'fichas') { pintarFichas(); return; }
+  if (vista === 'organigrama') { pintarOrganigrama(); return; }
   pintarCabecera();
   if (vista === 'rellenar') pintarDia();
   if (vista === 'cuadro') pintarCuadro();
@@ -3883,7 +4041,7 @@ history.replaceState({ vista: 'inicio', nivel: 0 }, '');
 window.addEventListener('popstate', (e) => {
   const st = e.state || { vista: 'inicio', nivel: 0 };
   if (!st.capa) {
-    if (!$('panelFondo').hidden) { $('panelFondo').hidden = true; incUI = null; serviciosUI = null; empleadoUI = null; fichajeUI = null; regUI = null; ausUI = null; }
+    if (!$('panelFondo').hidden) { $('panelFondo').hidden = true; incUI = null; serviciosUI = null; empleadoUI = null; fichajeUI = null; regUI = null; ausUI = null; puestoUI = null; }
     if (!$('hojaFondo').hidden) { $('hojaFondo').hidden = true; repetir = null; }
   }
   const salirDeRecuento = enRecuento && !st.recuento;
