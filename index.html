@@ -351,7 +351,8 @@
   .aviso {
     position: fixed; left: 50%; bottom: calc(92px + env(safe-area-inset-bottom)); transform: translateX(-50%);
     background: var(--tinta); color: #fff; padding: 10px 18px; border-radius: 99px; font-size: 14px;
-    opacity: 0; transition: opacity .2s; pointer-events: none; z-index: 20; white-space: nowrap;
+    opacity: 0; transition: opacity .2s; pointer-events: none; z-index: 20;
+    width: max-content; max-width: min(calc(100vw - 32px), 560px); text-align: center; line-height: 1.35;
   }
   .aviso.ver { opacity: 1; }
 
@@ -612,6 +613,71 @@
   .inf h2 { font-size: 12pt; margin: 0 0 4px; display: flex; justify-content: space-between; border-bottom: 2px solid #b04d6e; padding-bottom: 3px; }
   .inf-firmas { display: flex; gap: 40px; margin-top: 36px; break-inside: avoid; font-size: 10pt; }
   .inf-firmas div { flex: 1; border-top: 1px solid #44303a; padding-top: 6px; }
+  /* Comparar precios */
+  .enlace-comp { border: 0; background: none; padding: 0; color: var(--frambuesa); font-size: inherit; text-decoration: underline; text-underline-offset: 3px; }
+  .comp-filtros .campo:last-child, .comp-filtros .campos-2 .campo { margin-bottom: 0; }
+  .comp-filtros .campos-2 { margin-top: 0; }
+  .comp-cuenta { font-size: 13px; color: var(--gris); margin-bottom: 4px; }
+  .comp-fila { display: grid; grid-template-columns: 44px 1fr auto; gap: 10px; align-items: center; padding: 10px 0; border-top: 1px solid var(--borde); }
+  .comp-fila:first-of-type { border-top: 0; }
+  .comp-fila .info { min-width: 0; cursor: pointer; }
+  .comp-fila .info b { display: block; font-weight: 600; font-size: 14.5px; line-height: 1.3; }
+  .comp-fila .info small { font-size: 12px; color: var(--gris); }
+  .comp-fila .info em { font-style: normal; color: var(--frambuesa); font-weight: 600; }
+  .comp-fila .cant { text-align: right; white-space: nowrap; font-variant-numeric: tabular-nums; }
+  .comp-fila .cant b { display: block; font-size: 15px; }
+  .comp-fila .cant small { font-size: 12px; color: var(--gris); }
+  .comp-fila .cant small.falta, .comp-tabla .falta { color: #b42318; }
+  .comp-marca { width: 40px; height: 40px; border-radius: 12px; border: 2px solid var(--rosa-medio); background: var(--blanco); color: #fff; font-size: 18px; font-weight: 700; }
+  .comp-fila.marcado .comp-marca { background: var(--frambuesa); border-color: var(--frambuesa); }
+  .comp-barra { position: sticky; bottom: calc(84px + env(safe-area-inset-bottom)); z-index: 5; display: flex; align-items: center; gap: 8px; background: var(--tinta); color: #fff; border-radius: 16px; padding: 8px 8px 8px 16px; margin: 0 0 14px; box-shadow: 0 8px 24px rgba(0,0,0,.2); }
+  .comp-barra span { flex: 1; font-weight: 600; }
+  .comp-barra .btn.secundario { background: transparent; color: #fff; border-color: rgba(255,255,255,.4); }
+  .comp-tabla-caja { overflow-x: auto; margin: 6px -4px 8px; }
+  .comp-tabla { width: 100%; border-collapse: collapse; font-size: 14px; font-variant-numeric: tabular-nums; }
+  .comp-tabla th { font-size: 12px; color: var(--gris); font-weight: 600; text-align: left; padding: 6px 4px; border-bottom: 1px solid var(--borde); }
+  .comp-tabla td { padding: 10px 4px; border-bottom: 1px solid var(--borde); vertical-align: top; }
+  .comp-tabla .n { text-align: right; white-space: nowrap; }
+  .comp-tabla td small { display: block; font-size: 12px; color: var(--gris); }
+  .comp-tabla tr.elegido td { background: var(--rosa-suave); }
+  .comp-tabla .acc { text-align: right; white-space: nowrap; }
+  .comp-tabla .acc .btn { display: inline-flex; margin: 0 0 4px 4px; }
+  .comp-nombre { border: 0; background: none; padding: 0; text-align: left; font-weight: 600; font-size: 14px; color: var(--tinta); cursor: pointer; }
+  .pill.verde { background: #e3f6ec; color: #1f7a4d; margin: 4px 4px 0 0; display: inline-block; }
+  .pill.elegida { background: var(--frambuesa); color: #fff; margin-top: 4px; display: inline-block; }
+  .comp-lista-fila { display: grid; grid-template-columns: 1fr auto auto; gap: 10px; align-items: center; padding: 10px 0; border-top: 1px solid var(--borde); }
+  .comp-lista-fila:first-of-type { border-top: 0; }
+  .comp-lista-fila .info { min-width: 0; cursor: pointer; }
+  .comp-lista-fila .info b { display: block; font-size: 14.5px; font-weight: 600; }
+  .comp-lista-fila .info small { font-size: 12px; color: var(--gris); }
+  .comp-lista-fila .importe { font-weight: 600; min-width: 72px; text-align: right; font-variant-numeric: tabular-nums; }
+  .contador.chico { height: 40px; gap: 6px; }
+  .contador.chico button { width: 34px; height: 34px; }
+  .contador.chico b { min-width: 22px; text-align: center; }
+  .comp-totales { margin-top: 10px; padding-top: 10px; border-top: 2px solid var(--borde); display: grid; gap: 4px; font-variant-numeric: tabular-nums; }
+  .comp-totales div { display: flex; justify-content: space-between; font-size: 14px; color: var(--gris); }
+  .comp-totales .total { font-size: 17px; color: var(--tinta); }
+  .comp-prov { font-weight: 600; color: var(--frambuesa); }
+  .comp-provs { margin-bottom: 10px; }
+  .comp-catalogo { display: grid; grid-template-columns: 1fr auto auto; gap: 8px; align-items: center; padding: 12px 0; border-bottom: 1px solid var(--borde); }
+  .comp-catalogo b { display: block; font-size: 15px; }
+  .comp-catalogo small { font-size: 12px; color: var(--gris); }
+  .comp-gran-total { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; font-variant-numeric: tabular-nums; }
+  .comp-gran-total b { font-size: 20px; }
+  /* En el móvil, cada producto de la comparación es una tarjeta: nombre arriba, precios en medio, botones abajo. */
+  @media (max-width: 599px) {
+    .comp-tabla thead { display: none; }
+    .comp-tabla, .comp-tabla tbody { display: block; }
+    .comp-tabla tr { display: grid; grid-template-columns: 1fr auto; gap: 6px 12px; padding: 12px 4px; border-bottom: 1px solid var(--borde); }
+    .comp-tabla td { display: block; border: 0; padding: 0; }
+    .comp-tabla td:first-child, .comp-tabla .acc { grid-column: 1 / -1; }
+    .comp-tabla td.n:nth-child(2) { text-align: left; }
+    .comp-tabla td.n:nth-child(2)::before { content: 'Envase '; color: var(--gris); font-size: 12px; }
+    .comp-tabla .acc { text-align: left; display: flex; gap: 8px; }
+    .comp-tabla .acc .btn { margin: 0; }
+    .comp-tabla tr.elegido { background: var(--rosa-suave); border-radius: 12px; }
+    .comp-tabla tr.elegido td { background: none; }
+  }
   /* ---------- Tablet: el móvil sigue igual; con más ancho, dos columnas y menú a la izquierda ---------- */
   @media (min-width: 700px) {
     .tablero { max-width: 1100px; padding: 0 24px; columns: 2; column-gap: 18px; }
@@ -622,6 +688,8 @@
     #personas { display: grid; grid-template-columns: 1fr 1fr; gap: 0 14px; align-items: start; }
     #vistaStock, #vistaHoras, #vistaEquipo, #vistaFichas { max-width: 760px; margin: 0 auto; }
     #vistaOrganigrama { max-width: 1000px; margin: 0 auto; }
+    #vistaComparador { max-width: 900px; margin: 0 auto; }
+    .comp-barra { bottom: 16px; }
     #vistaCuadro { max-width: 900px; margin: 0 auto; }
     .hoja-fondo { align-items: center; }
     .hoja { max-width: 600px; border-radius: 26px; }
@@ -635,16 +703,110 @@
     .aviso { bottom: 28px; left: calc(50% + 48px); }
   }
 
+  /* ---------- Menú (carta de Hinoki) ---------- */
+  .menu-portada { display: flex; align-items: center; gap: 14px; width: 100%; text-align: left; border: 0; cursor: pointer; font: inherit; color: inherit; }
+  .menu-portada .menu-kanji { font-family: 'Shippori Mincho B1', serif; font-size: 30px; color: var(--rosa); }
+  .menu-portada span:nth-child(2) { flex: 1; min-width: 0; }
+  .menu-portada b { display: block; font-family: 'Josefin Sans', sans-serif; font-weight: 300; letter-spacing: .25em; font-size: 18px; color: var(--frambuesa); }
+  .menu-portada small { display: block; font-size: 12.5px; color: var(--gris); }
+  .menu-portada i { font-style: normal; font-size: 22px; color: var(--rosa); }
+  .menu-aviso { margin: 0 2px 12px; text-align: left; }
+  details.menu-pag > summary { list-style: none; cursor: pointer; display: flex; align-items: baseline; gap: 8px; padding: 2px 0; }
+  details.menu-pag > summary::-webkit-details-marker { display: none; }
+  details.menu-pag > summary::before { content: '▸'; color: var(--rosa); transition: transform .15s; }
+  details.menu-pag[open] > summary { margin-bottom: 12px; }
+  details.menu-pag[open] > summary::before { transform: rotate(90deg); }
+  details.menu-pag > summary b { font-size: 16px; }
+  details.menu-pag > summary small { margin-left: auto; font-size: 12px; color: var(--gris); white-space: nowrap; }
+  .menu-jp { font-family: 'Shippori Mincho B1', serif; color: var(--rosa); }
+  .menu-sec { display: flex; justify-content: space-between; width: 100%; border: 0; background: none; padding: 14px 0 6px; font-family: var(--letra); font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: var(--frambuesa); font-weight: 600; text-align: left; cursor: pointer; }
+  .menu-sec i { font-style: normal; color: var(--gris); }
+  .menu-plato { display: grid; grid-template-columns: 52px 1fr; gap: 12px; align-items: center; padding: 10px 0; border-top: 1px solid var(--borde); cursor: pointer; }
+  .menu-plato img, .menu-sinfoto { width: 52px; height: 52px; border-radius: 12px; object-fit: cover; }
+  .menu-sinfoto { display: grid; place-items: center; border: 1px dashed var(--rosa-medio); font-size: 20px; opacity: .6; }
+  .menu-plato b { font-size: 15px; }
+  .menu-plato small { display: block; font-size: 12px; color: var(--gris); }
+  .menu-plato .alg-mini { margin-top: 4px; }
+  .menu-sig { font-style: normal; font-size: 11px; font-weight: 600; color: var(--rosa); margin-left: 6px; white-space: nowrap; }
+  .menu-check { display: flex; align-items: center; gap: 10px; font-size: 15px; margin: 0 2px 12px; }
+  .menu-check input { width: 22px; height: 22px; accent-color: var(--rosa); }
+  .menu-foto { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 12px; }
+  .menu-foto img, .menu-foto .menu-sinfoto { width: 72px; height: 72px; border-radius: 14px; object-fit: cover; }
+  .menu-foto .btn.chico { margin: 0; }
+  .menu-alg { margin-bottom: 6px; }
+  .menu-mover { display: flex; gap: 8px; flex-wrap: wrap; margin: 6px 0 4px; }
+  .menu-mover button { border: 1px solid var(--borde); background: var(--blanco); color: var(--tinta); border-radius: 10px; min-height: 40px; padding: 6px 12px; font-size: 14px; }
+  .menu-mover button.borrar { margin-left: auto; color: #b3261e; }
+  .cm-vista { overflow: hidden; margin: 0 -2px; }
+  #cmHojas { width: 210mm; }
+  .cm-medir { position: absolute; left: -10000px; top: 0; visibility: hidden; pointer-events: none; }
+  #cmDefs { position: absolute; width: 0; height: 0; overflow: hidden; }
+
+  /* La carta en A4: mismos colores y letras que el editor de Hinoki, aunque la app esté en modo oscuro. */
+  .cm-pagina { --cm-papel: #f9eceb; --cm-papel-2: #f4dfe0; --cm-rosa: #d4698a; --cm-rosa-osc: #b04d6e; --cm-rosa-cl: #f3b9c8; --cm-rosa-pal: #fbe4ea; --cm-tinta: #44303a; --cm-gris: #866f77; --cm-rama: #6c4a44; --cm-linea: #e8c9d0;
+    --cm-titulo: 'Shippori Mincho B1', 'Hiragino Mincho ProN', Georgia, serif; --cm-letra: 'Josefin Sans', 'Avenir Next', 'Helvetica Neue', Arial, sans-serif;
+    width: 210mm; height: 297mm; position: relative; overflow: hidden; margin: 0 auto 10mm; text-align: left; line-height: normal; letter-spacing: normal;
+    background: radial-gradient(120% 80% at 50% 0%, #fdf4f3 0%, var(--cm-papel) 55%, var(--cm-papel-2) 100%); font-family: var(--cm-titulo); color: var(--cm-tinta);
+    box-shadow: 0 6px 24px rgba(68,48,58,.15); -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .cm-deco { position: absolute; inset: 0; width: 210mm; height: 297mm; pointer-events: none; }
+  .cm-petalos path { fill: url(#cmPetalo); stroke: #e7a2b5; stroke-width: .6; }
+  .cm-centro { fill: #c75479; } .cm-estambre { stroke: #b84a6c; stroke-width: 1; } .cm-antera { fill: #f4cf6a; }
+  .cm-boton { fill: #e690ab; } .cm-caliz { fill: none; stroke: #7a5148; stroke-width: 1.2; }
+  .cm-rama { fill: none; stroke: #6c4a44; stroke-width: 2.2; stroke-linecap: round; } .cm-rama.fina { stroke-width: 1.3; }
+  .cm-sello { position: absolute; left: 50%; top: 47%; transform: translate(-50%, -50%); width: 118mm; height: 118mm; display: grid; place-items: center; align-content: center; text-align: center; }
+  .cm-aro { position: absolute; inset: 0; border: 1.4pt solid var(--cm-rosa); border-radius: 50%; }
+  .cm-aro::after { content: ''; position: absolute; inset: 3.2mm; border: .5pt solid var(--cm-rosa-cl); border-radius: 50%; }
+  .cm-kanji-grande { font-family: var(--cm-titulo); font-size: 40pt; color: var(--cm-rosa); line-height: 1; margin-bottom: 4mm; }
+  .cm-nombre-grande { font-family: var(--cm-letra); font-weight: 300; font-size: 44pt; letter-spacing: .32em; padding-left: .32em; color: var(--cm-rosa); line-height: 1; }
+  .cm-lema { font-family: var(--cm-letra); font-weight: 400; font-size: 9pt; letter-spacing: .28em; text-transform: uppercase; color: var(--cm-rosa-osc); margin-top: 5mm; }
+  .cm-pie-portada { position: absolute; left: 0; right: 0; bottom: 30mm; display: flex; justify-content: center; gap: 4mm; font-family: var(--cm-letra); font-size: 10pt; letter-spacing: .4em; text-transform: uppercase; color: var(--cm-rosa-osc); }
+  .cm-punto { color: var(--cm-rosa); }
+  .cm-contenido { padding: 16mm 20mm 14mm; display: flex; flex-direction: column; }
+  .cm-header { display: flex; justify-content: space-between; align-items: baseline; border-bottom: .6pt solid var(--cm-linea); padding-bottom: 3mm; position: relative; }
+  .cm-marca { display: flex; align-items: baseline; gap: 2.5mm; font-family: var(--cm-letra); font-weight: 300; font-size: 15pt; letter-spacing: .3em; color: var(--cm-rosa); }
+  .cm-marca .cm-kanji { font-family: var(--cm-titulo); font-size: 14pt; letter-spacing: 0; }
+  .cm-lugar { font-family: var(--cm-letra); font-size: 8pt; letter-spacing: .22em; text-transform: uppercase; color: var(--cm-gris); margin-right: 26mm; }
+  .cm-cabeza { margin: 9mm 0 6mm; position: relative; }
+  .cm-jp { display: block; font-family: var(--cm-titulo); font-size: 12pt; letter-spacing: .3em; color: var(--cm-rosa); margin-bottom: 1.5mm; min-height: 1em; }
+  .cm-titulo { font-family: var(--cm-titulo); font-weight: 500; font-size: 30pt; margin: 0; color: var(--cm-tinta); letter-spacing: .01em; }
+  .cm-sub { margin: 2mm 0 0; font-family: var(--cm-letra); font-size: 10.5pt; letter-spacing: .04em; color: var(--cm-gris); }
+  .cm-cuerpo { flex: 1; position: relative; min-height: 0; overflow: hidden; }
+  .cm-cuerpo.cm-cols2 { column-count: 2; column-gap: 9mm; column-rule: .5pt solid var(--cm-linea); }
+  .cm-seccion { margin-bottom: 5mm; }
+  .cm-sec-t { font-family: var(--cm-letra); font-weight: 600; font-size: 10pt; letter-spacing: .26em; text-transform: uppercase; color: var(--cm-rosa-osc); margin: 0 0 3.5mm; display: flex; align-items: center; gap: 3mm; }
+  .cm-sec-t::after { content: ''; flex: 1; height: .5pt; background: var(--cm-linea); }
+  .cm-plato { margin-bottom: 4.5mm; break-inside: avoid; }
+  .cm-cols2 .cm-plato { margin-bottom: 4mm; }
+  .cm-plato.con-foto { display: grid; grid-template-columns: 34mm 1fr; gap: 5mm; align-items: center; }
+  .cm-cols2 .cm-plato.con-foto { grid-template-columns: 24mm 1fr; gap: 3.5mm; }
+  .cm-pagina .cm-foto { display: block; width: 34mm; height: 34mm; object-fit: cover; border-radius: 3mm; border: .6pt solid var(--cm-rosa-cl); box-shadow: 0 1mm 2.5mm rgba(68,48,58,.14); background: var(--cm-rosa-pal); }
+  .cm-pagina .cm-cols2 .cm-foto { width: 24mm; height: 24mm; border-radius: 2.4mm; }
+  .cm-nombre { display: flex; flex-wrap: wrap; align-items: baseline; gap: 1.6mm 2.2mm; }
+  .cm-nombre b { font-family: var(--cm-titulo); font-weight: 700; font-size: 14pt; color: var(--cm-tinta); }
+  .cm-cols2 .cm-nombre b { font-size: 12.5pt; }
+  .cm-det { font-family: var(--cm-letra); font-size: 9pt; letter-spacing: .06em; color: var(--cm-gris); }
+  .cm-sig { display: inline-flex; align-items: center; gap: 1mm; font-family: var(--cm-letra); font-size: 7.5pt; font-weight: 600; letter-spacing: .2em; text-transform: uppercase; color: var(--cm-rosa); background: var(--cm-rosa-pal); border: .5pt solid var(--cm-rosa-cl); border-radius: 10pt; padding: .4mm 2mm .3mm 1.2mm; }
+  .cm-sig svg { width: 3.4mm; height: 3.4mm; overflow: visible; }
+  .cm-plato p { margin: 1mm 0 0; font-family: var(--cm-titulo); font-size: 11pt; line-height: 1.4; color: #4f3b44; }
+  .cm-cols2 .cm-plato p { font-size: 10pt; }
+  .cm-alg { margin-top: 1mm; font-family: var(--cm-letra); font-size: 7.5pt; letter-spacing: .08em; color: var(--cm-rosa-osc); }
+  .cm-nota { font-family: var(--cm-letra); font-size: 9pt; letter-spacing: .04em; color: var(--cm-gris); font-style: italic; margin: 1mm 0 4mm; }
+  .cm-footer { display: flex; justify-content: space-between; border-top: .6pt solid var(--cm-linea); padding-top: 2.5mm; font-family: var(--cm-letra); font-size: 8pt; letter-spacing: .24em; text-transform: uppercase; color: var(--cm-gris); }
+
   @media print {
     @page { size: landscape; margin: 8mm; }
     @page informe { size: A4 portrait; margin: 14mm 12mm; }
     body { padding: 0; background: #fff; }
-    body > *:not(#zonaImprimir) { display: none !important; }
+    body > *:not(#zonaImprimir):not(#cmDefs) { display: none !important; }
     #zonaImprimir { display: block; }
     #zonaImprimir.informe { page: informe; }
     #zonaImprimir img { width: 100%; }
     @page matriz { size: A4 landscape; margin: 10mm; }
     #zonaImprimir.matriz { page: matriz; }
+    @page carta { size: A4; margin: 0; }
+    #zonaImprimir.carta { page: carta; }
+    #zonaImprimir.carta .cm-pagina { margin: 0; box-shadow: none; break-after: page; }
+    #zonaImprimir.carta .cm-pagina:last-child { break-after: auto; }
   }
   .inf .ficha-alg { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; margin-bottom: 12px; }
   .inf .ficha-alg div { border: 1px solid #ead6dd; border-radius: 6px; padding: 4px 2px; text-align: center; font-size: 8.5pt; line-height: 1.2; color: #b9a9af; }
@@ -838,7 +1000,7 @@
   <section class="vista" id="vistaFichas">
     <button class="volver" data-volver><span>‹</span> Inicio</button>
     <h2>Fichas técnicas</h2>
-    <div class="segmento" id="segFichas"><button data-sub-fichas="fichas" class="activo">Fichas</button><button data-sub-fichas="montaje">Montaje</button></div>
+    <div class="segmento" id="segFichas"><button data-sub-fichas="fichas" class="activo">Fichas</button><button data-sub-fichas="montaje">Montaje</button><button data-sub-fichas="menu">Menú</button></div>
     <div id="fichasContenido"></div>
   </section>
 
@@ -846,6 +1008,13 @@
     <button class="volver" data-volver><span>‹</span> Inicio</button>
     <h2 class="titulo-equipo"><span class="jp-equipo">組織</span> Organigrama</h2>
     <div id="organigramaContenido"></div>
+  </section>
+
+  <section class="vista" id="vistaComparador">
+    <button class="volver" data-volver><span>‹</span> Inicio</button>
+    <h2>Comparar precios</h2>
+    <div class="segmento" id="segComp"><button data-sub-comp="buscar" class="activo">Buscar</button><button data-sub-comp="comparaciones">Comparaciones</button><button data-sub-comp="lista">Lista</button></div>
+    <div id="compContenido"></div>
   </section>
 
   <section class="vista" id="vistaEquipo">
@@ -895,8 +1064,14 @@
     </div>
   </div>
 </div>
+<svg id="cmDefs" aria-hidden="true"><defs>
+<radialGradient id="cmPetalo" cx="0" cy="0" r="34" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#e98aa6"/><stop offset=".45" stop-color="#f6c3d1"/><stop offset="1" stop-color="#fdeef2"/></radialGradient>
+<symbol id="cmFlor" viewBox="-40 -40 80 80"><g class="cm-petalos"><path transform="rotate(0)" d="M0 -3 C -13 -9 -17 -25 -8 -33 C -5 -35 -2 -33 0 -29 C 2 -33 5 -35 8 -33 C 17 -25 13 -9 0 -3Z"/><path transform="rotate(72)" d="M0 -3 C -13 -9 -17 -25 -8 -33 C -5 -35 -2 -33 0 -29 C 2 -33 5 -35 8 -33 C 17 -25 13 -9 0 -3Z"/><path transform="rotate(144)" d="M0 -3 C -13 -9 -17 -25 -8 -33 C -5 -35 -2 -33 0 -29 C 2 -33 5 -35 8 -33 C 17 -25 13 -9 0 -3Z"/><path transform="rotate(216)" d="M0 -3 C -13 -9 -17 -25 -8 -33 C -5 -35 -2 -33 0 -29 C 2 -33 5 -35 8 -33 C 17 -25 13 -9 0 -3Z"/><path transform="rotate(288)" d="M0 -3 C -13 -9 -17 -25 -8 -33 C -5 -35 -2 -33 0 -29 C 2 -33 5 -35 8 -33 C 17 -25 13 -9 0 -3Z"/></g><circle r="6" class="cm-centro"/><g transform="rotate(0)"><line x1="0" y1="-4" x2="0" y2="-13" class="cm-estambre"/><circle cy="-14" r="1.6" class="cm-antera"/></g><g transform="rotate(36)"><line x1="0" y1="-4" x2="0" y2="-13" class="cm-estambre"/><circle cy="-14" r="1.6" class="cm-antera"/></g><g transform="rotate(72)"><line x1="0" y1="-4" x2="0" y2="-13" class="cm-estambre"/><circle cy="-14" r="1.6" class="cm-antera"/></g><g transform="rotate(108)"><line x1="0" y1="-4" x2="0" y2="-13" class="cm-estambre"/><circle cy="-14" r="1.6" class="cm-antera"/></g><g transform="rotate(144)"><line x1="0" y1="-4" x2="0" y2="-13" class="cm-estambre"/><circle cy="-14" r="1.6" class="cm-antera"/></g><g transform="rotate(180)"><line x1="0" y1="-4" x2="0" y2="-13" class="cm-estambre"/><circle cy="-14" r="1.6" class="cm-antera"/></g><g transform="rotate(216)"><line x1="0" y1="-4" x2="0" y2="-13" class="cm-estambre"/><circle cy="-14" r="1.6" class="cm-antera"/></g><g transform="rotate(252)"><line x1="0" y1="-4" x2="0" y2="-13" class="cm-estambre"/><circle cy="-14" r="1.6" class="cm-antera"/></g><g transform="rotate(288)"><line x1="0" y1="-4" x2="0" y2="-13" class="cm-estambre"/><circle cy="-14" r="1.6" class="cm-antera"/></g><g transform="rotate(324)"><line x1="0" y1="-4" x2="0" y2="-13" class="cm-estambre"/><circle cy="-14" r="1.6" class="cm-antera"/></g></symbol>
+<symbol id="cmBoton" viewBox="-12 -20 24 32"><path d="M0 10 C -9 2 -8 -12 0 -18 C 8 -12 9 2 0 10Z" class="cm-boton"/><path d="M0 10 C -4 6 -5 2 -3 -2 M0 10 C 4 6 5 2 3 -2" class="cm-caliz"/></symbol>
+</defs></svg>
 <div id="zonaImprimir"></div>
 <input type="file" id="archivoCopia" accept="application/json,.json" hidden>
+<input type="file" id="archivoCatalogo" accept="application/json,.json" hidden>
 <canvas id="lienzo" hidden></canvas>
 
 <script>
@@ -2862,6 +3037,7 @@ const nombreAlergeno = (k) => (ALERGENOS.find((a) => a[0] === k) || [k, k])[1];
 function pintarFichas() {
   document.querySelectorAll('#segFichas button').forEach((b) => b.classList.toggle('activo', b.dataset.subFichas === subFichas));
   if (subFichas === 'montaje') { pintarMontajes(); return; }
+  if (subFichas === 'menu') { pintarMenu(); return; }
   const lista = fichas().slice().sort((a, b) => a.nombre.localeCompare(b.nombre, 'es', { sensitivity: 'base' }));
   let html = '<div class="acciones"><button class="btn principal" data-ficha-accion="nueva">+ Nueva ficha</button>' +
     '<button class="btn secundario" data-ficha-accion="matriz"' + (lista.length ? '' : ' disabled') + '>PDF de alérgenos de la carta</button></div>';
@@ -3242,6 +3418,705 @@ function imprimirMatrizAlergenos() {
   fuentesListas().then(() => imprimir('Alérgenos de la carta - Kumi Mara'));
 }
 
+// ---------- Menú: la carta de Hinoki, unida a las fichas para que los alérgenos salgan solos ----------
+// Viene del editor de carta de Hinoki (misma web, clave 'hinoki-carta-v1'): la primera vez se copia de allí sin tocarla, así ese editor sigue funcionando.
+const CARTA_HINOKI = {"restaurante": {"nombre": "HINOKI", "kanji": "檜", "lema": "Japanese Kitchen & Cuisine", "ciudad": "Málaga"}, "paginas": [{"jp": "前菜", "titulo": "Para empezar", "sub": "Pequeños platos para abrir el apetito y compartir.", "cols": 1, "nota": "", "secciones": [{"titulo": "Frescos y pequeños bocados", "platos": [{"nombre": "Edamame", "detalle": "", "signature": false, "descripcion": "Vainas de soja cocidas al vapor, servidas al natural o con un toque picante."}, {"nombre": "Sopa miso", "detalle": "", "signature": false, "descripcion": "Caldo de miso con tofu, alga wakame y cebollino fresco."}, {"nombre": "Nasu no Miso Su", "detalle": "", "signature": true, "descripcion": "Berenjena servida fría con vinagreta de miso, cebollino, cacahuete crujiente y brotes tiernos."}, {"nombre": "Sunomono", "detalle": "", "signature": false, "descripcion": "Ensalada de wakame, pepino y cebolla encurtidos, con el delicado toque del vinagre de arroz."}, {"nombre": "Escabeche japonés de boquerones", "detalle": "", "signature": false, "descripcion": "Boquerones en escabeche de inspiración japonesa, acompañados de verduras confitadas."}, {"nombre": "Tres bocados HINOKI", "detalle": "3 bocados", "signature": true, "descripcion": "Tres bocados de brioche tostado: hamachi con emulsión de yuzu kosho y tobiko naranja; salmón con emulsión de miso blanco e ikura; atún con emulsión de wasabi y tobiko negro."}]}, {"titulo": "Bocados calientes", "platos": [{"nombre": "Gyozas de pato", "detalle": "4 unidades", "signature": false, "descripcion": "Empanadillas japonesas rellenas de pato, acompañadas de salsa hoisin."}, {"nombre": "Pollo karaage", "detalle": "", "signature": false, "descripcion": "Bocados de pollo crujiente al estilo japonés, acompañados de una salsa cremosa de chili dulce."}, {"nombre": "Yakitori de pollo", "detalle": "2 brochetas", "signature": false, "descripcion": "Brochetas de contramuslo de pollo, glaseadas con salsa teriyaki y terminadas con negi fresco."}, {"nombre": "Ebi Kushiyaki", "detalle": "2 brochetas", "signature": false, "descripcion": "Brochetas de langostino, terminadas con una suave emulsión de miso picante."}]}]}, {"jp": "刺身", "titulo": "Tartares, cortes y sashimi", "sub": "El pescado como protagonista: aliños, texturas y cortes.", "cols": 1, "nota": "Los sashimis se acompañan de wasabi y jengibre.", "secciones": [{"titulo": "Tartares y cortes", "platos": [{"nombre": "Tartar de salmón", "detalle": "", "signature": false, "descripcion": "Salmón cortado a cuchillo y aliñado con soja y sésamo, coronado con ikura y acompañado de crujiente de tapioca."}, {"nombre": "Tartar de atún", "detalle": "", "signature": false, "descripcion": "Atún cortado a cuchillo con aliño de dashi shoyu, yema, aceite de sésamo y un toque de kimchi; coronado con caviar Osetra y acompañado de crujiente de arroz."}, {"nombre": "Usuzukuri de hamachi", "detalle": "", "signature": false, "descripcion": "Finas láminas de hamachi con cremoso de aguacate, aliño de lima, soja y aceite de oliva suave, polvo de aceituna negra y brotes tiernos."}, {"nombre": "Tataki de bonito", "detalle": "9 piezas", "signature": true, "descripcion": "Bonito ligeramente marcado, acompañado de ponzu de maracuyá, berenjena a la parrilla, anacardo tostado y polvo de miso."}]}, {"titulo": "Sashimi", "platos": [{"nombre": "Sashimi moriawase", "detalle": "12 piezas", "signature": false, "descripcion": "Atún, salmón, hamachi y lubina: tres cortes de cada pescado."}, {"nombre": "Degustación de atún", "detalle": "9 piezas", "signature": true, "descripcion": "Nueve cortes para recorrer las texturas del atún: tres de akami, tres de chutoro y tres de otoro."}, {"nombre": "Sashimi de salmón", "detalle": "4 piezas", "signature": false, "descripcion": "Cuatro cortes de salmón, presentados con sencillez para destacar el producto."}, {"nombre": "Sashimi de hamachi", "detalle": "4 piezas", "signature": false, "descripcion": "Cuatro cortes de hamachi, de textura delicada."}, {"nombre": "Sashimi de lubina", "detalle": "4 piezas", "signature": false, "descripcion": "Cuatro cortes de lubina, de sabor suave y limpio."}]}]}, {"jp": "握り", "titulo": "Nigiri", "sub": "El equilibrio entre el producto y el arroz, en un solo bocado.", "cols": 1, "nota": "Nigiris servidos por pieza.", "secciones": [{"titulo": "Selección de nigiri · por pieza", "platos": [{"nombre": "Saba | Caballa", "detalle": "", "signature": false, "descripcion": "Caballa sobre arroz de sushi, terminada con un toque de kizami wasabi."}, {"nombre": "Maguro | Atún", "detalle": "", "signature": false, "descripcion": "Atún sobre arroz de sushi, acompañado de un toque de kimchi."}, {"nombre": "Sake Koji | Salmón", "detalle": "", "signature": false, "descripcion": "Salmón sobre arroz de sushi, terminado con koji."}, {"nombre": "Hamachi Yuzu", "detalle": "", "signature": false, "descripcion": "Hamachi sobre arroz de sushi, realzado con un toque de yuzu kosho."}, {"nombre": "Sake Aburi | Salmón", "detalle": "", "signature": false, "descripcion": "Salmón ligeramente flambeado sobre arroz de sushi, con un toque de queso y salsa teriyaki."}, {"nombre": "Lubina | Jalapeño", "detalle": "", "signature": false, "descripcion": "Lubina sobre arroz de sushi, terminada con un toque de jalapeño."}]}, {"titulo": "Signature HINOKI", "platos": [{"nombre": "Wagyu | Codorniz y trufa", "detalle": "", "signature": true, "descripcion": "Wagyu sobre arroz de sushi, acompañado de huevo de codorniz y crema de trufa."}]}]}, {"jp": "巻き寿司", "titulo": "Rolls, makis y temakis", "sub": "Rolls clásicos y signature, pequeños makis y conos de nori.", "cols": 2, "nota": "", "secciones": [{"titulo": "Rolls clásicos · uramaki", "platos": [{"nombre": "California Kani", "detalle": "8 piezas", "signature": false, "descripcion": "Cangrejo, pepino y aguacate con emulsión suave, terminado con huevas de capelán."}, {"nombre": "Sake Hana", "detalle": "8 piezas", "signature": false, "descripcion": "Salmón y aguacate envueltos en arroz de sushi, con sésamo en el exterior."}, {"nombre": "Akami Spicy", "detalle": "8 piezas", "signature": false, "descripcion": "Atún aliñado con sriracha y pepino, acompañado de tobiko y cebollino."}, {"nombre": "Ebi Tempura Aburi", "detalle": "8 piezas", "signature": false, "descripcion": "Langostino crujiente, queso y aguacate, coronados con salmón flambeado, salsa teriyaki y tobiko."}, {"nombre": "Pink Veggie", "detalle": "8 piezas", "signature": false, "descripcion": "Zanahoria, aguacate, pepino y pimiento rojo con aliño de mostaza y miel; cubierto de remolacha y terminado con cebolla frita."}]}, {"titulo": "Rolls signature HINOKI", "platos": [{"nombre": "Niji", "detalle": "8 piezas", "signature": true, "descripcion": "Cangrejo, aguacate y pepino, cubiertos con láminas de atún, salmón y hamachi; emulsión de yuzu y tobiko rojo y amarillo."}, {"nombre": "Kaisen Lobster", "detalle": "8 piezas", "signature": true, "descripcion": "Aguacate y pepino, coronados con bogavante en tempura, emulsión de yuzu y crujiente de miso; tobiko negro y rojo intercalados entre las piezas."}, {"nombre": "Ebi Maguro", "detalle": "8 piezas", "signature": true, "descripcion": "Langostino en tempura y aguacate, coronados con tartar de atún picante, emulsiones de ponzu y picante, cebollino y crujiente de arroz."}]}, {"titulo": "Futomaki", "platos": [{"nombre": "Negitoro | Futomaki", "detalle": "6 piezas", "signature": false, "descripcion": "Ventresca de atún, pepino, tobiko y negi, envueltos en alga nori."}]}, {"titulo": "Hosomaki", "platos": [{"nombre": "Hosomaki de salmón", "detalle": "6 piezas", "signature": false, "descripcion": "Alga nori, arroz de sushi y salmón."}, {"nombre": "Hosomaki de atún", "detalle": "6 piezas", "signature": false, "descripcion": "Alga nori, arroz de sushi y atún."}, {"nombre": "Hosomaki de aguacate", "detalle": "6 piezas", "signature": false, "descripcion": "Alga nori, arroz de sushi y aguacate."}, {"nombre": "Hosomaki de queso y cebollino", "detalle": "6 piezas", "signature": false, "descripcion": "Alga nori, arroz de sushi y queso y cebollino."}]}, {"titulo": "Temaki", "platos": [{"nombre": "Spicy Tuna Temaki", "detalle": "", "signature": false, "descripcion": "Cono de alga nori con arroz de sushi y atún picante."}, {"nombre": "Hamachi Yuzu Temaki", "detalle": "", "signature": false, "descripcion": "Cono de alga nori con arroz de sushi, hamachi y yuzu kosho."}, {"nombre": "Unagi Sansho Temaki", "detalle": "", "signature": false, "descripcion": "Cono de alga nori con arroz de sushi, anguila, salsa unagi y sansho."}]}]}, {"jp": "盛り合わせ", "titulo": "Sushi para compartir", "sub": "Selecciones de rolls y nigiris, seguidas de nuestros chirashis.", "cols": 1, "nota": "Chirashi: pescado sobre arroz de sushi, con wasabi y jengibre encurtido al lado; soja aparte.", "secciones": [{"titulo": "Selecciones HINOKI", "platos": [{"nombre": "HINOKI 12", "detalle": "12 piezas", "signature": false, "descripcion": "4 California Kani, 4 Sake Hana y 4 nigiris: atún, salmón, hamachi y lubina."}, {"nombre": "HINOKI 18", "detalle": "18 piezas", "signature": false, "descripcion": "4 California Kani, 4 Sake Hana, 6 hosomaki de atún y 4 nigiris: atún, salmón, hamachi y lubina."}, {"nombre": "HINOKI 22", "detalle": "22 piezas", "signature": false, "descripcion": "8 California Kani, 4 Sake Hana, 6 hosomaki de atún y 4 nigiris: atún, salmón, hamachi y lubina."}, {"nombre": "HINOKI Table Feast", "detalle": "50 piezas", "signature": false, "descripcion": "8 California Kani, 8 Sake Hana, 8 Niji, 6 Negitoro, 6 hosomaki de atún, 6 hosomaki de aguacate y 8 nigiris: dos de atún, salmón, hamachi y lubina."}]}, {"titulo": "Chirashi", "platos": [{"nombre": "Chirashi de salmón", "detalle": "", "signature": false, "descripcion": "Láminas de salmón sobre arroz de sushi y terminadas con negi fresco."}, {"nombre": "Chirashi de atún", "detalle": "", "signature": false, "descripcion": "Láminas de atún sobre arroz de sushi y terminadas con negi fresco."}, {"nombre": "Chirashi mixto", "detalle": "", "signature": false, "descripcion": "Selección de salmón, atún y hamachi sobre arroz de sushi, terminada con negi fresco."}]}]}, {"jp": "ご飯・麺・甘味", "titulo": "Arroces, noodles y postres", "sub": "Principales de cocina japonesa. Para terminar, nuestra selección dulce.", "cols": 1, "nota": "Consulte con nuestro equipo la información sobre alérgenos.", "secciones": [{"titulo": "Arroces y noodles", "platos": [{"nombre": "Yakisoba de pollo y shiitake", "detalle": "", "signature": false, "descripcion": "Fideos japoneses salteados con pollo, shiitake y verduras, ligados con salsa yakisoba."}, {"nombre": "Udon de langostino", "detalle": "", "signature": false, "descripcion": "Fideos udon salteados con langostinos y verduras, terminados con salsa de soja y sésamo."}, {"nombre": "Wok de verduras", "detalle": "", "signature": false, "descripcion": "Shiitake, zanahoria, calabacín, brotes de soja y cebolla salteados al wok con salsa teriyaki."}, {"nombre": "Yakimeshi de pluma ibérica", "detalle": "", "signature": false, "descripcion": "Arroz japonés salteado con dados de pluma ibérica, huevo, zanahoria y shiitake; soja, un toque de aceite de sésamo y negi fresco."}, {"nombre": "Donburi de pollo teriyaki", "detalle": "", "signature": false, "descripcion": "Bocados de contramuslo de pollo glaseados con teriyaki, sobre arroz japonés y terminados con negi fresco."}, {"nombre": "HINOKI Wagyu Yakiniku Don", "detalle": "", "signature": true, "descripcion": "Finas láminas de wagyu japonés A4, marcadas y glaseadas con tare de la casa sobre arroz japonés; negi fresco y pepino encurtido."}]}, {"titulo": "Para terminar", "platos": [{"nombre": "Cajita dulce HINOKI", "detalle": "8 bocados", "signature": false, "descripcion": "Una selección para compartir: dos mochis, dos trufas de sake y té verde, dos bocaditos de bizcocho de té con nata y azuki y dos mini dorayakis."}, {"nombre": "Helado de té verde matcha", "detalle": "", "signature": false, "descripcion": "Helado cremoso de té verde japonés."}, {"nombre": "Suflé de chocolate", "detalle": "", "signature": false, "descripcion": "Bizcocho caliente de chocolate con corazón fundente."}, {"nombre": "Cheesecake", "detalle": "", "signature": false, "descripcion": "Tarta de queso."}]}]}]};
+// Fotos de muestra (Unsplash, uso libre) hasta tener las del restaurante. Una foto propia o «Quitar foto» la sustituye.
+const FOTOS_MUESTRA_CARTA = {"Edamame": "photo-1557621956-ce58555aa0ce", "Sopa miso": "photo-1763470260582-894ae15f43bb", "Nasu no Miso Su": "photo-1706288586295-dadb4501b0ee", "Sunomono": "photo-1561466273-c13f88329aa0", "Escabeche japonés de boquerones": "photo-1560174122-cac0c0bdacc6", "Tres bocados HINOKI": "photo-1692740838550-fc67b4e78416", "Gyozas de pato": "photo-1738681336104-608b4e7dc3b0", "Pollo karaage": "photo-1700325341795-4793ac3ddb59", "Yakitori de pollo": "photo-1775379995350-43098b52d8ed", "Ebi Kushiyaki": "photo-1688084468401-4938b073aef2", "Tartar de salmón": "photo-1625944525533-473f1a3d54e7", "Tartar de atún": "photo-1722012988794-196d72bd12aa", "Usuzukuri de hamachi": "photo-1628280738974-24e582b9904a", "Tataki de bonito": "photo-1596189181426-7f63a1737f0d", "Sashimi moriawase": "photo-1743653258526-84f0245660c5", "Degustación de atún": "photo-1635452065566-9c89471bb86c", "Sashimi de salmón": "photo-1599084992304-0e2517910d3e", "Sashimi de hamachi": "photo-1730325559400-33573a1bca4c", "Sashimi de lubina": "photo-1563791743547-898d1485e3e5", "Saba | Caballa": "photo-1780817612617-cca92fc4b722", "Maguro | Atún": "photo-1790498486528-da1ff628e8f2", "Sake Koji | Salmón": "photo-1562158074-d49fbeffcc91", "Hamachi Yuzu": "photo-1642479513653-1b5a1664df8d", "Sake Aburi | Salmón": "photo-1710945301326-d60727e4833a", "Lubina | Jalapeño": "photo-1790643063016-f5c8365366e3", "Wagyu | Codorniz y trufa": "photo-1635451778386-e5778e66f61e", "California Kani": "photo-1648146298949-6b94f62164da", "Sake Hana": "photo-1635526910429-051cf1ed127e", "Akami Spicy": "photo-1580821082847-c53037ecfe0a", "Ebi Tempura Aburi": "photo-1774635812959-bd5cbaa9e496", "Pink Veggie": "photo-1730900737657-66c48d35ed3a", "Niji": "photo-1636425730652-ffdbada1ed4d", "Kaisen Lobster": "photo-1617196035154-1e7e6e28b0db", "Ebi Maguro": "photo-1653122024993-31e02aedb1ac", "Negitoro | Futomaki": "photo-1562158074-1602c2f19a08", "Hosomaki de salmón": "photo-1617196034738-26c5f7c977ce", "Hosomaki de atún": "photo-1555341748-a9d443dc3c14", "Hosomaki de aguacate": "photo-1709984110217-57d7d18e5299", "Hosomaki de queso y cebollino": "photo-1780291117619-c58ee7aa740e", "Spicy Tuna Temaki": "photo-1791386809517-60f40f5372dd", "Hamachi Yuzu Temaki": "photo-1710962169574-d1b52a2670e2", "Unagi Sansho Temaki": "photo-1791386809517-60f40f5372dd", "HINOKI 12": "photo-1617196034796-73dfa7b1fd56", "HINOKI 18": "photo-1611143669185-af224c5e3252", "HINOKI 22": "photo-1553621042-f6e147245754", "HINOKI Table Feast": "photo-1663334038419-71e6f82e333f", "Chirashi de salmón": "photo-1775889184907-36742cafb945", "Chirashi de atún": "photo-1678049379716-dcdf375eda2f", "Chirashi mixto": "photo-1565967531713-45739e0cad63", "Yakisoba de pollo y shiitake": "photo-1624904025321-24e2f17d06ce", "Udon de langostino": "photo-1558985212-324add95595a", "Wok de verduras": "photo-1564834724105-918b73d1b9e0", "Yakimeshi de pluma ibérica": "photo-1609570324378-ec0c4c9b6ba8", "Donburi de pollo teriyaki": "photo-1636401870585-a8852371e84a", "HINOKI Wagyu Yakiniku Don": "photo-1761064864527-d428a88cd4f5", "Cajita dulce HINOKI": "photo-1706350091276-ba994c35cd99", "Helado de té verde matcha": "photo-1534706936160-d5ee67737249", "Suflé de chocolate": "photo-1617305855058-336d24456869", "Cheesecake": "photo-1774988867972-98caecc776d8"};
+const URL_MUESTRA_CARTA = 'https://images.unsplash.com/';
+const fotoMuestraCarta = (nombre) => FOTOS_MUESTRA_CARTA[nombre] ? URL_MUESTRA_CARTA + FOTOS_MUESTRA_CARTA[nombre] + '?w=480&h=480&fit=crop&q=75' : '';
+const esFotoMuestra = (foto) => typeof foto === 'string' && foto.startsWith(URL_MUESTRA_CARTA);
+const LADO_FOTO_CARTA = 480;
+const ANCHO_A4 = 210 * 96 / 25.4;
+let menuUI = null;
+let menuVer = false;
+const menuAbiertas = new Set([0]);
+// Las fotos propias de los platos viven en IndexedDB como las del equipo; aquí se guardan las ya leídas.
+const fotosMenu = {};
+
+function platosMenu() { return datos.menu ? datos.menu.paginas.flatMap((pg) => pg.secciones.flatMap((s) => s.platos)) : []; }
+function idsFotosMenu() { return platosMenu().map((p) => p.fotoId).filter(Boolean); }
+const fotoPlato = (p) => p.fotoId ? fotosMenu[p.fotoId] || '' : p.foto || '';
+const nombreLimpio = (t) => sinTildes(t).replace(/\s+/g, ' ').trim();
+
+// El plato se une a la ficha que se eligió; si no se eligió ninguna, a la ficha que se llama igual.
+function fichaDePlato(p) {
+  const elegida = p.ficha && fichas().find((f) => f.id === p.ficha);
+  if (elegida) return elegida;
+  const n = nombreLimpio(p.nombre);
+  return n ? fichas().find((f) => nombreLimpio(f.nombre) === n) || null : null;
+}
+function alergenosEnCarta(p) {
+  const f = fichaDePlato(p);
+  if (!f) return '';
+  const pa = alergenosPlato(f);
+  const si = ALERGENOS.filter(([k]) => pa[k] === 'si').map(([, n]) => n);
+  const trazas = ALERGENOS.filter(([k]) => pa[k] === 'trazas').map(([, n]) => n);
+  return [si.join(' · '), trazas.length ? 'Puede contener: ' + trazas.join(' · ') : ''].filter(Boolean).join(' — ');
+}
+function chipsAlergenosPlato(f) {
+  if (!f) return '<span class="trazas">Sin ficha</span>';
+  const pa = alergenosPlato(f);
+  const algs = ALERGENOS.filter(([k]) => pa[k]);
+  if (algs.length) return algs.map(([k, n]) => '<span' + (pa[k] === 'trazas' ? ' class="trazas" title="Puede contener"' : '') + '>' + n + '</span>').join('');
+  return f.sinAlergenos ? '<span class="sin">Sin alérgenos</span>' : '<span class="trazas">Alérgenos sin revisar</span>';
+}
+
+// Una carta que llega con fotos dentro (data:) las pasa a IndexedDB; cada plato recibe un id fijo para su foto y su ficha.
+async function prepararCarta(c) {
+  const nuevas = {};
+  c.paginas.forEach((pg) => pg.secciones.forEach((s) => s.platos.forEach((p) => {
+    if (!p.id) p.id = nuevoId();
+    if (typeof p.foto === 'string' && p.foto.startsWith('data:')) {
+      const id = 'menu:' + p.id;
+      nuevas[id] = p.foto;
+      p.fotoId = id;
+      p.foto = '';
+    } else if (p.foto === undefined) p.foto = fotoMuestraCarta(p.nombre);
+  })));
+  if (Object.keys(nuevas).length) {
+    await escribirDocs(nuevas, []);
+    Object.assign(fotosMenu, nuevas);
+  }
+  if (c.alergenos === undefined) c.alergenos = true;
+  return c;
+}
+let menuPreparando = null;
+let menuFallo = false;
+function asegurarMenu() {
+  if (datos.menu) return Promise.resolve();
+  if (!menuPreparando) {
+    menuPreparando = (async () => {
+      let c = null;
+      try { c = JSON.parse(leerLocal('hinoki-carta-v1')); } catch (e) {}
+      if (!c || !c.restaurante || !Array.isArray(c.paginas)) c = JSON.parse(JSON.stringify(CARTA_HINOKI));
+      await prepararCarta(c);
+      if (!datos.menu) { datos.menu = c; guardar(); }
+      menuFallo = false;
+    })().catch(() => { menuFallo = true; }).finally(() => { menuPreparando = null; });
+  }
+  return menuPreparando;
+}
+async function cargarFotosMenu() {
+  const faltan = idsFotosMenu().filter((id) => !(id in fotosMenu));
+  if (!faltan.length) return false;
+  await Promise.all(faltan.map(async (id) => {
+    try { fotosMenu[id] = (await leerDoc(id)) || ''; } catch (e) { fotosMenu[id] = ''; }
+  }));
+  return true;
+}
+const enMenu = () => vista === 'fichas' && subFichas === 'menu';
+
+// ---------- Pantalla del menú ----------
+function filaPlatoMenu(p, ruta) {
+  const foto = fotoPlato(p);
+  return '<div class="menu-plato" data-menu-accion="plato" data-r="' + ruta + '">' +
+    (foto ? '<img src="' + escapar(foto) + '" alt="">' : '<span class="menu-sinfoto" aria-hidden="true">📷</span>') +
+    '<div><b>' + escapar(p.nombre || 'Plato sin nombre') + '</b>' + (p.signature ? '<em class="menu-sig">✿ Signature</em>' : '') +
+    (p.detalle ? '<small>' + escapar(p.detalle) + '</small>' : '') +
+    '<div class="alg-mini">' + chipsAlergenosPlato(fichaDePlato(p)) + '</div></div></div>';
+}
+function pintarMenu() {
+  if (!datos.menu) {
+    $('fichasContenido').innerHTML = '<div class="tarjeta"><h3>' + (menuFallo ? 'No se pudo preparar la carta' : 'Preparando la carta…') + '</h3>' +
+      (menuFallo ? '<div class="sub">¿Le queda espacio a este dispositivo? Vuelve a tocar «Menú» para intentarlo otra vez.</div>' : '') + '</div>';
+    if (!menuFallo) asegurarMenu().then(() => { if (enMenu()) pintarMenu(); });
+    menuFallo = false;
+    return;
+  }
+  if (menuVer) { pintarVistaCarta(); return; }
+  const c = datos.menu;
+  const r = c.restaurante;
+  const sinFicha = platosMenu().filter((p) => !fichaDePlato(p)).length;
+  let html = '<div class="acciones"><button class="btn principal" data-menu-accion="ver">Ver la carta</button>' +
+    '<button class="btn secundario" data-menu-accion="pdf">PDF de la carta</button></div>' +
+    '<button class="tarjeta menu-portada" data-menu-accion="portada"><span class="menu-kanji">' + escapar(r.kanji || '') + '</span>' +
+    '<span><b>' + escapar(r.nombre || 'Sin nombre') + '</b><small>' + escapar([r.lema, r.ciudad].filter(Boolean).join(' · ')) + '</small></span><i>›</i></button>' +
+    (sinFicha ? '<p class="pista-campo menu-aviso">' + sinFicha + (sinFicha === 1 ? ' plato no tiene ficha' : ' platos no tienen ficha') +
+      ': sus alérgenos no salen en la carta. Si la ficha se llama igual que el plato, se unen solas.</p>' : '');
+  c.paginas.forEach((pg, i) => {
+    const n = pg.secciones.reduce((t, s) => t + s.platos.length, 0);
+    html += '<details class="tarjeta menu-pag" data-i="' + i + '"' + (menuAbiertas.has(i) ? ' open' : '') + '><summary>' +
+      '<span class="menu-jp">' + escapar(pg.jp || '') + '</span><b>' + escapar(pg.titulo || 'Página sin título') + '</b>' +
+      '<small>' + n + (n === 1 ? ' plato' : ' platos') + '</small></summary>' +
+      '<button class="btn secundario chico" data-menu-accion="pagina" data-r="' + i + '">Editar la página</button>';
+    pg.secciones.forEach((s, j) => {
+      html += '<button class="menu-sec" data-menu-accion="seccion" data-r="' + i + '.' + j + '">' + escapar(s.titulo || 'Sección sin título') + '<i>✎</i></button>' +
+        s.platos.map((p, k) => filaPlatoMenu(p, i + '.' + j + '.' + k)).join('') +
+        '<button class="btn secundario chico" data-menu-accion="nuevo-plato" data-r="' + i + '.' + j + '">+ Plato</button>';
+    });
+    html += '<button class="btn secundario chico" data-menu-accion="nueva-seccion" data-r="' + i + '">+ Sección</button></details>';
+  });
+  html += '<div class="acciones"><button class="btn secundario" data-menu-accion="nueva-pagina">+ Página</button></div>' +
+    '<div class="tarjeta"><div class="grupo-stock">La carta en otro dispositivo</div>' +
+    '<p class="pista-campo" style="margin:0 0 10px">La carta viaja en la copia de Kumi Mara. Si ya la tienes hecha con el editor de carta de Hinoki, sube su PDF: se leen los platos, los textos y las fotos.</p>' +
+    '<button class="btn secundario chico" data-menu-accion="subir-pdf">Subir el PDF de la carta</button> ' +
+    '<button class="btn secundario chico" data-menu-accion="importar">Traer una copia de la carta (.json)</button> ' +
+    '<button class="btn secundario chico" data-menu-accion="original">Volver a la carta original</button></div>';
+  $('fichasContenido').innerHTML = html;
+  cargarFotosMenu().then((nuevas) => { if (nuevas && enMenu() && !menuVer) pintarMenu(); }).catch(() => {});
+}
+
+// ---------- La carta en hojas A4 (igual que el editor de Hinoki) ----------
+function cartaRamita(x, y, escala, giro, espejo) {
+  const sx = espejo ? -1 : 1;
+  return '<g transform="translate(' + x + ' ' + y + ') scale(' + sx * escala + ' ' + escala + ') rotate(' + giro + ')">' +
+    '<path d="M0 0 C 20 6 38 4 58 16 C 70 23 80 22 92 30" class="cm-rama"/><path d="M32 6 C 36 -4 44 -9 52 -10" class="cm-rama fina"/><path d="M62 18 C 66 28 64 36 70 44" class="cm-rama fina"/>' +
+    '<use href="#cmFlor" x="38" y="-6" width="22" height="22"/><use href="#cmFlor" x="50" y="-20" width="17" height="17" transform="rotate(20 58 -12)"/>' +
+    '<use href="#cmFlor" x="70" y="12" width="24" height="24"/><use href="#cmFlor" x="60" y="34" width="16" height="16"/><use href="#cmFlor" x="14" y="-4" width="14" height="14"/>' +
+    '<use href="#cmBoton" x="86" y="22" width="8" height="11" transform="rotate(60 90 27)"/><use href="#cmBoton" x="47" y="-15" width="6" height="8" transform="rotate(-30 50 -11)"/>' +
+    '<use href="#cmBoton" x="68" y="42" width="7" height="9" transform="rotate(150 71 46)"/></g>';
+}
+function cartaPortada(r) {
+  return '<div class="cm-pagina cm-portada"><svg class="cm-deco" viewBox="0 0 210 297" aria-hidden="true">' +
+    cartaRamita(-6, 6, 1.05, 12) + cartaRamita(216, 2, 0.95, 14, true) + cartaRamita(-10, 290, 0.8, -30) + cartaRamita(220, 294, 0.85, -26, true) +
+    '<use href="#cmFlor" x="150" y="64" width="9" height="9" opacity=".6"/><use href="#cmFlor" x="48" y="226" width="7" height="7" opacity=".55"/>' +
+    '<use href="#cmFlor" x="166" y="210" width="6" height="6" opacity=".5"/><use href="#cmFlor" x="34" y="96" width="6" height="6" opacity=".5"/></svg>' +
+    '<div class="cm-sello"><div class="cm-aro"></div><div class="cm-kanji-grande">' + escapar(r.kanji || '') + '</div><div class="cm-nombre-grande">' + escapar(r.nombre || '') + '</div><div class="cm-lema">' + escapar(r.lema || '') + '</div></div>' +
+    '<div class="cm-pie-portada"><span>Carta</span>' + (r.ciudad ? '<span class="cm-punto">·</span><span>' + escapar(r.ciudad) + '</span>' : '') + '</div></div>';
+}
+function cartaPlatoHtml(p, conAlergenos) {
+  const foto = fotoPlato(p);
+  const alg = conAlergenos ? alergenosEnCarta(p) : '';
+  return '<div class="cm-plato' + (foto ? ' con-foto' : '') + '">' + (foto ? '<img class="cm-foto" src="' + escapar(foto) + '" alt="">' : '') +
+    '<div><div class="cm-nombre"><b>' + escapar(p.nombre || '') + '</b>' + (p.detalle ? '<span class="cm-det">' + escapar(p.detalle) + '</span>' : '') +
+    (p.signature ? '<span class="cm-sig"><svg viewBox="-40 -40 80 80"><use href="#cmFlor" x="-40" y="-40" width="80" height="80"/></svg>Signature</span>' : '') +
+    '</div>' + (p.descripcion ? '<p>' + escapar(p.descripcion) + '</p>' : '') + (alg ? '<div class="cm-alg">' + escapar(alg) + '</div>' : '') + '</div></div>';
+}
+function cartaHojaVacia(destino, pg, r, sigue, muestras) {
+  const el = document.createElement('div');
+  el.className = 'cm-pagina cm-contenido';
+  el.innerHTML = '<svg class="cm-deco" viewBox="0 0 210 297" preserveAspectRatio="none" aria-hidden="true">' + cartaRamita(214, -6, 0.62, 18, true) + '</svg>' +
+    '<div class="cm-header"><div class="cm-marca"><span class="cm-kanji">' + escapar(r.kanji || '') + '</span><span>' + escapar(r.nombre || '') + '</span></div><div class="cm-lugar">' + escapar(r.lema || '') + (r.ciudad ? ' · ' + escapar(r.ciudad) : '') + '</div></div>' +
+    '<div class="cm-cabeza"><span class="cm-jp">' + escapar(pg.jp || '') + '</span><div class="cm-titulo">' + escapar(pg.titulo || '') + '</div>' + (sigue ? '<p class="cm-sub">Continuación</p>' : pg.sub ? '<p class="cm-sub">' + escapar(pg.sub) + '</p>' : '') + '</div>' +
+    '<div class="cm-cuerpo' + (pg.cols === 2 ? ' cm-cols2' : '') + '"></div>' +
+    (pg.nota ? '<p class="cm-nota">' + escapar(pg.nota) + '</p>' : '') +
+    '<div class="cm-footer"><span>' + escapar(r.nombre || '') + (r.ciudad ? ' · ' + escapar(r.ciudad) : '') + '</span>' + (muestras ? '<span>Imágenes orientativas</span>' : '') + '<span class="cm-num"></span></div>';
+  destino.appendChild(el);
+  return el.querySelector('.cm-cuerpo');
+}
+const cartaDesborda = (c) => c.scrollHeight > c.clientHeight + 2 || c.scrollWidth > c.clientWidth + 2;
+// Con letra grande y fotos una página de la carta puede no caber en una hoja: sigue en otra.
+function cartaHojasDePagina(destino, pg, r, muestras, conAlergenos) {
+  let cuerpo = cartaHojaVacia(destino, pg, r, false, muestras);
+  const nuevaSeccion = (titulo) => {
+    const sec = document.createElement('div');
+    sec.className = 'cm-seccion';
+    sec.innerHTML = '<div class="cm-sec-t">' + escapar(titulo || '') + '</div>';
+    cuerpo.appendChild(sec);
+    return sec;
+  };
+  pg.secciones.forEach((s) => {
+    let sec = nuevaSeccion(s.titulo);
+    s.platos.forEach((p) => {
+      sec.insertAdjacentHTML('beforeend', cartaPlatoHtml(p, conAlergenos));
+      if (!cartaDesborda(cuerpo)) return;
+      const ultimo = sec.lastElementChild;
+      const habiaPlatos = sec.querySelectorAll('.cm-plato').length > 1;
+      if (!habiaPlatos && cuerpo.children.length === 1) return;
+      ultimo.remove();
+      if (!habiaPlatos) sec.remove();
+      cuerpo = cartaHojaVacia(destino, pg, r, true, muestras);
+      sec = nuevaSeccion(s.titulo);
+      sec.appendChild(ultimo);
+    });
+  });
+}
+// Las hojas se miden fuera de la pantalla (hace falta que el navegador las coloque para saber si caben).
+async function construirCarta() {
+  if (document.fonts) {
+    await Promise.all([fuentesListas(), document.fonts.load('500 30px "Shippori Mincho B1"', 'Aa前菜'), document.fonts.load('300 15px "Josefin Sans"'), document.fonts.load('600 10px "Josefin Sans"')]).catch(() => {});
+  }
+  await cargarFotosMenu().catch(() => {});
+  const c = datos.menu;
+  const r = c.restaurante;
+  const medir = document.createElement('div');
+  medir.className = 'cm-medir';
+  document.body.appendChild(medir);
+  medir.innerHTML = cartaPortada(r);
+  const muestras = c.imagenesOrientativas || platosMenu().some((p) => !p.fotoId && esFotoMuestra(p.foto));
+  c.paginas.forEach((pg) => cartaHojasDePagina(medir, pg, r, muestras, c.alergenos !== false));
+  const nums = medir.querySelectorAll('.cm-contenido .cm-num');
+  nums.forEach((n, i) => { n.textContent = (i + 1) + ' / ' + nums.length; });
+  return medir;
+}
+async function pintarVistaCarta() {
+  $('fichasContenido').innerHTML = '<div class="acciones"><button class="btn principal" data-menu-accion="pdf">PDF de la carta</button>' +
+    '<button class="btn secundario" data-menu-accion="editar">‹ Volver a editar</button></div>' +
+    '<div class="cm-vista"><div id="cmHojas"><p class="pista-campo">Preparando la carta…</p></div></div>';
+  const medir = await construirCarta();
+  const destino = $('cmHojas');
+  if (destino && enMenu() && menuVer) destino.replaceChildren(...medir.childNodes);
+  medir.remove();
+  ajustarZoomCarta();
+}
+// En el móvil la hoja A4 se encoge para caber en la pantalla.
+function ajustarZoomCarta() {
+  const h = $('cmHojas');
+  if (h) h.style.zoom = Math.min(1, h.parentNode.clientWidth / ANCHO_A4);
+}
+window.addEventListener('resize', ajustarZoomCarta);
+async function imprimirCarta() {
+  avisar('Preparando la carta…');
+  const medir = await construirCarta();
+  const zona = $('zonaImprimir');
+  zona.className = 'carta';
+  zona.innerHTML = medir.innerHTML;
+  medir.remove();
+  // Las fotos de muestra llegan por internet: se espera a que estén antes de imprimir.
+  const fotos = [...zona.querySelectorAll('img')].map((im) => im.complete ? null : new Promise((ok) => { im.onload = im.onerror = ok; })).filter(Boolean);
+  await Promise.race([Promise.all(fotos), new Promise((ok) => setTimeout(ok, 15000))]);
+  imprimir((datos.menu.restaurante.nombre || 'Carta') + ' - Carta');
+}
+
+// ---------- Ventanas para editar la carta ----------
+function elegirArchivo(tipos, hacer) {
+  const entrada = document.createElement('input');
+  entrada.type = 'file';
+  entrada.accept = tipos;
+  entrada.hidden = true;
+  document.body.appendChild(entrada);
+  entrada.addEventListener('change', () => { const f = entrada.files[0]; entrada.remove(); if (f) hacer(f); });
+  entrada.click();
+}
+const campoMenu = (etq, clave, valor, extra) => '<label class="campo"><span>' + etq + '</span><input data-cm="' + clave + '" value="' + escapar(valor || '') + '"' + (extra || '') + '></label>';
+const areaMenu = (etq, clave, valor) => '<label class="campo"><span>' + etq + '</span><textarea data-cm="' + clave + '">' + escapar(valor || '') + '</textarea></label>';
+const botonesMover = (que) => '<div class="menu-mover"><button data-cm-accion="subir">↑ Subir</button><button data-cm-accion="bajar">↓ Bajar</button>' +
+  '<button class="borrar" data-cm-accion="borrar">Quitar ' + que + '</button></div>';
+function listaDeMenu(tipo, r) {
+  const c = datos.menu;
+  if (tipo === 'pagina') return [c.paginas, r[0]];
+  if (tipo === 'seccion') return [c.paginas[r[0]].secciones, r[1]];
+  return [c.paginas[r[0]].secciones[r[1]].platos, r[2]];
+}
+function abrirMenuPanel(ui) {
+  fichaUI = null; montajeUI = null;
+  menuUI = ui;
+  const c = datos.menu;
+  let html;
+  if (ui.tipo === 'portada') {
+    const r = c.restaurante;
+    html = '<h3>Portada de la carta</h3><p class="sub">&nbsp;</p>' +
+      campoMenu('Nombre', 'nombre', r.nombre) + campoMenu('Kanji', 'kanji', r.kanji) + campoMenu('Lema', 'lema', r.lema) + campoMenu('Ciudad', 'ciudad', r.ciudad) +
+      '<label class="menu-check"><input type="checkbox" data-cm="alergenos"' + (c.alergenos !== false ? ' checked' : '') + '> Poner los alérgenos de cada plato en la carta</label>' +
+      '<p class="pista-campo">Salen de su ficha técnica. Un plato sin ficha sale sin alérgenos.</p>' +
+      '<label class="menu-check"><input type="checkbox" data-cm="orientativas"' + (c.imagenesOrientativas ? ' checked' : '') + '> Poner «Imágenes orientativas» al pie</label>';
+  } else if (ui.tipo === 'pagina') {
+    const pg = ui.nuevo ? { jp: '', titulo: '', sub: '', nota: '', cols: 1 } : c.paginas[ui.r[0]];
+    html = '<h3>' + (ui.nuevo ? 'Página nueva' : 'Página de la carta') + '</h3><p class="sub">&nbsp;</p>' +
+      campoMenu('Título', 'titulo', pg.titulo, ' placeholder="Ej.: Para empezar"') + campoMenu('Japonés (opcional)', 'jp', pg.jp) +
+      campoMenu('Subtítulo', 'sub', pg.sub) + campoMenu('Nota al pie (opcional)', 'nota', pg.nota) +
+      '<label class="campo"><span>Columnas</span><select data-cm="cols"><option value="1"' + (pg.cols !== 2 ? ' selected' : '') + '>1 columna</option><option value="2"' + (pg.cols === 2 ? ' selected' : '') + '>2 columnas</option></select></label>' +
+      (ui.nuevo ? '' : botonesMover('la página'));
+  } else if (ui.tipo === 'seccion') {
+    const s = ui.nuevo ? { titulo: '' } : c.paginas[ui.r[0]].secciones[ui.r[1]];
+    html = '<h3>' + (ui.nuevo ? 'Sección nueva' : 'Sección') + '</h3><p class="sub">' + escapar(c.paginas[ui.r[0]].titulo || '') + '</p>' +
+      campoMenu('Título de la sección', 'titulo', s.titulo, ' placeholder="Ej.: Bocados calientes"') + (ui.nuevo ? '' : botonesMover('la sección'));
+  } else {
+    const p = ui.nuevo ? { nombre: '', detalle: '', descripcion: '', signature: false } : c.paginas[ui.r[0]].secciones[ui.r[1]].platos[ui.r[2]];
+    const elegida = p.ficha && fichas().some((f) => f.id === p.ficha) ? p.ficha : '';
+    const ordenadas = fichas().slice().sort((a, b) => a.nombre.localeCompare(b.nombre, 'es', { sensitivity: 'base' }));
+    html = '<h3>' + (ui.nuevo ? 'Plato nuevo' : 'Plato de la carta') + '</h3><p class="sub">' + escapar(c.paginas[ui.r[0]].secciones[ui.r[1]].titulo || '') + '</p>' +
+      campoMenu('Plato', 'nombre', p.nombre, ' placeholder="Ej.: Gyozas de pato"') + campoMenu('Detalle (opcional)', 'detalle', p.detalle, ' placeholder="Ej.: 4 unidades"') +
+      areaMenu('Descripción', 'descripcion', p.descripcion) +
+      '<label class="menu-check"><input type="checkbox" data-cm="signature"' + (p.signature ? ' checked' : '') + '> ✿ Signature</label>' +
+      '<div class="grupo-stock">Foto</div><div id="cmFotoZona"></div>' +
+      '<div class="grupo-stock">Ficha técnica y alérgenos</div>' +
+      '<label class="campo"><span>Ficha del plato</span><select data-cm="ficha"><option value="">La que se llame igual que el plato</option>' +
+      ordenadas.map((f) => '<option value="' + f.id + '"' + (f.id === elegida ? ' selected' : '') + '>' + escapar(f.nombre) + '</option>').join('') + '</select></label>' +
+      '<div id="cmAlgZona"></div>' + (ui.nuevo ? '' : botonesMover('de la carta'));
+    menuUI.foto = ui.nuevo ? '' : fotoPlato(p);
+  }
+  abrirPanel(html + '<div class="acciones"><button class="btn principal" data-cm-accion="guardar">Guardar</button></div>');
+  if (ui.tipo === 'plato') { pintarFotoMenu(); pintarAlgMenu(); }
+  if (ui.nuevo) setTimeout(() => { const n = $('panel').querySelector('[data-cm="nombre"], [data-cm="titulo"]'); if (n) n.focus(); }, 250);
+}
+const valorMenu = (clave) => { const el = $('panel').querySelector('[data-cm="' + clave + '"]'); return el ? (el.type === 'checkbox' ? el.checked : el.value) : ''; };
+function pintarFotoMenu() {
+  const f = menuUI.foto;
+  $('cmFotoZona').innerHTML = '<div class="menu-foto">' + (f ? '<img src="' + escapar(f) + '" alt="">' : '<span class="menu-sinfoto" aria-hidden="true">📷</span>') +
+    '<button class="btn secundario chico" data-cm-accion="foto">' + (esFotoMuestra(f) ? 'Poner la foto real' : f ? 'Cambiar foto' : 'Poner foto') + '</button>' +
+    (f ? '<button class="btn secundario chico" data-cm-accion="quitar-foto">Quitar</button>' : '') + '</div>' +
+    (esFotoMuestra(f) ? '<p class="pista-campo">Es una foto de muestra: la carta dice «Imágenes orientativas» mientras quede alguna.</p>' : '');
+}
+function pintarAlgMenu() {
+  const f = fichaDePlato({ nombre: valorMenu('nombre'), ficha: valorMenu('ficha') });
+  $('cmAlgZona').innerHTML = '<div class="alg-mini menu-alg">' + chipsAlergenosPlato(f) + '</div>' +
+    (f ? '<p class="pista-campo">Salen de la ficha «' + escapar(f.nombre) + '». Si cambias la ficha, la carta cambia sola.</p>'
+      : '<p class="pista-campo">Ninguna ficha se llama así. Elige una arriba o crea la suya.</p><button class="btn secundario chico" data-cm-accion="crear-ficha">+ Crear su ficha</button>');
+}
+$('panel').addEventListener('input', (e) => { if (menuUI && menuUI.tipo === 'plato' && e.target.dataset.cm === 'nombre') pintarAlgMenu(); });
+$('panel').addEventListener('change', (e) => { if (menuUI && menuUI.tipo === 'plato' && e.target.dataset.cm === 'ficha') pintarAlgMenu(); });
+
+async function guardarMenuPanel() {
+  const ui = menuUI;
+  const c = datos.menu;
+  if (ui.tipo === 'portada') {
+    ['nombre', 'kanji', 'lema', 'ciudad'].forEach((k) => { c.restaurante[k] = valorMenu(k).trim(); });
+    c.alergenos = valorMenu('alergenos');
+    c.imagenesOrientativas = valorMenu('orientativas');
+  } else if (ui.tipo === 'pagina') {
+    const pg = ui.nuevo ? { secciones: [{ titulo: 'Sección nueva', platos: [] }] } : c.paginas[ui.r[0]];
+    ['titulo', 'jp', 'sub', 'nota'].forEach((k) => { pg[k] = valorMenu(k).trim(); });
+    pg.titulo = pg.titulo || 'Página sin título';
+    pg.cols = Number(valorMenu('cols')) === 2 ? 2 : 1;
+    if (ui.nuevo) { c.paginas.push(pg); menuAbiertas.add(c.paginas.length - 1); }
+  } else if (ui.tipo === 'seccion') {
+    const titulo = valorMenu('titulo').trim() || 'Sección sin título';
+    if (ui.nuevo) c.paginas[ui.r[0]].secciones.push({ titulo, platos: [] });
+    else c.paginas[ui.r[0]].secciones[ui.r[1]].titulo = titulo;
+  } else {
+    const platos = c.paginas[ui.r[0]].secciones[ui.r[1]].platos;
+    const p = ui.nuevo ? { id: nuevoId(), foto: '' } : platos[ui.r[2]];
+    const antes = fotoPlato(p);
+    if (ui.foto !== antes) {
+      const viejo = p.fotoId;
+      try {
+        if (ui.foto && !esFotoMuestra(ui.foto)) {
+          const id = 'menu:' + p.id + ':' + Date.now().toString(36);
+          await escribirDocs({ [id]: ui.foto }, viejo ? [viejo] : []);
+          fotosMenu[id] = ui.foto;
+          p.fotoId = id;
+          p.foto = '';
+        } else {
+          if (viejo) await escribirDocs({}, [viejo]);
+          delete p.fotoId;
+          p.foto = ui.foto || '';
+        }
+      } catch (err) { avisar('No se pudo guardar la foto. ¿Le queda espacio a este dispositivo?'); return; }
+    }
+    p.nombre = valorMenu('nombre').trim() || 'Plato sin nombre';
+    p.detalle = valorMenu('detalle').trim();
+    p.descripcion = valorMenu('descripcion').trim();
+    p.signature = valorMenu('signature');
+    const ficha = valorMenu('ficha');
+    if (ficha) p.ficha = ficha; else delete p.ficha;
+    if (ui.nuevo) platos.push(p);
+  }
+  guardar();
+  return true;
+}
+
+$('panel').addEventListener('click', async (e) => {
+  if (!menuUI) return;
+  const b = e.target.closest('[data-cm-accion]');
+  if (!b) return;
+  const a = b.dataset.cmAccion;
+  const ui = menuUI;
+  if (a === 'guardar') {
+    if (await guardarMenuPanel()) { menuUI = null; cerrarPanel(); pintarMenu(); avisar('Carta guardada'); }
+  } else if (a === 'foto') {
+    elegirArchivo('image/*', async (archivo) => {
+      try { ui.foto = await imagenReducida(archivo, LADO_FOTO_CARTA, true); if (menuUI === ui) pintarFotoMenu(); }
+      catch (err) { avisar('No se pudo usar esa foto'); }
+    });
+  } else if (a === 'quitar-foto') {
+    ui.foto = '';
+    pintarFotoMenu();
+  } else if (a === 'crear-ficha') {
+    const nombre = valorMenu('nombre').trim();
+    if (!(await guardarMenuPanel())) return;
+    menuUI = null;
+    pintarMenu();
+    abrirFicha(null);
+    fichaUI.nombre = nombre;
+    pintarFicha();
+  } else if (a === 'subir' || a === 'bajar') {
+    const [arr, k] = listaDeMenu(ui.tipo, ui.r);
+    const d = a === 'subir' ? -1 : 1;
+    if (k + d < 0 || k + d >= arr.length) { avisar(a === 'subir' ? 'Ya está la primera' : 'Ya está la última'); return; }
+    [arr[k], arr[k + d]] = [arr[k + d], arr[k]];
+    ui.r[ui.r.length - 1] = k + d;
+    guardar();
+    pintarMenu();
+    avisar(a === 'subir' ? 'Subido' : 'Bajado');
+  } else if (a === 'borrar') {
+    const [arr, k] = listaDeMenu(ui.tipo, ui.r);
+    const x = arr[k];
+    const n = ui.tipo === 'pagina' ? x.secciones.reduce((t, s) => t + s.platos.length, 0) : ui.tipo === 'seccion' ? x.platos.length : 0;
+    if (n && !confirm('¿Quitar ' + (ui.tipo === 'pagina' ? 'la página «' + x.titulo + '»' : 'la sección «' + x.titulo + '»') + ' con sus ' + n + (n === 1 ? ' plato' : ' platos') + '?')) return;
+    arr.splice(k, 1);
+    guardar();
+    menuUI = null;
+    cerrarPanel();
+    pintarMenu();
+    ofrecerDeshacer((ui.tipo === 'plato' ? 'Plato quitado' : ui.tipo === 'seccion' ? 'Sección quitada' : 'Página quitada') + ' de la carta', () => { arr.splice(k, 0, x); });
+  }
+});
+
+$('fichasContenido').addEventListener('toggle', (e) => {
+  const d = e.target.closest && e.target.closest('details.menu-pag');
+  if (!d) return;
+  const i = Number(d.dataset.i);
+  if (d.open) menuAbiertas.add(i); else menuAbiertas.delete(i);
+}, true);
+$('fichasContenido').addEventListener('click', (e) => {
+  const b = e.target.closest('[data-menu-accion]');
+  if (!b || !datos.menu) return;
+  const a = b.dataset.menuAccion;
+  const r = (b.dataset.r || '').split('.').filter(Boolean).map(Number);
+  if (a === 'ver') { menuVer = true; pintarMenu(); window.scrollTo(0, 0); }
+  else if (a === 'editar') { menuVer = false; pintarMenu(); window.scrollTo(0, 0); }
+  else if (a === 'pdf') imprimirCarta();
+  else if (a === 'portada') abrirMenuPanel({ tipo: 'portada' });
+  else if (a === 'pagina' || a === 'seccion' || a === 'plato') abrirMenuPanel({ tipo: a, r });
+  else if (a === 'nuevo-plato') abrirMenuPanel({ tipo: 'plato', r, nuevo: true });
+  else if (a === 'nueva-seccion') abrirMenuPanel({ tipo: 'seccion', r, nuevo: true });
+  else if (a === 'nueva-pagina') abrirMenuPanel({ tipo: 'pagina', r: [], nuevo: true });
+  else if (a === 'subir-pdf') subirPdfCarta();
+  else if (a === 'importar') {
+    elegirArchivo('application/json,.json', async (archivo) => {
+      let c;
+      try { c = JSON.parse(await archivo.text()); } catch (err) { c = null; }
+      if (!c || !c.restaurante || !Array.isArray(c.paginas)) { avisar('Ese archivo no es una copia de la carta'); return; }
+      if (!confirm('¿Cambiar la carta de Kumi Mara por la del archivo?')) return;
+      try { await prepararCarta(c); } catch (err) { avisar('No se pudieron guardar las fotos de la carta'); return; }
+      const antes = datos.menu;
+      datos.menu = c;
+      guardar();
+      pintarMenu();
+      ofrecerDeshacer('Carta cambiada', () => { datos.menu = antes; });
+    });
+  } else if (a === 'original') {
+    if (!confirm('¿Volver a la carta original de Hinoki? Podrás deshacerlo justo después.')) return;
+    const antes = datos.menu;
+    prepararCarta(JSON.parse(JSON.stringify(CARTA_HINOKI))).then((c) => {
+      c.alergenos = antes.alergenos;
+      datos.menu = c;
+      guardar();
+      pintarMenu();
+      ofrecerDeshacer('Carta original puesta', () => { datos.menu = antes; });
+    });
+  }
+});
+
+// ---------- Subir el PDF de la carta ----------
+// Lee un PDF hecho con el editor de carta de Hinoki (o con «PDF de la carta» de aquí): textos, signature y la foto de cada plato.
+// El lector de PDF solo se descarga la primera vez que se usa; luego queda guardado para usarlo sin conexión.
+const PDFJS_URL = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.0.379/';
+let pdfjsListo = null;
+function cargarPdfJs() {
+  if (!pdfjsListo) {
+    pdfjsListo = import(PDFJS_URL + 'pdf.min.mjs').then((m) => { m.GlobalWorkerOptions.workerSrc = PDFJS_URL + 'pdf.worker.min.mjs'; return m; });
+    pdfjsListo.catch(() => { pdfjsListo = null; });
+  }
+  return pdfjsListo;
+}
+const juntarLetras = (t) => t.replace(/(\S) (?=\S( |$))/g, '$1').replace(/\s+/g, ' ').trim();
+const esMayusculas = (t) => /[A-ZÁÉÍÓÚÑ]/.test(t) && t === t.toUpperCase();
+const sinEspacios = (t) => sinTildes(t).replace(/[^a-z0-9ñ]/g, '');
+// Palabras que ya conoce la carta: sirven para arreglar las que el PDF parte («plat os» → «platos»).
+function diccionarioCarta(cartas) {
+  const d = new Set();
+  const textos = [];
+  cartas.forEach((c) => {
+    if (!c) return;
+    const r = c.restaurante || {};
+    textos.push(r.lema, r.ciudad);
+    c.paginas.forEach((pg) => { textos.push(pg.titulo, pg.sub, pg.nota); pg.secciones.forEach((s) => { textos.push(s.titulo); s.platos.forEach((p) => textos.push(p.nombre, p.detalle, p.descripcion)); }); });
+  });
+  textos.filter(Boolean).forEach((t) => sinTildes(t).split(/[^a-z0-9ñ]+/).forEach((w) => { if (w) d.add(w); }));
+  PALABRAS_CARTA.forEach((w) => d.add(w));
+  return { d, textos: textos.filter(Boolean) };
+}
+// Palabras habituales de los detalles que pueden no estar aún en la carta.
+const PALABRAS_CARTA = ['unidad', 'unidades', 'pieza', 'piezas', 'bocado', 'bocados', 'brocheta', 'brochetas', 'racion', 'raciones', 'opcion', 'vegana', 'vegano', 'vegetariana', 'vegetariano', 'picante', 'gluten', 'compartir', 'persona', 'personas', 'media', 'entera', 'grande', 'pequena'];
+// El PDF a veces parte palabras con letra espaciada («4 unid ad e s»): se juntan los trozos que forman una palabra conocida.
+function arreglarPartidas(t, dic) {
+  const conocido = dic.textos.find((x) => sinEspacios(x) === sinEspacios(t));
+  if (conocido) return conocido;
+  const limpio = (x) => sinTildes(x).replace(/[^a-z0-9ñ]/g, '');
+  const w = t.split(' ').filter(Boolean);
+  const res = [];
+  for (let i = 0; i < w.length; i++) {
+    let hecho = false;
+    for (let j = Math.min(w.length - 1, i + 4); j > i; j--) {
+      const trozo = w.slice(i, j + 1);
+      if (trozo.slice(1).every((x) => /^[a-záéíóúñü]/.test(x)) && dic.d.has(limpio(trozo.join('')))) { res.push(trozo.join('')); i = j; hecho = true; break; }
+    }
+    if (!hecho) res.push(w[i]);
+  }
+  return res.join(' ');
+}
+const conMayuscula = (t) => t.charAt(0).toUpperCase() + t.slice(1).toLowerCase();
+function tituloSeccion(t, dic) {
+  const conocido = dic.textos.find((x) => sinEspacios(x) === sinEspacios(t));
+  return conocido || conMayuscula(t);
+}
+const multiplicar = (m, n) => [m[0] * n[0] + m[2] * n[1], m[1] * n[0] + m[3] * n[1], m[0] * n[2] + m[2] * n[3], m[1] * n[2] + m[3] * n[3], m[0] * n[4] + m[2] * n[5] + m[4], m[1] * n[4] + m[3] * n[5] + m[5]];
+// Las fotos de la página con su sitio. Cada foto lleva detrás otra imagen un poco más grande (su sombra): se queda la de dentro.
+async function fotosDePaginaPdf(pdfjs, pagina) {
+  const O = pdfjs.OPS;
+  const ol = await pagina.getOperatorList();
+  let m = [1, 0, 0, 1, 0, 0];
+  const pila = [], imgs = [];
+  ol.fnArray.forEach((f, i) => {
+    const a = ol.argsArray[i];
+    if (f === O.save) pila.push(m);
+    else if (f === O.restore) m = pila.pop() || m;
+    else if (f === O.transform) m = multiplicar(m, a);
+    else if (f === O.paintFormXObjectBegin) { pila.push(m); if (a[0]) m = multiplicar(m, a[0]); }
+    else if (f === O.paintFormXObjectEnd) m = pila.pop() || m;
+    else if (f === O.paintImageXObject) imgs.push({ nombre: a[0], x: m[4], y: m[5], w: m[0], h: m[3] });
+  });
+  const dentro = (a, b) => a !== b && a.x >= b.x - 1 && a.y >= b.y - 1 && a.x + a.w <= b.x + b.w + 1 && a.y + a.h <= b.y + b.h + 1;
+  return imgs.filter((a) => a.w > 30 && Math.abs(a.w - a.h) < a.w * 0.15 && !imgs.some((b) => dentro(b, a)));
+}
+function imagenPdfAFoto(pagina, nombre) {
+  const obj = nombre.startsWith('g_') ? pagina.commonObjs.get(nombre) : pagina.objs.get(nombre);
+  const c = document.createElement('canvas');
+  const l = Math.min(obj.width, obj.height);
+  c.width = c.height = Math.min(LADO_FOTO_CARTA, l);
+  const ctx = c.getContext('2d');
+  if (obj.bitmap) ctx.drawImage(obj.bitmap, (obj.width - l) / 2, (obj.height - l) / 2, l, l, 0, 0, c.width, c.height);
+  else {
+    const t = document.createElement('canvas');
+    t.width = obj.width; t.height = obj.height;
+    const datosImg = new ImageData(obj.width, obj.height);
+    const src = obj.data, n = obj.width * obj.height;
+    if (src.length === n * 4) datosImg.data.set(src);
+    else for (let i = 0; i < n; i++) { datosImg.data[i * 4] = src[i * 3]; datosImg.data[i * 4 + 1] = src[i * 3 + 1]; datosImg.data[i * 4 + 2] = src[i * 3 + 2]; datosImg.data[i * 4 + 3] = 255; }
+    t.getContext('2d').putImageData(datosImg, 0, 0);
+    ctx.drawImage(t, (obj.width - l) / 2, (obj.height - l) / 2, l, l, 0, 0, c.width, c.height);
+  }
+  return c.toDataURL('image/jpeg', 0.82);
+}
+async function cartaDesdePdf(archivo, progreso) {
+  const pdfjs = await cargarPdfJs();
+  const doc = await pdfjs.getDocument({ data: new Uint8Array(await archivo.arrayBuffer()) }).promise;
+  const dic = diccionarioCarta([datos.menu, CARTA_HINOKI]);
+  const anterior = datos.menu || CARTA_HINOKI;
+  const carta = { restaurante: { ...anterior.restaurante }, paginas: [], alergenos: datos.menu ? datos.menu.alergenos !== false : true };
+  let pg = null, sec = null, plato = null, fotos = 0, orientativas = false;
+  for (let n = 1; n <= doc.numPages; n++) {
+    progreso(n, doc.numPages);
+    const pagina = await doc.getPage(n);
+    const alto = pagina.view[3];
+    const tc = await pagina.getTextContent();
+    const items = tc.items.filter((it) => it.str.trim()).map((it) => ({ t: it.str, x: it.transform[4], y: it.transform[5], s: it.height, w: it.width, cjk: /[　-鿿]/.test(it.str) }));
+    if (items.some((it) => /O R I E N T A T I V A S/.test(it.t))) orientativas = true;
+    const titulo = items.filter((it) => !it.cjk).sort((a, b) => b.s - a.s)[0];
+    const k = titulo ? titulo.s / 30 : 1;
+    const pt = (it) => it.s / k;
+    // Portada: sin título de página; trae nombre, kanji, lema y ciudad.
+    if (!titulo || /^(\S )+\S$/.test(titulo.t.trim())) {
+      const grande = items.filter((it) => !it.cjk).sort((a, b) => b.s - a.s)[0];
+      const kanji = items.find((it) => it.cjk);
+      if (grande) carta.restaurante.nombre = juntarLetras(grande.t);
+      if (kanji) carta.restaurante.kanji = kanji.t.trim();
+      const lineas = {};
+      items.filter((it) => it !== grande && !it.cjk).forEach((it) => { const y = Math.round(it.y); (lineas[y] = lineas[y] || []).push(it); });
+      Object.values(lineas).forEach((l) => {
+        const texto = l.sort((a, b) => a.x - b.x).map((it) => juntarLetras(it.t)).join(' ');
+        if (/^CARTA\b/.test(texto)) { const ciudad = texto.split('·')[1]; if (ciudad) carta.restaurante.ciudad = tituloSeccion(ciudad.trim(), dic).replace(/^./, (c) => c.toUpperCase()); }
+        else if (esMayusculas(texto)) { const conocido = dic.textos.find((x) => sinEspacios(x) === sinEspacios(texto)); carta.restaurante.lema = conocido || texto; }
+      });
+      continue;
+    }
+    const delCuerpo = items.filter((it) => !it.cjk && it.y < titulo.y - 1 && it.y > alto * 0.07);
+    const cols2 = delCuerpo.some((it) => pt(it) > 12.1 && pt(it) < 13) && !delCuerpo.some((it) => pt(it) >= 13.5 && pt(it) < 15.5);
+    const tituloTexto = items.filter((it) => Math.abs(it.s - titulo.s) < 0.5).sort((a, b) => b.y - a.y || a.x - b.x).map((it) => it.t).join(' ').trim();
+    const cuerpoArriba = titulo.y - 1;
+    const sigue = pg && pg.titulo === tituloTexto;
+    if (!sigue) {
+      plato = null; sec = null;
+      pg = { jp: items.filter((it) => it.cjk && it.y > titulo.y && it.y < titulo.y + titulo.s * 2).sort((a, b) => a.x - b.x).map((it) => it.t.trim()).join(''), titulo: tituloTexto, sub: '', cols: cols2 ? 2 : 1, nota: '', secciones: [] };
+      carta.paginas.push(pg);
+    }
+    const fotosPagina = await fotosDePaginaPdf(pdfjs, pagina);
+    const mitad = pagina.view[2] / 2;
+    const columna = (x) => (cols2 && x > mitad - 10 ? 1 : 0);
+    const cuerpo = items.filter((it) => it.y < cuerpoArriba && it.y > alto * 0.07 && !it.cjk);
+    const lineas = [];
+    cuerpo.forEach((it) => {
+      const col = columna(it.x);
+      let l = lineas.find((x) => x.col === col && Math.abs(x.y - it.y) < 3);
+      if (!l) { l = { col, y: it.y, items: [] }; lineas.push(l); }
+      l.items.push(it);
+    });
+    lineas.sort((a, b) => a.col - b.col || b.y - a.y);
+    let nombreSeguido = false;
+    lineas.forEach((l) => {
+      l.items.sort((a, b) => a.x - b.x);
+      const grandes = l.items.filter((it) => pt(it) >= 12);
+      const sig = l.items.some((it) => /^S ?I ?G ?N ?A ?T ?U ?R ?E$/.test(it.t.trim()) && pt(it) < 8.5);
+      const resto = l.items.filter((it) => pt(it) < 12 && !(/^S ?I ?G ?N ?A ?T ?U ?R ?E$/.test(it.t.trim()) && pt(it) < 8.5));
+      const textoResto = resto.map((it) => it.t).join(' ').replace(/\s+/g, ' ').trim();
+      const tam = resto.length ? Math.max(...resto.map(pt)) : 0;
+      if (grandes.length) {
+        const nombre = grandes.map((it) => it.t).join(' ').replace(/\s+/g, ' ').trim();
+        if (nombreSeguido && plato && !plato.descripcion) plato.nombre += ' ' + nombre;
+        else {
+          if (!sec) { sec = { titulo: 'Sección', platos: [] }; pg.secciones.push(sec); }
+          const viejo = anteriorPorNombre(anterior, nombre);
+          plato = { id: nuevoId(), nombre, detalle: '', descripcion: '', signature: false, foto: '', _y: l.y, _col: l.col };
+          if (viejo && viejo.ficha) plato.ficha = viejo.ficha;
+          sec.platos.push(plato);
+        }
+        nombreSeguido = true;
+        if (resto.length) plato.detalle = arreglarPartidas(textoResto, dic);
+        if (sig) plato.signature = true;
+        return;
+      }
+      if (sig && plato) { plato.signature = true; if (!resto.length) return; }
+      if (!resto.length) return;
+      const continuacion = sinEspacios(textoResto) === 'continuacion';
+      if (tam >= 10.2 && tam < 10.75 && !plato && !sec) { if (!continuacion && !sigue) pg.sub = arreglarPartidas(textoResto, dic); nombreSeguido = false; return; }
+      if (continuacion) return;
+      if (tam >= 9.6 && tam < 10.2 && esMayusculas(textoResto)) {
+        const t = tituloSeccion(resto.map((it) => juntarLetras(it.t)).join(' '), dic);
+        if (!(sec && sinEspacios(sec.titulo) === sinEspacios(t))) { sec = { titulo: t, platos: [] }; pg.secciones.push(sec); }
+        plato = null; nombreSeguido = false;
+        return;
+      }
+      if (tam < 9.6 && l.y < alto * 0.13) { const nota = arreglarPartidas(textoResto, dic); if (!pg.nota.includes(nota)) pg.nota = (pg.nota ? pg.nota + ' ' : '') + nota; return; }
+      if (!plato) return;
+      if (tam < 9.6 && !plato.descripcion) { plato.detalle = (plato.detalle ? plato.detalle + ' ' : '') + arreglarPartidas(textoResto, dic); return; }
+      plato.descripcion = (plato.descripcion ? plato.descripcion + ' ' : '') + textoResto;
+      nombreSeguido = false;
+    });
+    // Cada foto es del plato cuyo nombre está a su derecha: el más bajo de los que empiezan a la altura de la foto.
+    const platosPagina = pg.secciones.flatMap((s) => s.platos).filter((p) => p._y !== undefined);
+    fotosPagina.forEach((f) => {
+      const col = columna(f.x + f.w / 2);
+      const p = platosPagina.filter((x) => x._col === col && !x.foto && x._y >= f.y - 4 && x._y <= f.y + f.h + 20).sort((a, b) => a._y - b._y)[0];
+      if (!p) return;
+      try { p.foto = imagenPdfAFoto(pagina, f.nombre); fotos++; } catch (e) {}
+    });
+    platosPagina.forEach((p) => { delete p._y; delete p._col; });
+    pagina.cleanup();
+  }
+  carta.paginas.forEach((x) => x.secciones.forEach((s) => s.platos.forEach((p) => { p.descripcion = arreglarPartidas(p.descripcion, dic); })));
+  carta.imagenesOrientativas = orientativas;
+  await doc.destroy();
+  return { carta, fotos, platos: carta.paginas.reduce((t, x) => t + x.secciones.reduce((u, s) => u + s.platos.length, 0), 0) };
+}
+function anteriorPorNombre(c, nombre) {
+  const n = nombreLimpio(nombre);
+  for (const pg of c.paginas) for (const s of pg.secciones) for (const p of s.platos) if (nombreLimpio(p.nombre) === n) return p;
+  return null;
+}
+function subirPdfCarta() {
+  elegirArchivo('application/pdf,.pdf', async (archivo) => {
+    let r;
+    try {
+      r = await cartaDesdePdf(archivo, (n, total) => avisar('Leyendo el PDF: página ' + n + ' de ' + total + '…'));
+    } catch (err) {
+      avisar(navigator.onLine === false && !pdfjsListo ? 'Para leer el PDF la primera vez hace falta internet' : 'No se pudo leer ese PDF');
+      return;
+    }
+    if (!r.platos) { avisar('Ese PDF no parece una carta hecha con el editor de Hinoki'); return; }
+    if (!confirm('He leído ' + r.carta.paginas.length + ' páginas, ' + r.platos + ' platos y ' + r.fotos + ' fotos.\n\n¿Cambiar la carta de Kumi Mara por la del PDF? Podrás deshacerlo justo después.')) return;
+    try { await prepararCarta(r.carta); } catch (err) { avisar('No se pudieron guardar las fotos. ¿Le queda espacio a este dispositivo?'); return; }
+    const antes = datos.menu;
+    datos.menu = r.carta;
+    menuVer = false;
+    guardar();
+    pintarMenu();
+    ofrecerDeshacer('Carta cambiada por la del PDF', () => { datos.menu = antes; });
+  });
+}
+
 // --- Copia de seguridad: un archivo con todos los datos de este móvil ---
 function textoUltimaCopia() {
   if (!datos.ultimaCopia) return 'Todavía no has guardado ninguna copia.';
@@ -3252,9 +4127,9 @@ function textoUltimaCopia() {
 async function guardarCopia() {
   const ahora = new Date();
   // La copia lleva su propia fecha: al recuperarla, la app sabe cuándo se hizo.
-  // Las fotos de las fichas del equipo viven fuera de «datos» (IndexedDB): la copia las lleva aparte, para que la tablet y el móvil queden iguales.
+  // Las fotos de las fichas del equipo, las de los platos de la carta y los catálogos de proveedores viven fuera de «datos» (IndexedDB): la copia los lleva aparte, para que la tablet y el móvil queden iguales.
   const documentos = {};
-  try { await Promise.all(datos.equipo.flatMap((p) => idsDocs(p.docs)).map(async (id) => { const url = await leerDoc(id); if (url) documentos[id] = url; })); }
+  try { await Promise.all(datos.equipo.flatMap((p) => idsDocs(p.docs)).concat(((datos.comparador || {}).catalogos || []).map((x) => x.id), idsFotosMenu()).map(async (id) => { const url = await leerDoc(id); if (url) documentos[id] = url; })); }
   catch (e) { avisar('No se pudieron leer las fotos del equipo: la copia no las lleva'); }
   const contenido = JSON.stringify({ app: 'kumi-kitchen', version: 1, fecha: ahora.toISOString(), datos: { ...datos, ultimaCopia: ahora.getTime() }, documentos }, null, 1);
   const nombre = 'kumi-kitchen-copia-' + claveSemana(ahora) + '.json';
@@ -3312,6 +4187,7 @@ function abrirMas() {
     acceso('horas', '🕒', 'Horas del mes', 'Informe en PDF para la nómina', vista === 'horas') +
     acceso('fichas', '📋', 'Fichas técnicas', (datos.fichas || []).length ? datos.fichas.length + ' platos con alérgenos' : 'Platos, alérgenos y coste', vista === 'fichas') +
     acceso('organigrama', '🌳', 'Organigrama', organigrama().length + ' puestos · PDF', vista === 'organigrama') +
+    acceso('comparador', '⚖️', 'Comparar precios', comparador().catalogos.length ? comparador().catalogos.map((x) => x.proveedor).join(' · ') : 'Catálogos de tus proveedores', vista === 'comparador') +
     acceso('equipo', '👥', 'Tu equipo', datos.equipo.length + (datos.equipo.length === 1 ? ' persona' : ' personas'), vista === 'equipo') +
     acceso('servicios', '🍽️', 'Servicios y mínimos', franjas().map((f) => f.nombre + ' ' + f.minimo).join(' · ') || 'Sin servicios') +
     '</div><div class="grupo-stock">Tus datos</div><div class="accesos">' +
@@ -3325,10 +4201,10 @@ $('panel').addEventListener('click', (e) => {
   if (!b) return;
   const que = b.dataset.mas;
   if (que === 'servicios') { abrirServicios(); return; }
-  const navega = ['horas', 'equipo', 'fichas', 'recuento', 'compra', 'fichar', 'ausencias', 'organigrama'].includes(que);
+  const navega = ['horas', 'equipo', 'fichas', 'recuento', 'compra', 'fichar', 'ausencias', 'organigrama', 'comparador'].includes(que);
   cerrarPanel(navega);
   if (que === 'equipo' || que === 'fichar' || que === 'ausencias') { subEquipo = que === 'equipo' ? 'equipo' : que; irA('equipo'); }
-  if (que === 'horas' || que === 'fichas' || que === 'organigrama') irA(que);
+  if (que === 'horas' || que === 'fichas' || que === 'organigrama' || que === 'comparador') irA(que);
   if (que === 'recuento' || que === 'compra') {
     if (!productosActivos().length) { subStock = 'lista'; irA('stock'); avisar('Primero añade los productos'); return; }
     subStock = que === 'compra' ? 'compras' : 'lista';
@@ -4222,6 +5098,488 @@ function imprimirOrganigrama() {
   fuentesListas().then(() => imprimir('Organigrama de cocina - Kumi Mara'));
 }
 
+// ---------- Comparar precios: catálogos de uno o varios proveedores, buscar en todos, comparar lo que Mara decide que es comparable y la lista de compra ----------
+// Cada catálogo (miles de productos) vive en IndexedDB, como las fotos; en «datos» solo van sus datos básicos, las correcciones de Mara,
+// sus comparaciones y la lista. Así la copia de seguridad lo lleva todo y el almacén normal no se llena.
+// Un producto se nombra con su «clave»: id del catálogo + «|» + código, porque dos proveedores pueden repetir código.
+function comparador() {
+  if (!datos.comparador) datos.comparador = { catalogos: [], ajustes: {}, grupos: [], lista: [] };
+  const c = datos.comparador;
+  // Antes había un solo catálogo a la vista y las comparaciones guardaban solo el código: se pasan a clave.
+  c.grupos.forEach((g) => { g.codigos = g.codigos.map((x) => (x.includes('|') ? x : g.cat + '|' + x)); if (g.elegido && !g.elegido.includes('|')) g.elegido = g.cat + '|' + g.elegido; });
+  delete c.actual;
+  return c;
+}
+const COMP_UD = '(?:uds?|unid(?:ades)?|u|pzs?|pcs|piezas?|p|un)', COMP_PESO = '(?:kgs?|kilos?|grs?|g)', COMP_VOL = '(?:ml|cl|lt?r?s?|litros?)';
+// Lee del nombre lo que trae cada envase: «30pzs 600g», «1 Kg.», «22g x 30», «500ML». Si no lo encuentra, no se inventa nada.
+function compLeerMedidas(nombre, uv) {
+  const t = ' ' + String(nombre).toLowerCase().replace(/(\d),(\d)/g, '$1.$2') + ' ';
+  const num = (s) => parseFloat(s);
+  const aG = (v, u) => (/^k/i.test(u) ? v * 1000 : v);
+  const aMl = (v, u) => { u = u.toLowerCase(); return u === 'ml' ? v : u === 'cl' ? v * 10 : v * 1000; };
+  const m = {};
+  let r;
+  if ((r = t.match(new RegExp('(\\d+(?:\\.\\d+)?)\\s*(' + COMP_PESO + '|' + COMP_VOL + ')\\s*[x×]\\s*(\\d+)(?![\\d.])', 'i')))) {
+    const n = +r[3], v = num(r[1]);
+    if (new RegExp('^' + COMP_PESO + '$', 'i').test(r[2])) m.g = aG(v, r[2]) * n; else m.ml = aMl(v, r[2]) * n;
+    m.uds = n;
+  }
+  if (m.g == null && (r = t.match(new RegExp('(\\d+(?:\\.\\d+)?)\\s*(' + COMP_PESO + ')(?![a-zñ])', 'i')))) m.g = aG(num(r[1]), r[2]);
+  if (m.ml == null && m.g == null && (r = t.match(new RegExp('(\\d+(?:\\.\\d+)?)\\s*(' + COMP_VOL + ')(?![a-zñ])', 'i')))) m.ml = aMl(num(r[1]), r[2]);
+  if (m.uds == null && (r = t.match(new RegExp('(\\d+)\\s*' + COMP_UD + '(?![a-zñ])', 'i')))) m.uds = +r[1];
+  // Lo que se vende «por kilo»: el precio ya es por kilo.
+  if (/^kg$/i.test(uv || '')) m.g = 1000;
+  return m;
+}
+const COMP_BASES = { kg: ['g', 1000, 'kg'], l: ['ml', 1000, 'L'], ud: ['uds', 1, 'ud'] };
+// En memoria, los catálogos abiertos: id → { id, proveedor, nombre, productos, porCodigo }.
+const compCatalogos = new Map();
+let compCargando = null;
+let compSub = 'buscar', compProv = '', compTexto = '', compCat = '', compFam = '', compVer = 40, compGrupo = null, compUI = null, compActualizar = null;
+const compSel = new Set();
+function compInfo(id) { return comparador().catalogos.find((x) => x.id === id) || null; }
+function compTotalProductos() { return comparador().catalogos.reduce((s, x) => s + x.n, 0); }
+// Lee de IndexedDB los catálogos que aún no están en memoria (una vez por sesión).
+function compAsegurarCatalogos() {
+  const faltan = comparador().catalogos.filter((x) => !compCatalogos.has(x.id));
+  if (!faltan.length) return Promise.resolve(true);
+  if (!compCargando) {
+    compCargando = Promise.all(faltan.map((info) => leerDoc(info.id).then((txt) => {
+      const obj = txt ? JSON.parse(txt) : null;
+      if (obj) compCatalogos.set(info.id, { id: info.id, proveedor: obj.proveedor, nombre: obj.nombre, productos: obj.productos, porCodigo: new Map(obj.productos.map((p) => [p.c, p])) });
+    }))).then(() => { compCargando = null; return comparador().catalogos.every((x) => compCatalogos.has(x.id)); })
+      .catch(() => { compCargando = null; return false; });
+  }
+  return compCargando;
+}
+// Producto con las correcciones de Mara encima del original (el original nunca se toca).
+function compProducto(clave) {
+  const i = clave.indexOf('|');
+  const cat = compCatalogos.get(clave.slice(0, i));
+  const o = cat && cat.porCodigo.get(clave.slice(i + 1));
+  if (!o) return null;
+  const aj = comparador().ajustes[clave] || {};
+  const leidas = compLeerMedidas(o.n, o.uv);
+  const med = { g: aj.g !== undefined ? aj.g : leidas.g, ml: aj.ml !== undefined ? aj.ml : leidas.ml, uds: aj.uds !== undefined ? aj.uds : leidas.uds };
+  return { ...o, clave, catId: cat.id, proveedor: cat.proveedor, p: aj.p != null ? aj.p : o.p, nota: aj.nota || '', med, editado: Object.keys(aj).length > 0, original: o };
+}
+function compMedidaTxt(med) {
+  const partes = [];
+  if (med.g) partes.push(med.g >= 1000 ? cifra.format(med.g / 1000) + ' kg' : cifra.format(med.g) + ' g');
+  if (med.ml) partes.push(med.ml >= 1000 ? cifra.format(med.ml / 1000) + ' L' : cifra.format(med.ml) + ' ml');
+  if (med.uds) partes.push(med.uds + ' ud');
+  return partes.join(' · ');
+}
+// Precio por kilo, por litro o por unidad; null si falta la cantidad (nunca una comparación inventada).
+function compPorBase(p, base) {
+  const [campo, factor] = COMP_BASES[base];
+  const v = p.med[campo];
+  return v && p.p != null ? (p.p / v) * factor : null;
+}
+function compBaseSugerida(ps) {
+  const n = (k) => ps.filter((p) => p.med[COMP_BASES[k][0]]).length;
+  return ['kg', 'l', 'ud'].reduce((a, b) => (n(b) > n(a) ? b : a), 'kg');
+}
+function compNormal(s) { return String(s).toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, ''); }
+function compVisibles() { return [...compCatalogos.values()].filter((c) => !compProv || c.id === compProv); }
+function compBuscarProductos() {
+  const palabras = compNormal(compTexto).split(/\s+/).filter(Boolean);
+  const res = [];
+  compVisibles().forEach((cat) => cat.productos.forEach((p) => {
+    if ((!compCat || p.cat === compCat) && (!compFam || p.fam === compFam) && palabras.every((w) => compNormal(p.n + ' ' + p.c + ' ' + p.cat + ' ' + p.fam + ' ' + cat.proveedor).includes(w))) res.push(cat.id + '|' + p.c);
+  }));
+  return res;
+}
+// La lista agrupada por proveedor: cada uno con sus líneas y su subtotal, porque a cada uno se le manda su pedido.
+function compListaPorProveedor() {
+  const grupos = new Map();
+  comparador().lista.forEach((l) => {
+    const p = compProducto(l.cat + '|' + l.c);
+    if (!p) return;
+    if (!grupos.has(p.catId)) grupos.set(p.catId, { catId: p.catId, proveedor: p.proveedor, filas: [] });
+    grupos.get(p.catId).filas.push({ l, p });
+  });
+  return [...grupos.values()].map((g) => {
+    const base = g.filas.reduce((s, x) => s + (x.p.p || 0) * x.l.cant, 0);
+    const iva = g.filas.reduce((s, x) => s + (x.p.p || 0) * x.l.cant * ((x.p.iva || 0) / 100), 0);
+    return { ...g, base, iva };
+  });
+}
+
+function pintarComparador() {
+  const c = comparador();
+  document.querySelectorAll('[data-sub-comp]').forEach((b) => {
+    b.classList.toggle('activo', b.dataset.subComp === compSub);
+    if (b.dataset.subComp === 'lista') b.textContent = 'Lista' + (c.lista.length ? ' (' + c.lista.length + ')' : '');
+  });
+  const caja = $('compContenido');
+  if (!c.catalogos.length) {
+    $('segComp').hidden = true;
+    caja.innerHTML = '<div class="tarjeta"><h3>Compara los precios de tus proveedores</h3>' +
+      '<p class="sub">Carga el catálogo de uno o de varios proveedores y podrás buscar en todos, comparar el precio por kilo, por litro o por unidad, y hacer la lista de compra de cada uno.</p>' +
+      '<div class="acciones"><button class="btn principal" data-comp="cargar">Cargar catálogo</button></div>' +
+      '<p class="nota" style="text-align:left">Cada catálogo llega como un archivo de Kumi (.json) preparado a partir del Excel del proveedor.</p></div>';
+    return;
+  }
+  $('segComp').hidden = false;
+  if (c.catalogos.some((x) => !compCatalogos.has(x.id))) {
+    caja.innerHTML = '<div class="tarjeta"><div class="vacio">Abriendo los catálogos…</div></div>';
+    compAsegurarCatalogos().then((todos) => {
+      if (!todos) { caja.innerHTML = '<div class="tarjeta"><h3>No se pudo abrir algún catálogo</h3><p class="sub">Vuelve a cargarlo desde su archivo.</p><div class="acciones"><button class="btn principal" data-comp="catalogos">Ver catálogos</button></div></div>'; return; }
+      if (vista === 'comparador') pintarComparador();
+    });
+    return;
+  }
+  if (compProv && !compCatalogos.has(compProv)) compProv = '';
+  if (compSub === 'buscar') pintarCompBuscar();
+  if (compSub === 'comparaciones') { if (compGrupo && c.grupos.some((g) => g.id === compGrupo)) pintarCompGrupo(); else { compGrupo = null; pintarCompGrupos(); } }
+  if (compSub === 'lista') pintarCompLista();
+}
+
+function pintarCompBuscar() {
+  const c = comparador();
+  const visibles = compVisibles().flatMap((x) => x.productos);
+  const cats = [...new Set(visibles.map((p) => p.cat).filter(Boolean))].sort((a, b) => a.localeCompare(b, 'es'));
+  const fams = [...new Set(visibles.filter((p) => !compCat || p.cat === compCat).map((p) => p.fam).filter(Boolean))].sort((a, b) => a.localeCompare(b, 'es'));
+  const res = compBuscarProductos();
+  const destino = compGrupo && c.grupos.find((g) => g.id === compGrupo);
+  const varios = c.catalogos.length > 1;
+  $('compContenido').innerHTML =
+    '<p class="sub-equipo">' + c.catalogos.length + (c.catalogos.length === 1 ? ' catálogo' : ' catálogos') + ' · ' + cifra.format(compTotalProductos()) + ' productos · <button class="enlace-comp" data-comp="catalogos">Catálogos</button></p>' +
+    (destino ? '<div class="tarjeta tarjeta-ok"><i>⚖️</i><div><b>Añadiendo a «' + escapar(destino.nombre) + '»</b><span>Marca los productos y toca «Añadir».</span></div></div>' : '') +
+    '<div class="tarjeta comp-filtros">' +
+    (varios ? '<div class="chips-inc comp-provs">' + [['', 'Todos']].concat(c.catalogos.map((x) => [x.id, x.proveedor])).map(([id, n]) => '<button data-comp-prov="' + escapar(id) + '"' + (compProv === id ? ' class="sel"' : '') + '>' + escapar(n) + '</button>').join('') + '</div>' : '') +
+    '<label class="campo"><span>Buscar por nombre, código, marca o categoría</span><input id="compBuscar" type="search" enterkeyhint="search" placeholder="Ej.: gyoza pollo" value="' + escapar(compTexto) + '"></label>' +
+    '<div class="campos-2"><label class="campo"><span>Categoría</span><select id="compCat"><option value="">Todas</option>' + cats.map((x) => '<option' + (x === compCat ? ' selected' : '') + '>' + escapar(x) + '</option>').join('') + '</select></label>' +
+    '<label class="campo"><span>Familia</span><select id="compFam"><option value="">Todas</option>' + fams.map((x) => '<option' + (x === compFam ? ' selected' : '') + '>' + escapar(x) + '</option>').join('') + '</select></label></div></div>' +
+    '<div class="tarjeta"><div class="comp-cuenta">' + cifra.format(res.length) + (res.length === 1 ? ' producto' : ' productos') + (compSel.size ? ' · ' + compSel.size + ' marcados' : '') + '</div>' +
+    (res.length ? res.slice(0, compVer).map((clave) => {
+      const p = compProducto(clave);
+      const marcado = compSel.has(clave) || (destino && destino.codigos.includes(clave));
+      const ref = p.med.g ? compPorBase(p, 'kg') : p.med.ml ? compPorBase(p, 'l') : p.med.uds ? compPorBase(p, 'ud') : null;
+      const refTxt = ref == null ? 'falta la cantidad' : euros.format(ref) + (p.med.g ? '/kg' : p.med.ml ? '/L' : '/ud');
+      return '<div class="comp-fila' + (marcado ? ' marcado' : '') + '">' +
+        '<button class="comp-marca" data-comp-marca="' + escapar(clave) + '" aria-pressed="' + !!marcado + '" aria-label="Marcar para comparar">' + (marcado ? '✓' : '') + '</button>' +
+        '<div class="info" data-comp-editar="' + escapar(clave) + '"><b>' + escapar(p.n) + '</b><small>' + (varios ? '<span class="comp-prov">' + escapar(p.proveedor) + '</span> · ' : '') + escapar([p.c, p.fam || p.cat, compMedidaTxt(p.med) || 'sin cantidad', p.uv].filter(Boolean).join(' · ')) + (p.editado ? ' · <em>corregido</em>' : '') + '</small></div>' +
+        '<div class="cant"><b>' + euros.format(p.p || 0) + '</b><small' + (ref == null ? ' class="falta"' : '') + '>' + refTxt + '</small></div></div>';
+    }).join('') + (res.length > compVer ? '<div class="acciones"><button class="btn secundario" data-comp="mas">Ver ' + Math.min(40, res.length - compVer) + ' más</button></div>' : '')
+      : '<div class="vacio">Nada con esa búsqueda. Prueba con menos palabras.</div>') + '</div>' +
+    (compSel.size ? '<div class="comp-barra"><span>' + compSel.size + (compSel.size === 1 ? ' marcado' : ' marcados') + '</span>' +
+      '<button class="btn secundario chico" data-comp="desmarcar">Quitar marcas</button>' +
+      '<button class="btn principal chico" data-comp="comparar">' + (destino ? 'Añadir' : 'Comparar') + '</button></div>' : '') +
+    '<p class="nota">Toca un producto para corregir su cantidad o su precio. Kumi calcula, tú decides qué es comparable.</p>';
+}
+
+function pintarCompGrupos() {
+  const c = comparador();
+  $('compContenido').innerHTML = '<div class="tarjeta"><h3>Mis comparaciones</h3><p class="sub">Cada una guarda los productos que elegiste comparar y el que te quedaste.</p>' +
+    (c.grupos.length ? c.grupos.slice().sort((a, b) => b.ts - a.ts).map((g) => {
+      const ps = g.codigos.map(compProducto).filter(Boolean);
+      const provs = [...new Set(ps.map((p) => p.proveedor))];
+      const elegido = g.elegido && compProducto(g.elegido);
+      return '<div class="producto" data-comp-grupo="' + g.id + '"><div class="info"><b>' + escapar(g.nombre) + '</b><small>' + ps.length + ' productos · ' + escapar(provs.join(', ')) + ' · por ' + COMP_BASES[g.base][2] +
+        (elegido ? ' · elegido: ' + escapar(elegido.n) : ' · sin elegir') + '</small></div><span class="pill gris">Ver ›</span></div>';
+    }).join('') : '<div class="vacio">Todavía no hay comparaciones. En «Buscar», marca los productos que quieras comparar.</div>') + '</div>' +
+    (c.grupos.length ? '<div class="acciones"><button class="btn secundario" data-comp="pdf-comparaciones">PDF de las comparaciones</button></div>' : '');
+}
+
+function compFilasGrupo(g) {
+  const ps = g.codigos.map(compProducto).filter(Boolean).map((p) => ({ p, v: compPorBase(p, g.base) }));
+  const con = ps.filter((x) => x.v != null).sort((a, b) => a.v - b.v);
+  return { con, sin: ps.filter((x) => x.v == null), min: con.length ? con[0].v : null, faltan: g.codigos.length - ps.length };
+}
+function pintarCompGrupo() {
+  const g = comparador().grupos.find((x) => x.id === compGrupo);
+  const { con, sin, min, faltan } = compFilasGrupo(g);
+  const u = COMP_BASES[g.base][2];
+  const varios = new Set(con.concat(sin).map((x) => x.p.catId)).size > 1;
+  const fila = (x, i) => '<tr' + (g.elegido === x.p.clave ? ' class="elegido"' : '') + '>' +
+    '<td><button class="comp-nombre" data-comp-editar="' + escapar(x.p.clave) + '">' + escapar(x.p.n) + '</button><small>' + (varios ? '<span class="comp-prov">' + escapar(x.p.proveedor) + '</span> · ' : '') + escapar(x.p.c + ' · ' + (compMedidaTxt(x.p.med) || 'sin cantidad')) + '</small>' +
+    (x.v != null && i === 0 ? '<span class="pill verde">Más barato</span>' : '') + (g.elegido === x.p.clave ? '<span class="pill elegida">Elegido</span>' : '') + '</td>' +
+    '<td class="n">' + euros.format(x.p.p || 0) + '</td>' +
+    '<td class="n">' + (x.v == null ? '<span class="falta">falta cantidad</span>' : '<b>' + euros.format(x.v) + '</b>/' + u + (i > 0 && min ? '<small>+' + cifra.format(Math.round((x.v / min - 1) * 1000) / 10) + ' %</small>' : '')) + '</td>' +
+    '<td class="acc"><button class="btn chico ' + (g.elegido === x.p.clave ? 'secundario' : 'principal') + '" data-comp-elegir="' + escapar(x.p.clave) + '">' + (g.elegido === x.p.clave ? 'Elegido ✓' : 'Elegir') + '</button>' +
+    '<button class="btn chico texto" data-comp-quitar="' + escapar(x.p.clave) + '" aria-label="Quitar de la comparación">Quitar</button></td></tr>';
+  $('compContenido').innerHTML =
+    '<button class="volver" data-comp="grupos"><span>‹</span> Mis comparaciones</button>' +
+    '<div class="tarjeta"><label class="campo"><span>Nombre de la comparación</span><input id="compNombre" value="' + escapar(g.nombre) + '"></label>' +
+    '<div class="grupo-stock">Comparar el precio</div><div class="chips-inc">' +
+    Object.keys(COMP_BASES).map((k) => '<button data-comp-base="' + k + '"' + (g.base === k ? ' class="sel"' : '') + '>Por ' + (k === 'kg' ? 'kilo' : k === 'l' ? 'litro' : 'unidad') + '</button>').join('') + '</div>' +
+    '<div class="comp-tabla-caja"><table class="comp-tabla"><thead><tr><th>Producto</th><th class="n">Precio</th><th class="n">Por ' + u + '</th><th></th></tr></thead><tbody>' +
+    con.map(fila).join('') + sin.map((x) => fila(x, -1)).join('') + '</tbody></table></div>' +
+    (sin.length ? '<p class="pista-campo">' + sin.length + (sin.length === 1 ? ' producto no tiene' : ' productos no tienen') + ' la cantidad que hace falta: tócalos para ponerla. Mientras, no se comparan.</p>' : '') +
+    (faltan ? '<p class="pista-campo">' + faltan + (faltan === 1 ? ' producto ya no está' : ' productos ya no están') + ' en su catálogo (se quitó o cambió la tarifa).</p>' : '') +
+    '<p class="pista-campo">Kumi ordena por precio por ' + u + '. Si algo no es comparable de verdad, quítalo.</p></div>' +
+    '<div class="acciones"><button class="btn secundario" data-comp="anadir">+ Añadir productos</button><button class="btn texto" data-comp="borrar-grupo">Borrar esta comparación</button></div>';
+}
+
+function pintarCompLista() {
+  const provs = compListaPorProveedor();
+  const total = provs.reduce((s, g) => s + g.base + g.iva, 0);
+  $('compContenido').innerHTML = (provs.length ? provs.map((g) =>
+    '<div class="tarjeta"><h3>' + escapar(g.proveedor) + '</h3><p class="sub">' + g.filas.length + (g.filas.length === 1 ? ' producto' : ' productos') + '. Cambia las cantidades con − y +.</p>' +
+    g.filas.map((x) => '<div class="comp-lista-fila"><div class="info" data-comp-nota="' + escapar(x.p.clave) + '"><b>' + escapar(x.p.n) + '</b><small>' + escapar(x.p.c) + ' · ' + euros.format(x.p.p || 0) + ' / ' + escapar((x.p.uv || 'ud').toLowerCase()) + (x.l.nota ? ' · ' + escapar(x.l.nota) : '') + '</small></div>' +
+      '<div class="contador chico"><button data-comp-cant="' + escapar(x.p.clave) + '" data-paso="-1" aria-label="Uno menos">−</button><b>' + x.l.cant + '</b><button data-comp-cant="' + escapar(x.p.clave) + '" data-paso="1" aria-label="Uno más">+</button></div>' +
+      '<span class="importe">' + euros.format((x.p.p || 0) * x.l.cant) + '</span></div>').join('') +
+    '<div class="comp-totales"><div><span>Sin IVA</span><b>' + euros.format(g.base) + '</b></div><div><span>IVA</span><b>' + euros.format(g.iva) + '</b></div><div class="total"><span>Total ' + escapar(g.proveedor) + '</span><b>' + euros.format(g.base + g.iva) + '</b></div></div>' +
+    '<div class="acciones"><button class="btn principal" data-comp-enviar="' + escapar(g.catId) + '">Enviar a ' + escapar(g.proveedor) + '</button><button class="btn secundario" data-comp-pdf="' + escapar(g.catId) + '">PDF</button></div></div>').join('') +
+    (provs.length > 1 ? '<div class="tarjeta comp-gran-total"><span>Total de todos los proveedores, con IVA</span><b>' + euros.format(total) + '</b></div>' : '') +
+    '<div class="acciones"><button class="btn texto" data-comp="vaciar">Vaciar la lista</button></div>'
+    : '<div class="tarjeta"><h3>Lista de compra</h3><div class="vacio">Vacía. En una comparación, toca «Elegir» en el producto que te quedas.</div></div>') +
+    '<p class="nota">Toca un producto para añadirle una nota. Precios de la tarifa de cada proveedor; el IVA según su tipo.</p>';
+}
+
+// Los catálogos cargados: cuántos productos trae cada uno, actualizar su tarifa o quitarlo.
+function abrirCompCatalogos() {
+  const c = comparador();
+  compUI = { catalogos: true };
+  abrirPanel('<h3>Catálogos</h3><p class="sub">Uno por proveedor. Si te llega una tarifa nueva, actualízalo: tus correcciones, comparaciones y lista se quedan.</p>' +
+    (c.catalogos.length ? c.catalogos.map((x) => '<div class="comp-catalogo"><div><b>' + escapar(x.proveedor) + '</b><small>' + escapar(x.nombre) + ' · ' + cifra.format(x.n) + ' productos · cargado el ' + fechaCorta(x.cargado) + '</small></div>' +
+      '<button class="btn chico secundario" data-comp-actualizar="' + escapar(x.id) + '">Actualizar</button><button class="btn chico texto" data-comp-quitar-cat="' + escapar(x.id) + '">Quitar</button></div>').join('') : '<div class="vacio">Todavía no hay catálogos.</div>') +
+    '<div class="acciones"><button class="btn principal" data-comp-nuevo-cat>+ Cargar otro catálogo</button><button class="btn secundario" data-comp-cerrar>Cerrar</button></div>');
+}
+// Corregir lo que trae un producto: cantidad, precio o una nota. El original queda guardado para volver a él.
+function abrirCompProducto(clave) {
+  const p = compProducto(clave);
+  if (!p) return;
+  const leidas = compLeerMedidas(p.original.n, p.original.uv);
+  compUI = { clave };
+  const n = (v) => (v == null ? '' : String(v).replace('.', ','));
+  abrirPanel('<h3>' + escapar(p.n) + '</h3><p class="sub">' + escapar([p.proveedor, p.c, p.cat, p.fam, p.uv].filter(Boolean).join(' · ')) + '</p>' +
+    '<div class="campos-2"><label class="campo"><span>Peso del envase (g)</span><input id="compG" class="numero" inputmode="decimal" value="' + n(p.med.g) + '" placeholder="—"></label>' +
+    '<label class="campo"><span>Volumen (ml)</span><input id="compMl" class="numero" inputmode="decimal" value="' + n(p.med.ml) + '" placeholder="—"></label></div>' +
+    '<div class="campos-2"><label class="campo"><span>Unidades / piezas</span><input id="compUds" class="numero" inputmode="numeric" value="' + n(p.med.uds) + '" placeholder="—"></label>' +
+    '<label class="campo"><span>Precio sin IVA (€)</span><input id="compP" class="numero" inputmode="decimal" value="' + n(p.p) + '"></label></div>' +
+    '<label class="campo"><span>Nota</span><input id="compNota" value="' + escapar(p.nota) + '" placeholder="Ej.: el del envase rojo"></label>' +
+    '<p class="pista-campo">Del catálogo: ' + euros.format(p.original.p || 0) + (compMedidaTxt(leidas) ? ' · ' + compMedidaTxt(leidas) : ' · sin cantidad en el nombre') + '.</p>' +
+    '<div class="acciones"><button class="btn principal" data-comp-guardar>Guardar</button><button class="btn secundario" data-comp-cerrar>Cancelar</button>' +
+    (p.editado ? '<button class="btn texto" data-comp-original>Volver al original</button>' : '') + '</div>');
+}
+$('panel').addEventListener('click', (e) => {
+  if (!compUI) return;
+  const b = e.target.closest('button');
+  if (!b) return;
+  const c = comparador();
+  if (b.dataset.compCerrar !== undefined) { compUI = null; cerrarPanel(); return; }
+  if (compUI.catalogos) {
+    if (b.dataset.compNuevoCat !== undefined) { compActualizar = null; $('archivoCatalogo').click(); return; }
+    if (b.dataset.compActualizar) { compActualizar = b.dataset.compActualizar; $('archivoCatalogo').click(); return; }
+    if (b.dataset.compQuitarCat) {
+      const id = b.dataset.compQuitarCat, info = compInfo(id);
+      const enLista = c.lista.filter((l) => l.cat === id).length;
+      if (!confirm('¿Quitar el catálogo de ' + info.proveedor + '?' + (enLista ? ' Sus ' + enLista + ' productos de la lista también se quitan.' : '') + ' Sus productos dejan de salir en las comparaciones.')) return;
+      c.catalogos = c.catalogos.filter((x) => x.id !== id);
+      c.lista = c.lista.filter((l) => l.cat !== id);
+      compCatalogos.delete(id); compSel.clear();
+      escribirDocs({}, [id]).catch(() => {});
+      guardar(); abrirCompCatalogos(); pintarComparador();
+      avisar('Catálogo de ' + info.proveedor + ' quitado');
+    }
+    return;
+  }
+  const aj = c.ajustes;
+  if (b.dataset.compOriginal !== undefined) {
+    delete aj[compUI.clave];
+  } else if (b.dataset.compGuardar !== undefined) {
+    const o = compProducto(compUI.clave).original;
+    const leidas = compLeerMedidas(o.n, o.uv);
+    const leer = (id) => { const t = $(id).value.trim().replace(',', '.'); return t === '' ? null : Number(t); };
+    const nuevo = { g: leer('compG'), ml: leer('compMl'), uds: leer('compUds'), p: leer('compP') };
+    if (Object.values(nuevo).some((v) => v != null && (Number.isNaN(v) || v < 0))) { avisar('Revisa los números'); return; }
+    const ajuste = {};
+    ['g', 'ml', 'uds'].forEach((k) => { if ((nuevo[k] ?? null) !== (leidas[k] ?? null)) ajuste[k] = nuevo[k]; });
+    if (nuevo.p != null && nuevo.p !== o.p) ajuste.p = nuevo.p;
+    const nota = $('compNota').value.trim();
+    if (nota) ajuste.nota = nota;
+    if (Object.keys(ajuste).length) aj[compUI.clave] = ajuste; else delete aj[compUI.clave];
+  } else return;
+  compUI = null;
+  guardar(); cerrarPanel(); pintarComparador();
+});
+
+// Cargar un catálogo: un archivo de Kumi con { app: 'kumi-catalogo', proveedor, nombre, productos: [{ c, n, cat, fam, uv, p, iva }] }.
+// Un proveedor nuevo se suma a los que ya hay; uno que ya estaba cambia su tarifa por la nueva.
+$('archivoCatalogo').addEventListener('change', async (e) => {
+  const archivo = e.target.files[0];
+  e.target.value = '';
+  const esperado = compActualizar;
+  compActualizar = null;
+  if (!archivo) return;
+  if (/\.xlsx?$/i.test(archivo.name)) { avisar('Ese es el Excel: hace falta el catálogo preparado para Kumi (.json)'); return; }
+  let obj = null;
+  try { obj = JSON.parse(await archivo.text()); } catch (err) { obj = null; }
+  if (!obj || obj.app !== 'kumi-catalogo' || !Array.isArray(obj.productos) || !obj.productos.length || !obj.proveedor) { avisar('Ese archivo no es un catálogo de Kumi'); return; }
+  const c = comparador();
+  const id = 'catalogo:' + compNormal(obj.proveedor).replace(/[^a-z0-9]+/g, '-');
+  if (esperado && esperado !== id && !confirm('Ese archivo es de ' + obj.proveedor + ', no de ' + compInfo(esperado).proveedor + '. ¿Cargarlo como otro proveedor?')) return;
+  const yaEsta = compInfo(id);
+  if (yaEsta && !esperado && !confirm('Ya tienes el catálogo de ' + obj.proveedor + '. ¿Cambiar su tarifa por «' + obj.nombre + '»? Tus comparaciones, correcciones y lista se quedan.')) return;
+  try { await escribirDocs({ [id]: JSON.stringify({ proveedor: obj.proveedor, nombre: obj.nombre, productos: obj.productos }) }, []); }
+  catch (err) { avisar('No se pudo guardar el catálogo. ¿Le queda espacio a este dispositivo?'); return; }
+  const info = { id, proveedor: obj.proveedor, nombre: obj.nombre, n: obj.productos.length, cargado: Date.now() };
+  c.catalogos = c.catalogos.filter((x) => x.id !== id).concat(info);
+  compCatalogos.delete(id); compSel.clear();
+  guardar();
+  if (compUI && compUI.catalogos) abrirCompCatalogos();
+  if (vista === 'comparador') pintarComparador();
+  avisar((yaEsta ? 'Tarifa de ' : 'Catálogo de ') + obj.proveedor + (yaEsta ? ' actualizada: ' : ' cargado: ') + cifra.format(info.n) + ' productos');
+});
+
+let compBuscarTiempo = null;
+$('compContenido').addEventListener('input', (e) => {
+  if (e.target.id !== 'compBuscar') return;
+  clearTimeout(compBuscarTiempo);
+  compBuscarTiempo = setTimeout(() => {
+    compTexto = e.target.value; compVer = 40;
+    const pos = e.target.selectionStart;
+    pintarComparador();
+    const i = $('compBuscar'); if (i) { i.focus(); i.setSelectionRange(pos, pos); }
+  }, 250);
+});
+$('compContenido').addEventListener('change', (e) => {
+  if (e.target.id === 'compCat') { compCat = e.target.value; compFam = ''; compVer = 40; pintarComparador(); }
+  if (e.target.id === 'compFam') { compFam = e.target.value; compVer = 40; pintarComparador(); }
+  if (e.target.id === 'compNombre') {
+    const g = comparador().grupos.find((x) => x.id === compGrupo);
+    const v = e.target.value.trim();
+    if (g && v) { g.nombre = v; guardar(); }
+  }
+});
+function compEnviar(catId) {
+  const g = compListaPorProveedor().find((x) => x.catId === catId);
+  if (!g) return;
+  const texto = 'Hola ' + g.proveedor + ', te paso el pedido de Hinoki (' + hoy.getDate() + '/' + (hoy.getMonth() + 1) + '):\n' +
+    g.filas.map((x) => '• ' + x.l.cant + ' × ' + x.p.n + ' (' + x.p.c + ')' + (x.l.nota ? ' — ' + x.l.nota : '')).join('\n') + '\nGracias.';
+  if (navigator.share) navigator.share({ text: texto }).catch(() => {});
+  else window.open('https://wa.me/?text=' + encodeURIComponent(texto), '_blank');
+}
+$('compContenido').addEventListener('click', (e) => {
+  const c = comparador();
+  const g = compGrupo && c.grupos.find((x) => x.id === compGrupo);
+  const t = (sel) => e.target.closest(sel);
+  const enLista = (clave) => c.lista.find((l) => l.cat + '|' + l.c === clave);
+  let b;
+  if ((b = t('[data-comp-prov]'))) { compProv = b.dataset.compProv; compCat = ''; compFam = ''; compVer = 40; pintarComparador(); return; }
+  if ((b = t('[data-comp-marca]'))) {
+    const clave = b.dataset.compMarca;
+    if (g && compSub === 'buscar' && g.codigos.includes(clave)) return;
+    if (compSel.has(clave)) compSel.delete(clave); else compSel.add(clave);
+    pintarComparador(); return;
+  }
+  if ((b = t('[data-comp-editar]'))) { abrirCompProducto(b.dataset.compEditar); return; }
+  if ((b = t('[data-comp-grupo]'))) { compGrupo = b.dataset.compGrupo; pintarComparador(); window.scrollTo(0, 0); return; }
+  if ((b = t('[data-comp-base]')) && g) { g.base = b.dataset.compBase; guardar(); pintarComparador(); return; }
+  if ((b = t('[data-comp-elegir]')) && g) {
+    const clave = b.dataset.compElegir;
+    if (g.elegido === clave) return;
+    const antes = JSON.parse(JSON.stringify(c));
+    // Elegir otro de la misma comparación cambia el de la lista, no suma uno más.
+    if (g.elegido) c.lista = c.lista.filter((l) => l.cat + '|' + l.c !== g.elegido);
+    g.elegido = clave;
+    if (!enLista(clave)) { const i = clave.indexOf('|'); c.lista.push({ cat: clave.slice(0, i), c: clave.slice(i + 1), cant: 1, nota: '' }); }
+    guardar(); pintarComparador();
+    ofrecerDeshacer('Elegido y añadido a la lista', () => { datos.comparador = antes; });
+    return;
+  }
+  if ((b = t('[data-comp-quitar]')) && g) {
+    const clave = b.dataset.compQuitar;
+    g.codigos = g.codigos.filter((x) => x !== clave);
+    if (g.elegido === clave) g.elegido = null;
+    guardar(); pintarComparador(); return;
+  }
+  if ((b = t('[data-comp-cant]'))) {
+    const l = enLista(b.dataset.compCant);
+    if (!l) return;
+    l.cant = Math.max(0, l.cant + Number(b.dataset.paso));
+    if (!l.cant) {
+      const antes = JSON.parse(JSON.stringify(c.lista));
+      c.lista = c.lista.filter((x) => x !== l);
+      ofrecerDeshacer('Quitado de la lista', () => { datos.comparador.lista = antes; });
+    }
+    guardar(); pintarComparador(); return;
+  }
+  if ((b = t('[data-comp-nota]'))) {
+    const l = enLista(b.dataset.compNota);
+    const nota = prompt('Nota para este producto', l.nota || '');
+    if (nota === null) return;
+    l.nota = nota.trim(); guardar(); pintarComparador(); return;
+  }
+  if ((b = t('[data-comp-enviar]'))) { compEnviar(b.dataset.compEnviar); return; }
+  if ((b = t('[data-comp-pdf]'))) { imprimirCompLista(b.dataset.compPdf); return; }
+  if (!(b = t('[data-comp]'))) return;
+  const que = b.dataset.comp;
+  if (que === 'cargar') { compActualizar = null; $('archivoCatalogo').click(); }
+  if (que === 'catalogos') abrirCompCatalogos();
+  if (que === 'mas') { compVer += 40; pintarComparador(); }
+  if (que === 'desmarcar') { compSel.clear(); pintarComparador(); }
+  if (que === 'comparar') {
+    if (g) { g.codigos = [...new Set(g.codigos.concat([...compSel]))]; }
+    else {
+      const ps = [...compSel].map(compProducto).filter(Boolean);
+      const nombre = compTexto.trim() ? compTexto.trim()[0].toUpperCase() + compTexto.trim().slice(1) : (compFam || compCat || 'Comparación');
+      const nuevo = { id: nuevoId(), nombre, base: compBaseSugerida(ps), codigos: ps.map((p) => p.clave), elegido: null, ts: Date.now() };
+      c.grupos.push(nuevo);
+      compGrupo = nuevo.id;
+    }
+    compSel.clear(); compSub = 'comparaciones';
+    guardar(); pintarComparador(); window.scrollTo(0, 0);
+  }
+  if (que === 'grupos') { compGrupo = null; pintarComparador(); }
+  if (que === 'anadir') { compSub = 'buscar'; compSel.clear(); pintarComparador(); window.scrollTo(0, 0); }
+  if (que === 'borrar-grupo' && g) {
+    if (!confirm('¿Borrar la comparación «' + g.nombre + '»? Lo que tengas en la lista se queda.')) return;
+    const antes = JSON.parse(JSON.stringify(c.grupos));
+    c.grupos = c.grupos.filter((x) => x !== g); compGrupo = null;
+    guardar(); pintarComparador();
+    ofrecerDeshacer('Comparación borrada', () => { datos.comparador.grupos = antes; });
+  }
+  if (que === 'vaciar') {
+    if (!confirm('¿Vaciar la lista de compra de todos los proveedores?')) return;
+    const antes = JSON.parse(JSON.stringify(c.lista));
+    c.lista = []; guardar(); pintarComparador();
+    ofrecerDeshacer('Lista vaciada', () => { datos.comparador.lista = antes; });
+  }
+  if (que === 'pdf-comparaciones') imprimirCompComparaciones();
+});
+document.querySelectorAll('[data-sub-comp]').forEach((b) => b.addEventListener('click', () => {
+  compSub = b.dataset.subComp;
+  if (compSub === 'buscar' && compGrupo) compGrupo = null;
+  pintarComparador(); window.scrollTo(0, 0);
+}));
+
+// PDF de la lista de un proveedor: lo que se le manda a él.
+function imprimirCompLista(catId) {
+  const g = compListaPorProveedor().find((x) => x.catId === catId);
+  if (!g) return;
+  const info = compInfo(catId);
+  const zona = $('zonaImprimir');
+  zona.className = 'informe';
+  zona.innerHTML = '<div class="inf"><div class="inf-marca">Kumi Mara · Hinoki · Cocina</div><h1>Lista de compra · ' + escapar(g.proveedor) + '</h1>' +
+    '<p class="inf-sub">' + escapar(info ? info.nombre : '') + ' · ' + fechaLarga(Date.now()) + '</p>' +
+    '<table><thead><tr><th>Código</th><th>Producto</th><th class="n">Cant.</th><th class="n">Precio</th><th class="n">Importe</th></tr></thead><tbody>' +
+    g.filas.map((x) => '<tr><td>' + escapar(x.p.c) + '</td><td>' + escapar(x.p.n) + (x.l.nota ? '<br><small>' + escapar(x.l.nota) + '</small>' : '') + '</td><td class="n">' + x.l.cant + '</td><td class="n">' + euros.format(x.p.p || 0) + '</td><td class="n">' + euros.format((x.p.p || 0) * x.l.cant) + '</td></tr>').join('') +
+    '<tr class="suma"><td></td><td>Sin IVA</td><td></td><td></td><td class="n">' + euros.format(g.base) + '</td></tr>' +
+    '<tr><td></td><td>IVA</td><td></td><td></td><td class="n">' + euros.format(g.iva) + '</td></tr>' +
+    '<tr class="suma"><td></td><td>Total</td><td></td><td></td><td class="n">' + euros.format(g.base + g.iva) + '</td></tr></tbody></table>' +
+    '<p class="inf-nota">Precios sin IVA de la tarifa del proveedor, con las correcciones apuntadas en Kumi.</p></div>';
+  fuentesListas().then(() => imprimir('Lista de compra ' + g.proveedor + ' - Kumi Mara'));
+}
+function imprimirCompComparaciones() {
+  const c = comparador();
+  const zona = $('zonaImprimir');
+  zona.className = 'informe';
+  zona.innerHTML = '<div class="inf"><div class="inf-marca">Kumi Mara · Hinoki · Cocina</div><h1>Comparaciones de precios</h1>' +
+    '<p class="inf-sub">' + escapar(c.catalogos.map((x) => x.proveedor + ' (' + x.nombre + ')').join(' · ')) + ' · ' + fechaLarga(Date.now()) + '</p>' +
+    c.grupos.map((g) => {
+      const { con, sin } = compFilasGrupo(g);
+      const u = COMP_BASES[g.base][2];
+      return '<div class="inf-persona"><h2><span>' + escapar(g.nombre) + '</span><span>por ' + u + '</span></h2><table><thead><tr><th>Producto</th><th>Proveedor</th><th class="n">Precio</th><th class="n">Cantidad</th><th class="n">€/' + u + '</th></tr></thead><tbody>' +
+        con.concat(sin).map((x, i) => '<tr><td>' + (g.elegido === x.p.clave ? '<b>✓ ' + escapar(x.p.n) + '</b>' : escapar(x.p.n)) + (i === 0 && x.v != null ? ' <small>(más barato)</small>' : '') + '</td><td>' + escapar(x.p.proveedor) + '</td><td class="n">' + euros.format(x.p.p || 0) + '</td><td class="n">' + escapar(compMedidaTxt(x.p.med) || '—') + '</td><td class="n">' + (x.v == null ? 'falta cantidad' : euros.format(x.v)) + '</td></tr>').join('') +
+        '</tbody></table></div>';
+    }).join('') + '<p class="inf-nota">✓ = elegido. El precio por kilo, litro o unidad se calcula con la cantidad de cada envase.</p></div>';
+  fuentesListas().then(() => imprimir('Comparaciones de precios - Kumi Mara'));
+}
+
 // --- Navegación ---
 let vista = 'inicio';
 // «Atrás» (gesto o botón de Android): cierra la ventana abierta o vuelve al inicio; desde el inicio, sale.
@@ -4248,8 +5606,8 @@ function irA(nombre, desdeHistorial) {
   if (nombre !== 'stock') enRecuento = false;
   vista = nombre;
   document.querySelectorAll('.vista').forEach((v) => v.classList.toggle('activa', v.id === 'vista' + nombre[0].toUpperCase() + nombre.slice(1)));
-  document.querySelectorAll('nav button').forEach((b) => b.classList.toggle('activo', b.dataset.ir === nombre || (b.id === 'btnMas' && ['horas', 'equipo', 'fichas', 'organigrama'].includes(nombre))));
-  $('cabecera').hidden = ['inicio', 'equipo', 'horas', 'stock', 'fichas', 'organigrama'].includes(nombre);
+  document.querySelectorAll('nav button').forEach((b) => b.classList.toggle('activo', b.dataset.ir === nombre || (b.id === 'btnMas' && ['horas', 'equipo', 'fichas', 'organigrama', 'comparador'].includes(nombre))));
+  $('cabecera').hidden = ['inicio', 'equipo', 'horas', 'stock', 'fichas', 'organigrama', 'comparador'].includes(nombre);
   $('dias').style.display = nombre === 'rellenar' ? '' : 'none';
   refrescar();
   window.scrollTo(0, 0);
@@ -4271,6 +5629,7 @@ function refrescar() {
   if (vista === 'stock') { pintarStock(); return; }
   if (vista === 'fichas') { pintarFichas(); return; }
   if (vista === 'organigrama') { pintarOrganigrama(); return; }
+  if (vista === 'comparador') { pintarComparador(); return; }
   pintarCabecera();
   if (vista === 'rellenar') pintarDia();
   if (vista === 'cuadro') pintarCuadro();
@@ -4294,7 +5653,7 @@ history.replaceState({ vista: 'inicio', nivel: 0 }, '');
 window.addEventListener('popstate', (e) => {
   const st = e.state || { vista: 'inicio', nivel: 0 };
   if (!st.capa) {
-    if (!$('panelFondo').hidden) { $('panelFondo').hidden = true; incUI = null; serviciosUI = null; empleadoUI = null; fichajeUI = null; regUI = null; ausUI = null; puestoUI = null; codigoUI = null; }
+    if (!$('panelFondo').hidden) { $('panelFondo').hidden = true; incUI = null; serviciosUI = null; empleadoUI = null; fichajeUI = null; regUI = null; ausUI = null; puestoUI = null; codigoUI = null; compUI = null; menuUI = null; }
     if (!$('hojaFondo').hidden) { $('hojaFondo').hidden = true; repetir = null; }
   }
   const salirDeRecuento = enRecuento && !st.recuento;
