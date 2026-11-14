@@ -1,8 +1,11 @@
 // Primero intenta la red (para recibir mejoras); sin conexión, sirve lo guardado.
-const CACHE = 'kumi-v38';
+const CACHE = 'kumi-v39';
 const ARCHIVOS = ['./', './index.html', './manifest.webmanifest', './icon-180.png', './icon-192.png', './icon-512.png', './icon-maskable-512.png',
   './fuentes/Jost.woff2', './fuentes/JosefinSans.woff2', './fuentes/ShipporiMincho-500.woff2', './fuentes/ShipporiMincho-700.woff2',
-  './fuentes/ShipporiMincho-jp-500.woff2', './fuentes/ShipporiMincho-jp-700.woff2'];
+  './fuentes/ShipporiMincho-jp-500.woff2', './fuentes/ShipporiMincho-jp-700.woff2',
+  './fuentes/BagelFatOne.woff2', './fuentes/Alegreya.woff2', './fuentes/Alegreya-italic.woff2', './fuentes/Marcellus.woff2',
+  './carta/portada.jpg', './carta/contraportada.jpg', './carta/papel.jpg', './carta/papel-monte.jpg', './carta/sello.png',
+  './carta/foto-entrantes.jpg', './carta/foto-salmon.jpg', './carta/foto-arroz.jpg', './carta/foto-postres.jpg'];
 
 self.addEventListener('install', (e) => {
   e.waitUntil(caches.open(CACHE).then((c) => c.addAll(ARCHIVOS)));

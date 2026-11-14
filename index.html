@@ -20,6 +20,10 @@
   @font-face { font-family: 'Shippori Mincho B1'; font-weight: 500; font-display: swap; src: url(fuentes/ShipporiMincho-jp-500.woff2) format('woff2'); unicode-range: U+3000-30FF, U+3400-4DBF, U+4E00-9FFF; }
   @font-face { font-family: 'Shippori Mincho B1'; font-weight: 700; font-display: swap; src: url(fuentes/ShipporiMincho-jp-700.woff2) format('woff2'); unicode-range: U+3000-30FF, U+3400-4DBF, U+4E00-9FFF; }
   @font-face { font-family: 'Josefin Sans'; font-weight: 300 700; font-display: swap; src: url(fuentes/JosefinSans.woff2) format('woff2'); }
+  @font-face { font-family: 'Bagel Fat One'; font-weight: 400; font-display: swap; src: url(fuentes/BagelFatOne.woff2) format('woff2'); }
+  @font-face { font-family: 'Alegreya'; font-weight: 400 900; font-display: swap; src: url(fuentes/Alegreya.woff2) format('woff2'); }
+  @font-face { font-family: 'Alegreya'; font-style: italic; font-weight: 400; font-display: swap; src: url(fuentes/Alegreya-italic.woff2) format('woff2'); }
+  @font-face { font-family: 'Marcellus'; font-weight: 400; font-display: swap; src: url(fuentes/Marcellus.woff2) format('woff2'); }
   @font-face { font-family: 'Jost'; font-weight: 100 900; font-display: swap; src: url(fuentes/Jost.woff2) format('woff2'); }
 
   /* Colores de la app: estos son los de «Borgoña Hinoki»; los demás temas los cambia temaKumi() (Más → Color de la app). */
@@ -809,6 +813,46 @@
   .temas b { display: block; font-size: 15.5px; }
   .temas small { display: block; font-size: 12.5px; color: var(--gris); }
   .temas i { font-style: normal; font-size: 18px; color: var(--frambuesa); }
+
+  /* Carta en estilo Geisha: papel beige, foto grande por hoja, títulos retro en negro y rosa, español e inglés. */
+  .gz-hoja { font-family: 'Alegreya', Georgia, serif; color: #1f1a17; --gz-rosa: #b83280; background: #f3dcc0; }
+  .gz-papel, .gz-foto, .gz-sello, .gz-foto-plato { overflow: hidden; }
+  .gz-papel { position: absolute; inset: 0; }
+  .gz-papel img, .gz-foto img, .gz-foto-plato img { display: block; width: 100%; height: 100%; object-fit: cover; }
+  .gz-foto { position: absolute; top: 0; bottom: 0; right: 0; width: 37%; }
+  .gz-izquierda .gz-foto { right: auto; left: 0; width: 31%; }
+  .gz-abajo .gz-foto { top: auto; left: 0; width: auto; height: 41%; }
+  .gz-texto { position: absolute; top: 11mm; bottom: 10mm; left: 12.7mm; right: 12.7mm; display: grid; grid-template-columns: minmax(0, 1fr); gap: 9mm; }
+  .gz-texto.gz-dos { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+  .gz-derecha .gz-texto { right: calc(37% + 8mm); }
+  .gz-izquierda .gz-texto { left: calc(31% + 9mm); }
+  .gz-abajo .gz-texto { bottom: 9mm; }
+  .gz-sobre, .gz-sobre .gz-in, .gz-sobre .gz-nom b { color: #fff; }
+  .gz-sobre { text-shadow: 0 1px 3px rgba(0, 0, 0, .55); }
+  .gz-col { display: flex; flex-direction: column; min-width: 0; min-height: 0; }
+  .gz-cab { display: flex; gap: 2.5mm; align-items: flex-start; margin-bottom: 3mm; }
+  .gz-jp { writing-mode: vertical-rl; font-family: 'Shippori Mincho B1', serif; font-size: 13pt; line-height: 1.05; margin-top: 2mm; }
+  .gz-titulo { font-family: 'Bagel Fat One', 'Alegreya', sans-serif; font-size: 24.8pt; line-height: .98; text-transform: uppercase; color: #1f1a17; }
+  .gz-titulo span { display: block; }
+  .gz-rosa { color: var(--gz-rosa); }
+  .gz-en-tit { font-family: 'Marcellus', serif; font-size: 10.5pt; text-transform: uppercase; margin-top: 2mm; }
+  .gz-cuerpo { flex: 1; min-height: 0; overflow: hidden; }
+  .gz-sec { font-family: 'Marcellus', serif; font-size: 11pt; color: var(--gz-rosa); text-transform: uppercase; letter-spacing: .02em; margin: 2mm 0 2mm; line-height: 1.25; }
+  .gz-seccion + .gz-seccion .gz-sec { margin-top: 4mm; }
+  .gz-plato { margin-bottom: 3.4mm; break-inside: avoid; }
+  .gz-plato.con-foto { display: grid; grid-template-columns: 17mm minmax(0, 1fr); gap: 3mm; align-items: start; }
+  .gz-foto-plato { width: 17mm; height: 17mm; border-radius: 2mm; }
+  .gz-nom { display: flex; justify-content: space-between; align-items: baseline; gap: 4mm; }
+  .gz-nom b { font-weight: 700; font-size: 12pt; text-transform: uppercase; line-height: 1.15; }
+  .gz-precio { font-size: 10.5pt; white-space: nowrap; }
+  .gz-sig { font-weight: 700; font-size: 8pt; color: var(--gz-rosa); text-transform: uppercase; }
+  .gz-es { margin: .5mm 0 0; font-size: 11.3pt; line-height: 1.2; }
+  .gz-in { margin: .4mm 0 0; font-size: 10.5pt; line-height: 1.2; font-style: italic; color: #3a332e; }
+  .gz-alg { margin-top: .6mm; font-family: 'Marcellus', serif; font-size: 8pt; letter-spacing: .03em; color: var(--gz-rosa); }
+  .gz-nota { margin-top: 3mm; font-size: 10.5pt; line-height: 1.25; }
+  .gz-nota i { display: block; color: #3a332e; }
+  .gz-sello { position: absolute; left: 13mm; bottom: 9mm; width: 62mm; }
+  .gz-sello img { display: block; width: 100%; }
   @media print {
     @page { size: landscape; margin: 8mm; }
     @page informe { size: A4 portrait; margin: 14mm 12mm; }
@@ -3505,7 +3549,7 @@ function asegurarMenu() {
     menuPreparando = (async () => {
       let c = null;
       try { c = JSON.parse(leerLocal('hinoki-carta-v1')); } catch (e) {}
-      if (!c || !c.restaurante || !Array.isArray(c.paginas)) c = JSON.parse(JSON.stringify(CARTA_HINOKI));
+      if (!c || !c.restaurante || !Array.isArray(c.paginas)) c = JSON.parse(JSON.stringify(CARTA_GEISHA));
       await prepararCarta(c);
       if (!datos.menu) { datos.menu = c; guardar(); }
       menuFallo = false;
@@ -3566,6 +3610,7 @@ function pintarMenu() {
   html += '<div class="acciones"><button class="btn secundario" data-menu-accion="nueva-pagina">+ Página</button></div>' +
     '<div class="tarjeta"><div class="grupo-stock">La carta en otro dispositivo</div>' +
     '<p class="pista-campo" style="margin:0 0 10px">La carta viaja en la copia de Kumi Mara. Si ya la tienes hecha con el editor de carta de Hinoki, sube su PDF: se leen los platos, los textos y las fotos.</p>' +
+    '<button class="btn secundario chico" data-menu-accion="carta-geisha">Poner la carta nueva (Geisha)</button> ' +
     '<button class="btn secundario chico" data-menu-accion="subir-pdf">Subir el PDF de la carta</button> ' +
     '<button class="btn secundario chico" data-menu-accion="importar">Traer una copia de la carta (.json)</button> ' +
     '<button class="btn secundario chico" data-menu-accion="original">Volver a la carta original</button></div>';
@@ -3641,7 +3686,8 @@ function cartaHojasDePagina(destino, pg, r, muestras, conAlergenos) {
 // Las hojas se miden fuera de la pantalla (hace falta que el navegador las coloque para saber si caben).
 async function construirCarta() {
   if (document.fonts) {
-    await Promise.all([fuentesListas(), document.fonts.load('500 30px "Shippori Mincho B1"', 'Aa前菜'), document.fonts.load('300 15px "Josefin Sans"'), document.fonts.load('600 10px "Josefin Sans"')]).catch(() => {});
+    await Promise.all([fuentesListas(), document.fonts.load('500 30px "Shippori Mincho B1"', 'Aa前菜'), document.fonts.load('300 15px "Josefin Sans"'), document.fonts.load('600 10px "Josefin Sans"'),
+      document.fonts.load('30px "Bagel Fat One"'), document.fonts.load('400 15px Alegreya'), document.fonts.load('700 15px Alegreya'), document.fonts.load('italic 400 15px Alegreya'), document.fonts.load('15px Marcellus')]).catch(() => {});
   }
   await cargarFotosMenu().catch(() => {});
   const c = datos.menu;
@@ -3649,6 +3695,7 @@ async function construirCarta() {
   const medir = document.createElement('div');
   medir.className = 'cm-medir';
   document.body.appendChild(medir);
+  if (estiloCarta() === 'geisha') { construirGeisha(medir); return medir; }
   medir.innerHTML = cartaPortada(r);
   const muestras = c.imagenesOrientativas || platosMenu().some((p) => !p.fotoId && esFotoMuestra(p.foto));
   c.paginas.forEach((pg) => cartaHojasDePagina(medir, pg, r, muestras, c.alergenos !== false));
@@ -3716,25 +3763,39 @@ function abrirMenuPanel(ui) {
       campoMenu('Nombre', 'nombre', r.nombre) + campoMenu('Kanji', 'kanji', r.kanji) + campoMenu('Lema', 'lema', r.lema) + campoMenu('Ciudad', 'ciudad', r.ciudad) +
       '<label class="menu-check"><input type="checkbox" data-cm="alergenos"' + (c.alergenos !== false ? ' checked' : '') + '> Poner los alérgenos de cada plato en la carta</label>' +
       '<p class="pista-campo">Salen de su ficha técnica. Un plato sin ficha sale sin alérgenos.</p>' +
-      '<label class="menu-check"><input type="checkbox" data-cm="orientativas"' + (c.imagenesOrientativas ? ' checked' : '') + '> Poner «Imágenes orientativas» al pie</label>';
+      '<label class="menu-check"><input type="checkbox" data-cm="orientativas"' + (c.imagenesOrientativas ? ' checked' : '') + '> Poner «Imágenes orientativas» al pie</label>' +
+      '<div class="grupo-stock">Estilo de la carta</div><label class="campo"><span>Estilo</span><select data-cm="estilo">' +
+      '<option value="geisha"' + (estiloCarta() === 'geisha' ? ' selected' : '') + '>Geisha (la carta nueva)</option><option value="cerezo"' + (estiloCarta() === 'cerezo' ? ' selected' : '') + '>Cerezo (con la foto de cada plato)</option></select></label>' +
+      '<label class="menu-check"><input type="checkbox" data-cm="fotosPlatos"' + (c.fotosPlatos ? ' checked' : '') + '> En el estilo Geisha, poner la foto de cada plato</label>' +
+      '<p class="pista-campo">La portada y la contraportada de Geisha son las de la carta impresa; el nombre, el lema y la ciudad salen en el estilo Cerezo.</p>';
   } else if (ui.tipo === 'pagina') {
     const pg = ui.nuevo ? { jp: '', titulo: '', sub: '', nota: '', cols: 1 } : c.paginas[ui.r[0]];
     html = '<h3>' + (ui.nuevo ? 'Página nueva' : 'Página de la carta') + '</h3><p class="sub">&nbsp;</p>' +
       campoMenu('Título', 'titulo', pg.titulo, ' placeholder="Ej.: Para empezar"') + campoMenu('Japonés (opcional)', 'jp', pg.jp) +
-      campoMenu('Subtítulo', 'sub', pg.sub) + campoMenu('Nota al pie (opcional)', 'nota', pg.nota) +
+      campoMenu('Subtítulo', 'sub', pg.sub) + campoMenu('Subtítulo en inglés (Geisha)', 'en', pg.en, ' placeholder="Ej.: Starters"') +
+      campoMenu('Nota al pie (opcional)', 'nota', pg.nota) + campoMenu('Nota en inglés (opcional)', 'notaEn', pg.notaEn) +
+      '<div class="grupo-stock">En el estilo Geisha</div>' +
+      '<label class="campo"><span>Foto grande de la hoja</span><select data-cm="foto"><option value="">Sin foto</option>' +
+      Object.entries(FOTOS_HOJA).map(([k, n]) => '<option value="' + k + '"' + (pg.foto === k ? ' selected' : '') + '>' + n + '</option>').join('') + '</select></label>' +
+      '<label class="campo"><span>Dónde va la foto</span><select data-cm="fotoLado">' +
+      Object.entries(LADOS_FOTO).map(([k, n]) => '<option value="' + k + '"' + ((pg.fotoLado || 'derecha') === k ? ' selected' : '') + '>' + n + '</option>').join('') + '</select></label>' +
+      '<label class="campo"><span>Papel</span><select data-cm="papel"><option value="">Liso</option><option value="monte"' + (pg.papel === 'monte' ? ' selected' : '') + '>Con el monte Fuji</option></select></label>' +
+      '<label class="menu-check"><input type="checkbox" data-cm="junto"' + (pg.junto ? ' checked' : '') + '> Compartir hoja con la página siguiente (una en cada columna)</label>' +
+      '<label class="menu-check"><input type="checkbox" data-cm="sello"' + (pg.sello ? ' checked' : '') + '> Poner el sello de HINOKI abajo</label>' +
       '<label class="campo"><span>Columnas</span><select data-cm="cols"><option value="1"' + (pg.cols !== 2 ? ' selected' : '') + '>1 columna</option><option value="2"' + (pg.cols === 2 ? ' selected' : '') + '>2 columnas</option></select></label>' +
       (ui.nuevo ? '' : botonesMover('la página'));
   } else if (ui.tipo === 'seccion') {
     const s = ui.nuevo ? { titulo: '' } : c.paginas[ui.r[0]].secciones[ui.r[1]];
     html = '<h3>' + (ui.nuevo ? 'Sección nueva' : 'Sección') + '</h3><p class="sub">' + escapar(c.paginas[ui.r[0]].titulo || '') + '</p>' +
-      campoMenu('Título de la sección', 'titulo', s.titulo, ' placeholder="Ej.: Bocados calientes"') + (ui.nuevo ? '' : botonesMover('la sección'));
+      campoMenu('Título de la sección', 'titulo', s.titulo, ' placeholder="Ej.: Bocados calientes"') + campoMenu('Título en inglés (opcional)', 'en', s.en, ' placeholder="Ej.: Hot bites"') + (ui.nuevo ? '' : botonesMover('la sección'));
   } else {
     const p = ui.nuevo ? { nombre: '', detalle: '', descripcion: '', signature: false } : c.paginas[ui.r[0]].secciones[ui.r[1]].platos[ui.r[2]];
     const elegida = p.ficha && fichas().some((f) => f.id === p.ficha) ? p.ficha : '';
     const ordenadas = fichas().slice().sort((a, b) => a.nombre.localeCompare(b.nombre, 'es', { sensitivity: 'base' }));
     html = '<h3>' + (ui.nuevo ? 'Plato nuevo' : 'Plato de la carta') + '</h3><p class="sub">' + escapar(c.paginas[ui.r[0]].secciones[ui.r[1]].titulo || '') + '</p>' +
       campoMenu('Plato', 'nombre', p.nombre, ' placeholder="Ej.: Gyozas de pato"') + campoMenu('Detalle (opcional)', 'detalle', p.detalle, ' placeholder="Ej.: 4 unidades"') +
-      areaMenu('Descripción', 'descripcion', p.descripcion) +
+      campoMenu('Precio (opcional)', 'precio', p.precio, ' placeholder="Ej.: 12,50" inputmode="decimal"') +
+      areaMenu('Descripción', 'descripcion', p.descripcion) + areaMenu('Descripción en inglés (opcional)', 'en', p.en) +
       '<label class="menu-check"><input type="checkbox" data-cm="signature"' + (p.signature ? ' checked' : '') + '> ✿ Signature</label>' +
       '<div class="grupo-stock">Foto</div><div id="cmFotoZona"></div>' +
       '<div class="grupo-stock">Ficha técnica y alérgenos</div>' +
@@ -3771,16 +3832,21 @@ async function guardarMenuPanel() {
     ['nombre', 'kanji', 'lema', 'ciudad'].forEach((k) => { c.restaurante[k] = valorMenu(k).trim(); });
     c.alergenos = valorMenu('alergenos');
     c.imagenesOrientativas = valorMenu('orientativas');
+    c.estilo = valorMenu('estilo') === 'cerezo' ? 'cerezo' : 'geisha';
+    c.fotosPlatos = valorMenu('fotosPlatos');
   } else if (ui.tipo === 'pagina') {
     const pg = ui.nuevo ? { secciones: [{ titulo: 'Sección nueva', platos: [] }] } : c.paginas[ui.r[0]];
-    ['titulo', 'jp', 'sub', 'nota'].forEach((k) => { pg[k] = valorMenu(k).trim(); });
+    ['titulo', 'jp', 'sub', 'nota', 'en', 'notaEn', 'foto', 'fotoLado', 'papel'].forEach((k) => { pg[k] = valorMenu(k).trim(); });
+    pg.junto = valorMenu('junto');
+    pg.sello = valorMenu('sello');
     pg.titulo = pg.titulo || 'Página sin título';
     pg.cols = Number(valorMenu('cols')) === 2 ? 2 : 1;
     if (ui.nuevo) { c.paginas.push(pg); menuAbiertas.add(c.paginas.length - 1); }
   } else if (ui.tipo === 'seccion') {
     const titulo = valorMenu('titulo').trim() || 'Sección sin título';
-    if (ui.nuevo) c.paginas[ui.r[0]].secciones.push({ titulo, platos: [] });
-    else c.paginas[ui.r[0]].secciones[ui.r[1]].titulo = titulo;
+    const en = valorMenu('en').trim();
+    if (ui.nuevo) c.paginas[ui.r[0]].secciones.push({ titulo, en, platos: [] });
+    else Object.assign(c.paginas[ui.r[0]].secciones[ui.r[1]], { titulo, en });
   } else {
     const platos = c.paginas[ui.r[0]].secciones[ui.r[1]].platos;
     const p = ui.nuevo ? { id: nuevoId(), foto: '' } : platos[ui.r[2]];
@@ -3804,6 +3870,8 @@ async function guardarMenuPanel() {
     p.nombre = valorMenu('nombre').trim() || 'Plato sin nombre';
     p.detalle = valorMenu('detalle').trim();
     p.descripcion = valorMenu('descripcion').trim();
+    p.en = valorMenu('en').trim();
+    p.precio = valorMenu('precio').trim();
     p.signature = valorMenu('signature');
     const ficha = valorMenu('ficha');
     if (ficha) p.ficha = ficha; else delete p.ficha;
@@ -3880,6 +3948,7 @@ $('fichasContenido').addEventListener('click', (e) => {
   else if (a === 'nueva-seccion') abrirMenuPanel({ tipo: 'seccion', r, nuevo: true });
   else if (a === 'nueva-pagina') abrirMenuPanel({ tipo: 'pagina', r: [], nuevo: true });
   else if (a === 'subir-pdf') subirPdfCarta();
+  else if (a === 'carta-geisha') usarCartaGeisha();
   else if (a === 'importar') {
     elegirArchivo('application/json,.json', async (archivo) => {
       let c;
@@ -3997,9 +4066,125 @@ function imagenPdfAFoto(pagina, nombre) {
   }
   return c.toDataURL('image/jpeg', 0.82);
 }
+
+// ---------- Leer el PDF de la carta Geisha (la de 12 páginas) ----------
+// Se reconoce por su letra de títulos (TAN Buster). Cada texto se identifica por su tipo de letra: títulos, secciones,
+// nombres de plato, descripción en español (normal) y en inglés (cursiva). Las bebidas (飲み物) no entran en la carta.
+async function esPdfGeisha(doc) {
+  for (let n = 1; n <= Math.min(doc.numPages, 8); n++) {
+    const pagina = await doc.getPage(n);
+    await pagina.getOperatorList();
+    const tc = await pagina.getTextContent();
+    if (tc.items.some((it) => { try { return /TANBUSTER/i.test(pagina.commonObjs.get(it.fontName).name || ''); } catch (e) { return false; } })) return true;
+  }
+  return false;
+}
+const conFrase = (t) => t.split(' · ').map((x) => x.charAt(0).toUpperCase() + x.slice(1).toLowerCase()).join(' · ');
+const PALABRAS_MENORES = ['de', 'y', 'o', 'con', 'en', 'a', 'al', 'del', 'la', 'el', 'los', 'las'];
+const conNombre = (t) => t.toLowerCase().split(' ').map((w, i) => (i && PALABRAS_MENORES.includes(w) ? w : w === 'hinoki' ? 'HINOKI' : w.charAt(0).toUpperCase() + w.slice(1))).join(' ');
+async function cartaGeishaDesdePdf(doc, progreso) {
+  const antes = datos.menu;
+  const nombres = new Map();
+  const secciones = new Map();
+  [CARTA_GEISHA, antes].forEach((c) => c && c.paginas.forEach((pg) => pg.secciones.forEach((s) => {
+    secciones.set(sinEspacios([s.titulo, s.en].filter(Boolean).join(' · ')), s);
+    s.platos.forEach((p) => nombres.set(sinEspacios(p.nombre), p.nombre));
+  })));
+  const viejos = antes ? antes.paginas.flatMap((pg) => pg.secciones.flatMap((s) => s.platos)) : [];
+  const carta = { restaurante: antes ? { ...antes.restaurante } : { ...CARTA_GEISHA.restaurante }, estilo: 'geisha', alergenos: antes ? antes.alergenos !== false : true, fotosPlatos: !!(antes && antes.fotosPlatos), paginas: [] };
+  const rol = (it) => /TANBUSTER/i.test(it.f) ? 'titulo' : /CJK|Mincho|Gothic/i.test(it.f) || /[　-鿿]/.test(it.t) ? 'jp'
+    : /Optima/i.test(it.f) && /Bold/i.test(it.f) ? 'sec' : /Optima/i.test(it.f) ? 'en' : /Bold/i.test(it.f) ? (it.s < 9 ? 'sig' : 'nombre')
+    : /Italic/i.test(it.f) ? 'ingles' : /^€/.test(it.t) ? 'precio' : 'texto';
+  for (let n = 1; n <= doc.numPages; n++) {
+    progreso(n, doc.numPages);
+    const pagina = await doc.getPage(n);
+    await pagina.getOperatorList();
+    const tc = await pagina.getTextContent();
+    const items = tc.items.filter((it) => it.str.trim()).map((it) => {
+      let f = '';
+      try { f = pagina.commonObjs.get(it.fontName).name || ''; } catch (e) {}
+      const x = { t: it.str.trim(), x: it.transform[4], y: it.transform[5], s: it.height, f };
+      x.rol = rol(x);
+      return x;
+    });
+    const titulos = items.filter((it) => it.rol === 'titulo');
+    if (!titulos.length) continue;
+    if (items.some((it) => it.rol === 'jp' && it.t.includes('飲'))) continue;
+    const dos = titulos.some((it) => it.x >= 300);
+    const columna = (it) => (dos && it.x >= 290 ? 1 : 0);
+    for (let ci = 0; ci < (dos ? 2 : 1); ci++) {
+      const mios = items.filter((it) => columna(it) === ci);
+      const tits = mios.filter((it) => it.rol === 'titulo').sort((a, b) => b.y - a.y);
+      if (!tits.length) continue;
+      const titulo = conFrase(tits.map((it) => it.t).join(' '));
+      const bajoTitulo = Math.min(...tits.map((it) => it.y));
+      const ref = CARTA_GEISHA.paginas.find((p) => sinEspacios(p.titulo) === sinEspacios(titulo)) || {};
+      const pg = {
+        titulo, jp: mios.filter((it) => it.rol === 'jp').sort((a, b) => b.y - a.y).map((it) => it.t).join('').normalize('NFKC'),
+        en: conFrase(mios.filter((it) => it.rol === 'en' && it.y < bajoTitulo && it.y > bajoTitulo - 45).map((it) => it.t).join(' ')),
+        sub: '', cols: 1, nota: '', notaEn: '', foto: ref.foto || '', fotoLado: ref.fotoLado || 'derecha', papel: ref.papel || '', sello: !!ref.sello,
+        junto: dos && ci === 0, secciones: [],
+      };
+      const cuerpo = mios.filter((it) => ['sec', 'nombre', 'sig', 'texto', 'ingles'].includes(it.rol) && it.y < bajoTitulo - 2).sort((a, b) => b.y - a.y || a.x - b.x);
+      const lineas = [];
+      cuerpo.forEach((it) => {
+        const l = lineas.find((x) => x.rol === it.rol && Math.abs(x.y - it.y) < 2);
+        if (l) l.t += ' ' + it.t; else lineas.push({ ...it });
+      });
+      let sec = null, plato = null, ultimo = '', ultY = 0;
+      const platosY = [];
+      lineas.forEach((l) => {
+        const hueco = ultY - l.y;
+        let r = l.rol;
+        if (r === 'sec') {
+          if (ultimo === 'sec' && hueco < 18) sec.titulo += ' ' + l.t;
+          else { sec = { titulo: l.t, en: '', platos: [] }; pg.secciones.push(sec); plato = null; }
+        } else if (r === 'sig') {
+          if (plato) plato.signature = true;
+        } else if (r === 'nombre') {
+          if (ultimo === 'nombre' && hueco < 18) plato.nombre += ' ' + l.t;
+          else {
+            if (!sec) { sec = { titulo: '', en: '', platos: [] }; pg.secciones.push(sec); }
+            plato = { nombre: l.t, detalle: '', descripcion: '', en: '', precio: '', signature: false, foto: '' };
+            sec.platos.push(plato);
+            platosY.push([plato, l.y]);
+          }
+        } else if (r === 'ingles') {
+          if (ultimo === 'nota' || ultimo === 'notaEn') { pg.notaEn = (pg.notaEn + ' ' + l.t).trim(); r = 'notaEn'; }
+          else if (plato) plato.en = (plato.en + ' ' + l.t).trim();
+        } else if ((ultimo === 'ingles' || ultimo === 'nota' || ultimo === 'notaEn') && (hueco > 17 || ultimo !== 'texto')) {
+          pg.nota = (pg.nota + ' ' + l.t).trim();
+          r = 'nota';
+        } else if (plato) plato.descripcion = (plato.descripcion + ' ' + l.t).trim();
+        ultimo = r;
+        ultY = l.y;
+      });
+      // Precio: el que está en la misma línea que el nombre del plato (si no es «XX,XX»).
+      mios.filter((it) => it.rol === 'precio' && /\d/.test(it.t)).forEach((it) => {
+        const p = platosY.find(([, y]) => Math.abs(y - it.y) < 3);
+        if (p) p[0].precio = it.t.replace(/€\s*/, '').trim();
+      });
+      pg.secciones.forEach((s) => {
+        const conocida = secciones.get(sinEspacios(s.titulo));
+        if (conocida) { s.titulo = conocida.titulo; s.en = conocida.en || ''; } else s.titulo = conFrase(s.titulo);
+        s.platos.forEach((p) => {
+          if (p.nombre.includes(' · ')) { const [nom, ...det] = p.nombre.split(' · '); p.nombre = nom; p.detalle = det.join(' · ').toLowerCase(); }
+          p.nombre = nombres.get(sinEspacios(p.nombre)) || conNombre(p.nombre);
+          const v = viejos.find((x) => nombreLimpio(x.nombre) === nombreLimpio(p.nombre));
+          if (v) { if (v.ficha) p.ficha = v.ficha; if (v.fotoId) p.fotoId = v.fotoId; else if (v.foto) p.foto = v.foto; if (!p.precio && v.precio) p.precio = v.precio; }
+        });
+      });
+      carta.paginas.push(pg);
+    }
+  }
+  await doc.destroy();
+  return { carta, fotos: 0, platos: carta.paginas.reduce((t, x) => t + x.secciones.reduce((u, s) => u + s.platos.length, 0), 0) };
+}
+
 async function cartaDesdePdf(archivo, progreso) {
   const pdfjs = await cargarPdfJs();
   const doc = await pdfjs.getDocument({ data: new Uint8Array(await archivo.arrayBuffer()) }).promise;
+  if (await esPdfGeisha(doc)) return cartaGeishaDesdePdf(doc, progreso);
   const dic = diccionarioCarta([datos.menu, CARTA_HINOKI]);
   const anterior = datos.menu || CARTA_HINOKI;
   const carta = { restaurante: { ...anterior.restaurante }, paginas: [], alergenos: datos.menu ? datos.menu.alergenos !== false : true };
@@ -4122,7 +4307,9 @@ function subirPdfCarta() {
       return;
     }
     if (!r.platos) { avisar('Ese PDF no parece una carta hecha con el editor de Hinoki'); return; }
-    if (!confirm('He leído ' + r.carta.paginas.length + ' páginas, ' + r.platos + ' platos y ' + r.fotos + ' fotos.\n\n¿Cambiar la carta de Kumi Mara por la del PDF? Podrás deshacerlo justo después.')) return;
+    if (!confirm('He leído ' + r.carta.paginas.length + ' páginas y ' + r.platos + ' platos' + (r.carta.estilo === 'geisha' ? ', con su texto en inglés (carta Geisha; las bebidas no entran)' : ' y ' + r.fotos + ' fotos') + '.\n\n¿Cambiar la carta de Kumi Mara por la del PDF? Podrás deshacerlo justo después.')) return;
+    // El PDF antiguo (cerezos, foto por plato) se queda en su estilo; el de la geisha trae el suyo.
+    if (!r.carta.estilo) r.carta.estilo = 'cerezo';
     try { await prepararCarta(r.carta); } catch (err) { avisar('No se pudieron guardar las fotos. ¿Le queda espacio a este dispositivo?'); return; }
     const antes = datos.menu;
     datos.menu = r.carta;
@@ -4131,6 +4318,148 @@ function subirPdfCarta() {
     pintarMenu();
     ofrecerDeshacer('Carta cambiada por la del PDF', () => { datos.menu = antes; });
   });
+}
+
+// ---------- Estilo «Geisha»: la carta nueva de Hinoki (12 páginas, papel beige, foto grande por página, español e inglés) ----------
+// El estilo «Cerezo» (el anterior, con una foto por plato) sigue disponible: se elige en la portada de la carta.
+const CARTA_GEISHA = {"restaurante":{"nombre":"HINOKI","kanji":"檜","lema":"Japanese Kitchen & Sushi","ciudad":"Málaga"},"estilo":"geisha","alergenos":true,"paginas":[{"titulo":"Para empezar","jp":"前菜","en":"Starters","foto":"entrantes","fotoLado":"abajo","papel":"","sello":false,"sub":"","cols":1,"nota":"","notaEn":"","junto":true,"secciones":[{"titulo":"Frescos y pequeños bocados","en":"Fresh & small bites","platos":[{"nombre":"Edamame","detalle":"","descripcion":"Vainas de soja al vapor, con Sal Maldon o con un toque picante.","en":"Steamed soybean pods with Maldon salt or a spicy kick.","precio":"","signature":false,"foto":""},{"nombre":"Sopa miso","detalle":"","descripcion":"Caldo de miso con tofu, wakame y cebolleta fresca.","en":"Miso broth with tofu, wakame and fresh spring onion.","precio":"","signature":false,"foto":""},{"nombre":"Nasu no Miso Su","detalle":"","descripcion":"Berenjena fría con vinagreta de miso, cebollino, fruto seco y brotes tiernos.","en":"Chilled aubergine with miso vinaigrette, chives, nuts and baby shoots.","precio":"","signature":true,"foto":""},{"nombre":"Sunomono","detalle":"","descripcion":"Ensalada de wakame, pepino y cebolla encurtidos, con vinagre de arroz.","en":"Pickled wakame, cucumber and onion salad with rice vinegar.","precio":"","signature":false,"foto":""},{"nombre":"Wakame","detalle":"","descripcion":"Alga wakame con sésamo mixto.","en":"Wakame seaweed with mixed sesame.","precio":"","signature":false,"foto":""},{"nombre":"Tres bocados HINOKI","detalle":"3 uds.","descripcion":"Brioche tostado: hamachi con emulsión de yuzu kosho y tobiko naranja; salmón con emulsión de miso blanco e ikura; atún con emulsión de wasabi y tobiko negro.","en":"Toasted brioche: hamachi with yuzu kosho emulsion and orange tobiko; salmon with white miso emulsion and ikura; tuna with wasabi emulsion and black tobiko.","precio":"","signature":true,"foto":""}]}]},{"titulo":"Bocados calientes","jp":"","en":"Hot bites","foto":"","fotoLado":"derecha","papel":"","sello":false,"sub":"","cols":1,"nota":"","notaEn":"","junto":false,"secciones":[{"titulo":"","en":"","platos":[{"nombre":"Gyozas","detalle":"4 uds.","descripcion":"Empanadillas japonesas con salsa de soja dulce. De pato, pollo curry, cerdo, langostino o kale (vegana).","en":"Japanese dumplings with sweet soy sauce. Duck, curry chicken, pork, prawn or kale (vegan).","precio":"","signature":false,"foto":""},{"nombre":"Pollo karaage","detalle":"","descripcion":"Pollo crujiente al estilo japonés, con salsa sweet chili y teriyaki, sésamo mixto y cebolleta.","en":"Japanese-style crispy chicken with sweet chili and teriyaki sauce, mixed sesame and spring onion.","precio":"","signature":false,"foto":""},{"nombre":"Yakitori de pollo","detalle":"2 brochetas","descripcion":"Contramuslo glaseado con teriyaki o salsa kimchi picante, hierbas y sésamo.","en":"Chicken thigh skewers glazed with teriyaki or spicy kimchi sauce, herbs and sesame.","precio":"","signature":false,"foto":""},{"nombre":"Ebi Kushiyaki","detalle":"2 brochetas","descripcion":"Brochetas de langostino con salsa cremosa picante.","en":"Prawn skewers with a creamy spicy sauce.","precio":"","signature":false,"foto":""}]}]},{"titulo":"Tartares y sashimi","jp":"刺身","en":"Tartares, cuts & sashimi","foto":"salmon","fotoLado":"derecha","papel":"","sello":false,"sub":"","cols":1,"nota":"Los sashimis se acompañan de wasabi y jengibre.","notaEn":"Sashimi is served with wasabi and ginger.","junto":false,"secciones":[{"titulo":"Tartares y cortes","en":"Tartares & cuts","platos":[{"nombre":"Tartar de salmón","detalle":"","descripcion":"Salmón cortado a cuchillo con soja y sésamo, ikura y hoja de arroz.","en":"Knife-cut salmon with soy and sesame, topped with ikura, served with rice leaf.","precio":"","signature":false,"foto":""},{"nombre":"Tartar de atún","detalle":"","descripcion":"Atún a cuchillo con dashi shoyu, yema, aceite de sésamo ume y un toque de kimchi; tobiko negro y crujiente de arroz.","en":"Knife-cut tuna with dashi shoyu, egg yolk, ume sesame oil and a touch of kimchi; black tobiko and rice crisp.","precio":"","signature":false,"foto":""},{"nombre":"Usuzukuri de hamachi","detalle":"","descripcion":"Láminas finas de hamachi con crema de aguacate, aliño de lima, soja y aceite de oliva suave, polvo de aceituna negra y brotes tiernos.","en":"Thinly sliced hamachi with avocado cream, lime dressing, soy and mild olive oil, black olive powder and baby shoots.","precio":"","signature":false,"foto":""},{"nombre":"Tataki de bonito","detalle":"9 piezas","descripcion":"Bonito ligeramente marcado, ponzu de maracuyá, berenjena a la parrilla, sésamo tostado y polvo de miso.","en":"Lightly seared bonito with passion fruit ponzu, grilled aubergine, toasted sesame and miso powder.","precio":"","signature":true,"foto":""}]},{"titulo":"Sashimi","en":"","platos":[{"nombre":"Sashimi moriawase","detalle":"12 piezas","descripcion":"Atún, salmón, hamachi y lubina: tres cortes de cada pescado.","en":"Tuna, salmon, hamachi and sea bass: three cuts of each.","precio":"","signature":false,"foto":""},{"nombre":"Sashimi Mixto","detalle":"8 piezas","descripcion":"Ocho cortes de salmón y atún.","en":"Eight cuts of salmon and tuna.","precio":"","signature":true,"foto":""},{"nombre":"Sashimi de Salmón, Hamachi o Lubina","detalle":"4 piezas","descripcion":"Cuatro cortes del pescado elegido, presentados con sencillez para destacar el producto.","en":"Four cuts of your chosen fish, served simply to let the product shine.","precio":"","signature":false,"foto":""}]}]},{"titulo":"Nigiri","jp":"握り","en":"On sushi rice, served per piece · Servidos por pieza","foto":"arroz","fotoLado":"derecha","papel":"monte","sello":false,"sub":"","cols":1,"nota":"","notaEn":"","junto":false,"secciones":[{"titulo":"","en":"","platos":[{"nombre":"Saba | Caballa","detalle":"","descripcion":"Con un toque de kizami wasabi.","en":"Mackerel with kizami wasabi.","precio":"","signature":false,"foto":""},{"nombre":"Maguro | Atún","detalle":"","descripcion":"Con un toque de kimchi.","en":"Tuna with a touch of kimchi.","precio":"","signature":false,"foto":""},{"nombre":"Sake Koji | Salmón","detalle":"","descripcion":"Salmón terminado con koji.","en":"Salmon finished with koji.","precio":"","signature":false,"foto":""},{"nombre":"Hamachi Yuzu","detalle":"","descripcion":"Realzado con un toque de yuzu kosho.","en":"Hamachi with a touch of yuzu kosho.","precio":"","signature":false,"foto":""},{"nombre":"Sake Aburi | Salmón","detalle":"","descripcion":"Salmón ligeramente flambeado, con alioli de wasabi.","en":"Lightly torched salmon with wasabi aioli.","precio":"","signature":false,"foto":""},{"nombre":"Lubina | Jalapeño","detalle":"","descripcion":"Lubina con un toque de jalapeño.","en":"Sea bass with a touch of jalapeño.","precio":"","signature":false,"foto":""},{"nombre":"Wagyu | Codorniz y trufa","detalle":"","descripcion":"Wagyu con huevo de codorniz y crema de trufa.","en":"Wagyu with quail egg and truffle cream.","precio":"","signature":true,"foto":""}]},{"titulo":"Futomaki, hosomaki y temaki · 6 piezas / 6 pcs","en":"","platos":[{"nombre":"Negitoro | Futomaki","detalle":"","descripcion":"Ventresca de atún, aguacate y tobiko rojo en alga nori.","en":"Tuna belly, avocado and red tobiko wrapped in nori.","precio":"","signature":false,"foto":""},{"nombre":"Hosomaki","detalle":"","descripcion":"Alga nori y arroz de sushi con salmón, atún, aguacate o surimi.","en":"Nori and sushi rice with salmon, tuna, avocado or surimi.","precio":"","signature":false,"foto":""},{"nombre":"Temaki","detalle":"","descripcion":"Cono de nori con arroz de sushi y: atún picante · hamachi y yuzu kosho · anguila, salsa unagi y sansho.","en":"Nori cone with sushi rice and: spicy tuna · hamachi and yuzu kosho · eel, unagi sauce and sansho.","precio":"","signature":false,"foto":""}]}]},{"titulo":"Rolls","jp":"巻き寿司","en":"Rolls · 8 piezas / 8 pcs","foto":"arroz","fotoLado":"izquierda","papel":"","sello":false,"sub":"","cols":1,"nota":"","notaEn":"","junto":false,"secciones":[{"titulo":"Clásicos · uramaki","en":"Classics","platos":[{"nombre":"California Kani","detalle":"","descripcion":"Cangrejo, pepino y aguacate con emulsión suave y masago naranja.","en":"Crab, cucumber and avocado with a light emulsion and orange masago.","precio":"","signature":false,"foto":""},{"nombre":"Sake Hana","detalle":"","descripcion":"Salmón y aguacate, con sésamo en el exterior.","en":"Salmon and avocado, sesame-coated outside.","precio":"","signature":false,"foto":""},{"nombre":"Akami Spicy","detalle":"","descripcion":"Atún aliñado con sriracha y pepino, tobiko y cebollino.","en":"Tuna dressed with sriracha and cucumber, tobiko and chives.","precio":"","signature":false,"foto":""},{"nombre":"Ebi Tempura Aburi","detalle":"","descripcion":"Langostino crujiente, queso y aguacate, con salmón flambeado, teriyaki y tobiko.","en":"Crispy prawn, cheese and avocado topped with torched salmon, teriyaki and tobiko.","precio":"","signature":false,"foto":""},{"nombre":"Pink Veggie","detalle":"","descripcion":"Zanahoria, aguacate, pepino y pimiento rojo con aliño de mostaza y miel; remolacha rallada y cebolla frita.","en":"Carrot, avocado, cucumber and red pepper with mustard-honey dressing; grated beetroot and crispy onion.","precio":"","signature":false,"foto":""}]},{"titulo":"Signature HINOKI","en":"","platos":[{"nombre":"Niji","detalle":"","descripcion":"Cangrejo, aguacate y pepino, cubiertos con láminas de atún, salmón y hamachi.","en":"Crab, avocado and cucumber covered with slices of tuna, salmon and hamachi.","precio":"","signature":true,"foto":""},{"nombre":"Kaisen Lobster","detalle":"","descripcion":"Aguacate y pepino con langostino en tempura, emulsión de yuzu y crujiente de miso; tobiko negro y rojo.","en":"Avocado and cucumber topped with tempura prawn, yuzu emulsion and miso crunch; black and red tobiko.","precio":"","signature":true,"foto":""},{"nombre":"Ebi Maguro","detalle":"","descripcion":"Langostino en tempura y aguacate con tartar de atún picante, emulsiones de ponzu y picante, cebollino y crujiente de arroz.","en":"Tempura prawn and avocado topped with spicy tuna tartare, ponzu and spicy emulsions, chives and rice crisp.","precio":"","signature":true,"foto":""}]}]},{"titulo":"Sushi para compartir","jp":"盛り合わせ","en":"Sushi to share","foto":"","fotoLado":"derecha","papel":"","sello":false,"sub":"","cols":1,"nota":"","notaEn":"","junto":true,"secciones":[{"titulo":"Selecciones HINOKI","en":"Hinoki selections","platos":[{"nombre":"HINOKI 12","detalle":"12 piezas","descripcion":"4 California Kani, 4 Sake Hana y 4 nigiris: atún, salmón, hamachi y lubina.","en":"4 California Kani, 4 Sake Hana and 4 nigiri: tuna, salmon, hamachi and sea bass.","precio":"","signature":false,"foto":""},{"nombre":"HINOKI 18","detalle":"18 piezas","descripcion":"4 California Kani, 4 Sake Hana, 6 hosomaki de atún y 4 nigiris: atún, salmón, hamachi y lubina.","en":"4 California Kani, 4 Sake Hana, 6 tuna hosomaki and 4 nigiri: tuna, salmon, hamachi and sea bass.","precio":"","signature":false,"foto":""},{"nombre":"HINOKI 22","detalle":"22 piezas","descripcion":"8 California Kani, 4 Sake Hana, 6 hosomaki de atún y 4 nigiris: atún, salmón, hamachi y lubina.","en":"8 California Kani, 4 Sake Hana, 6 tuna hosomaki and 4 nigiri: tuna, salmon, hamachi and sea bass.","precio":"","signature":false,"foto":""},{"nombre":"HINOKI Table Feast","detalle":"50 piezas","descripcion":"8 California Kani, 8 Sake Hana, 8 Niji, 6 Negitoro, 6 hosomaki de atún, 6 de aguacate y 8 nigiris: dos de atún, salmón, hamachi y lubina.","en":"8 California Kani, 8 Sake Hana, 8 Niji, 6 Negitoro, 6 tuna and 6 avocado hosomaki and 8 nigiri: two each of tuna, salmon, hamachi and sea bass.","precio":"","signature":false,"foto":""}]},{"titulo":"Chirashi","en":"","platos":[{"nombre":"Chirashi de Salmón, Atún o Mixto","detalle":"","descripcion":"Pescado sobre arroz de sushi con negi fresco; el mixto lleva salmón, atún y hamachi. Wasabi y jengibre encurtido al lado, soja aparte.","en":"Fish over sushi rice with fresh negi; the mixed one has salmon, tuna and hamachi. Wasabi and pickled ginger on the side, soy served separately.","precio":"","signature":false,"foto":""}]}]},{"titulo":"Arroces y noodles","jp":"ご飯・麺","en":"Rice & noodles","foto":"","fotoLado":"derecha","papel":"","sello":false,"sub":"","cols":1,"nota":"","notaEn":"","junto":false,"secciones":[{"titulo":"Noodles","en":"","platos":[{"nombre":"Yakisoba","detalle":"","descripcion":"Fideos salteados con pollo, o versión vegana con verduras, shiitake y champiñones, en salsa yakisoba.","en":"Stir-fried noodles with chicken, or a vegan version with vegetables, shiitake and mushrooms in yakisoba sauce.","precio":"","signature":false,"foto":""},{"nombre":"Udon de langostino","detalle":"","descripcion":"Udon salteado con langostinos y verduras, con soja y sésamo.","en":"Stir-fried udon with prawns and vegetables, finished with soy and sesame.","precio":"","signature":false,"foto":""},{"nombre":"Wok de verduras","detalle":"","descripcion":"Shiitake, zanahoria, col china, pimientos, brotes de soja y cebolla al wok con salsa teriyaki.","en":"Wok-fried shiitake, carrot, Chinese cabbage, peppers, bean sprouts and onion with teriyaki sauce.","precio":"","signature":false,"foto":""}]},{"titulo":"Arroces","en":"Rice","platos":[{"nombre":"Yakimeshi de pluma ibérica","detalle":"","descripcion":"Arroz japonés salteado con pluma ibérica, huevo, zanahoria y shiitake; soja, aceite de sésamo y negi.","en":"Stir-fried Japanese rice with Iberian pork pluma, egg, carrot and shiitake; soy, sesame oil and negi.","precio":"","signature":false,"foto":""},{"nombre":"Donburi de pollo teriyaki","detalle":"","descripcion":"Contramuslo glaseado con teriyaki sobre arroz japonés con huevo y cebolleta fresca.","en":"Teriyaki-glazed chicken thigh over Japanese rice with egg and fresh spring onion.","precio":"","signature":false,"foto":""},{"nombre":"HINOKI Wagyu Yakiniku Don","detalle":"","descripcion":"Finas láminas de wagyu japonés A4 glaseadas con tare de la casa sobre arroz japonés; negi y pepino encurtido.","en":"Thin slices of A4 Japanese wagyu glazed with house tare over Japanese rice; negi and pickled cucumber.","precio":"","signature":true,"foto":""}]}]},{"titulo":"Para terminar","jp":"甘味","en":"To finish","foto":"postres","fotoLado":"derecha","sello":true,"papel":"","sub":"","cols":1,"nota":"Consulte con nuestro equipo la información sobre alérgenos.","notaEn":"Please ask our team for allergen information.","junto":false,"secciones":[{"titulo":"Postres","en":"Desserts","platos":[{"nombre":"Cajita dulce HINOKI","detalle":"8 bocados","descripcion":"Para compartir: 2 mochis, 2 trufas de sake y té verde, 2 bocaditos de bizcocho de té con nata y azuki y 2 mini dorayakis.","en":"To share: 2 mochi, 2 sake and green tea truffles, 2 tea sponge bites with cream and azuki, and 2 mini dorayaki.","precio":"","signature":false,"foto":""},{"nombre":"Helado de té verde matcha","detalle":"","descripcion":"Helado cremoso de té verde japonés.","en":"Creamy Japanese green tea ice cream.","precio":"","signature":false,"foto":""},{"nombre":"Suflé de chocolate","detalle":"","descripcion":"Bizcocho caliente de chocolate con corazón fundente.","en":"Warm chocolate cake with a molten centre.","precio":"","signature":false,"foto":""},{"nombre":"Cheesecake","detalle":"","descripcion":"Tarta de queso.","en":"Cheesecake.","precio":"","signature":false,"foto":""},{"nombre":"Dorayakis","detalle":"","descripcion":"A elección: Nutella, dulce de leche o Lotus; con fresas o chocolate picado; topping de azúcar glas o polvo de chocolate.","en":"Your choice of Nutella, dulce de leche or Lotus; with strawberries or chopped chocolate; topped with icing sugar or chocolate powder.","precio":"","signature":false,"foto":""}]}]}]};
+const FOTOS_HOJA = { entrantes: 'Entrantes', salmon: 'Corte de salmón', arroz: 'Arroz de sushi', postres: 'Postres' };
+const LADOS_FOTO = { derecha: 'A la derecha', izquierda: 'A la izquierda', abajo: 'Abajo' };
+const estiloCarta = () => (datos.menu && datos.menu.estilo === 'cerezo' ? 'cerezo' : 'geisha');
+const textoPrecio = (precio) => { const t = String(precio || '').trim(); return !t ? '' : t.includes('€') ? t : '€ ' + t; };
+// El título va en dos líneas: la primera mitad en negro y la segunda en rosa, como en la carta impresa.
+function gzTitulo(titulo) {
+  const w = String(titulo || '').trim().split(/\s+/).filter(Boolean);
+  if (w.length < 2) return '<span class="gz-rosa">' + escapar(w.join(' ')) + '</span>';
+  const corte = Math.floor(w.length / 2);
+  return '<span>' + escapar(w.slice(0, corte).join(' ')) + '</span><span class="gz-rosa">' + escapar(w.slice(corte).join(' ')) + '</span>';
+}
+function gzPlatoHtml(p, c) {
+  const foto = c.fotosPlatos ? fotoPlato(p) : '';
+  const alg = c.alergenos !== false ? alergenosEnCarta(p) : '';
+  const precio = textoPrecio(p.precio);
+  return '<div class="gz-plato' + (foto ? ' con-foto' : '') + '">' + (foto ? '<div class="gz-foto-plato"><img src="' + escapar(foto) + '" alt=""></div>' : '') +
+    '<div><div class="gz-nom"><b>' + escapar(p.nombre || '') + (p.detalle ? ' · ' + escapar(p.detalle) : '') + '</b>' + (precio ? '<span class="gz-precio">' + escapar(precio) + '</span>' : '') + '</div>' +
+    (p.signature ? '<div class="gz-sig">Signature</div>' : '') +
+    (p.descripcion ? '<p class="gz-es">' + escapar(p.descripcion) + '</p>' : '') + (p.en ? '<p class="gz-in">' + escapar(p.en) + '</p>' : '') +
+    (alg ? '<div class="gz-alg">' + escapar(alg) + '</div>' : '') + '</div></div>';
+}
+function gzHoja(destino, pg, conFoto) {
+  const foto = conFoto && FOTOS_HOJA[pg.foto] ? pg.foto : '';
+  const el = document.createElement('div');
+  el.className = 'cm-pagina gz-hoja' + (foto ? ' gz-' + (LADOS_FOTO[pg.fotoLado] ? pg.fotoLado : 'derecha') : '');
+  el.innerHTML = '<div class="gz-papel"><img src="carta/' + (pg.papel === 'monte' ? 'papel-monte' : 'papel') + '.jpg" alt=""></div>' +
+    (foto ? '<div class="gz-foto"><img src="carta/foto-' + foto + '.jpg" alt=""></div>' : '') + '<div class="gz-texto"></div>';
+  destino.appendChild(el);
+  return el.querySelector('.gz-texto');
+}
+function gzColumna(texto, pg, sigue) {
+  const col = document.createElement('div');
+  col.className = 'gz-col';
+  col.innerHTML = '<div class="gz-cab">' + (pg.jp ? '<div class="gz-jp">' + escapar(pg.jp) + '</div>' : '') +
+    '<div><div class="gz-titulo">' + gzTitulo(pg.titulo) + '</div>' +
+    ((sigue || pg.en) ? '<div class="gz-en-tit">' + escapar(sigue ? 'Continuación · Continued' : pg.en) + '</div>' : '') + '</div></div><div class="gz-cuerpo"></div>';
+  texto.appendChild(col);
+  return col.querySelector('.gz-cuerpo');
+}
+const gzSeccion = (s) => '<div class="gz-sec">' + escapar([s.titulo, s.en].filter(Boolean).join(' · ')) + '</div>';
+const gzNota = (pg) => (pg.nota || pg.notaEn) ? '<div class="gz-nota">' + escapar(pg.nota || '') + (pg.notaEn ? '<i>' + escapar(pg.notaEn) + '</i>' : '') + '</div>' : '';
+// Una página de la carta en una o más hojas: si no cabe, sigue en otra hoja sin foto.
+function gzPagina(destino, pg, c) {
+  let cuerpo = gzColumna(gzHoja(destino, pg, true), pg, false);
+  const otraHoja = () => { cuerpo = gzColumna(gzHoja(destino, pg, false), pg, true); };
+  const nuevaSeccion = (titulo) => {
+    const sec = document.createElement('div');
+    sec.className = 'gz-seccion';
+    sec.innerHTML = titulo;
+    cuerpo.appendChild(sec);
+    return sec;
+  };
+  pg.secciones.forEach((s) => {
+    const titulo = (s.titulo || s.en) ? gzSeccion(s) : '';
+    let sec = nuevaSeccion(titulo);
+    s.platos.forEach((p) => {
+      sec.insertAdjacentHTML('beforeend', gzPlatoHtml(p, c));
+      if (!cartaDesborda(cuerpo)) return;
+      const ultimo = sec.lastElementChild;
+      const habia = sec.querySelectorAll('.gz-plato').length > 1;
+      if (!habia && cuerpo.children.length === 1) return;
+      ultimo.remove();
+      if (!habia) sec.remove();
+      otraHoja();
+      sec = nuevaSeccion(titulo);
+      sec.appendChild(ultimo);
+    });
+  });
+  const nota = gzNota(pg);
+  if (nota) {
+    cuerpo.insertAdjacentHTML('beforeend', nota);
+    if (cartaDesborda(cuerpo) && cuerpo.children.length > 1) { const n = cuerpo.lastElementChild; n.remove(); otraHoja(); cuerpo.appendChild(n); }
+  }
+  if (pg.sello) cuerpo.closest('.gz-hoja').insertAdjacentHTML('beforeend', '<div class="gz-sello"><img src="carta/sello.png" alt=""></div>');
+}
+// Dos páginas cortas comparten hoja, una por columna. Si alguna no cabe, cada una va en su hoja.
+function gzPar(destino, a, b, c) {
+  const texto = gzHoja(destino, a, true);
+  texto.classList.add('gz-dos');
+  const cabe = [a, b].every((pg) => {
+    const cuerpo = gzColumna(texto, pg, false);
+    cuerpo.innerHTML = pg.secciones.map((s) => '<div class="gz-seccion">' + ((s.titulo || s.en) ? gzSeccion(s) : '') + s.platos.map((p) => gzPlatoHtml(p, c)).join('') + '</div>').join('') + gzNota(pg);
+    return !cartaDesborda(cuerpo);
+  });
+  if (cabe) return;
+  texto.closest('.gz-hoja').remove();
+  gzPagina(destino, a, c);
+  gzPagina(destino, b, c);
+}
+// En las hojas con la foto abajo, lo que llega a la foto se escribe en blanco encima de ella.
+function gzSobreFoto(medir) {
+  medir.querySelectorAll('.gz-abajo').forEach((hoja) => {
+    const limite = hoja.querySelector('.gz-foto').getBoundingClientRect().top - 2;
+    hoja.querySelectorAll('.gz-plato, .gz-sec, .gz-nota').forEach((el) => {
+      const caja = el.getBoundingClientRect();
+      if (caja.bottom <= limite) return;
+      // Si empieza en el papel y acaba en la foto, se baja entero a la foto (si aún cabe en la hoja).
+      if (caja.top < limite) {
+        const antes = el.style.marginTop;
+        el.style.marginTop = (parseFloat(getComputedStyle(el).marginTop) + limite - caja.top + 10) + 'px';
+        if (cartaDesborda(el.closest('.gz-cuerpo'))) el.style.marginTop = antes;
+      }
+      el.classList.add('gz-sobre');
+    });
+  });
+}
+function construirGeisha(medir) {
+  const c = datos.menu;
+  medir.innerHTML = '<div class="cm-pagina gz-portada"><div class="gz-papel"><img src="carta/portada.jpg" alt=""></div></div>';
+  for (let i = 0; i < c.paginas.length; i++) {
+    const pg = c.paginas[i];
+    if (pg.junto && c.paginas[i + 1]) { gzPar(medir, pg, c.paginas[i + 1], c); i++; }
+    else gzPagina(medir, pg, c);
+  }
+  medir.insertAdjacentHTML('beforeend', '<div class="cm-pagina gz-portada"><div class="gz-papel"><img src="carta/contraportada.jpg" alt=""></div></div>');
+  gzSobreFoto(medir);
+}
+// Pone la carta nueva conservando, en los platos que se llaman igual, su ficha, su foto y su precio.
+async function usarCartaGeisha() {
+  if (!confirm('¿Poner la carta nueva de 12 páginas (estilo Geisha)? Los platos que se llamen igual mantienen su ficha, su foto y su precio. Podrás deshacerlo justo después.')) return;
+  const antes = datos.menu;
+  const nueva = JSON.parse(JSON.stringify(CARTA_GEISHA));
+  const viejos = antes ? antes.paginas.flatMap((pg) => pg.secciones.flatMap((s) => s.platos)) : [];
+  nueva.paginas.forEach((pg) => pg.secciones.forEach((s) => s.platos.forEach((p) => {
+    const v = viejos.find((x) => nombreLimpio(x.nombre) === nombreLimpio(p.nombre));
+    if (!v) return;
+    if (v.ficha) p.ficha = v.ficha;
+    if (v.fotoId) p.fotoId = v.fotoId; else if (v.foto) p.foto = v.foto;
+    if (v.precio) p.precio = v.precio;
+  })));
+  if (antes) { nueva.alergenos = antes.alergenos !== false; nueva.fotosPlatos = !!antes.fotosPlatos; }
+  try { await prepararCarta(nueva); } catch (err) { avisar('No se pudo preparar la carta en este dispositivo'); return; }
+  datos.menu = nueva;
+  menuVer = false;
+  guardar();
+  pintarMenu();
+  ofrecerDeshacer('Carta nueva puesta', () => { datos.menu = antes; });
 }
 
 // --- Copia de seguridad: un archivo con todos los datos de este móvil ---
