@@ -4,7 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="robots" content="noindex, nofollow">
-<meta name="theme-color" content="#b04d6e">
+<meta name="theme-color" content="#7a2131">
+<script>try { var t = JSON.parse(localStorage.getItem('kumi-mara-tema')); if (t && t.css) { var s = document.createElement('style'); s.id = 'temaVars'; s.textContent = t.css; document.head.appendChild(s); document.querySelector('meta[name="theme-color"]').content = t.c; } } catch (e) {}</script>
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -21,21 +22,29 @@
   @font-face { font-family: 'Josefin Sans'; font-weight: 300 700; font-display: swap; src: url(fuentes/JosefinSans.woff2) format('woff2'); }
   @font-face { font-family: 'Jost'; font-weight: 100 900; font-display: swap; src: url(fuentes/Jost.woff2) format('woff2'); }
 
+  /* Colores de la app: estos son los de «Borgoña Hinoki»; los demás temas los cambia temaKumi() (Más → Color de la app). */
   :root {
-    --rosa: #d4698a;
-    --coral: #e9a3b6;
-    --violeta: #6c4a44;
-    --frambuesa: #b04d6e;
-    --frambuesa-oscuro: #5b2f3e;
-    --rosa-medio: #f3b9c8;
-    --rosa-suave: #fbe4ea;
-    --deg: linear-gradient(135deg, #d4698a 0%, #e9a3b6 100%);
-    --deg-intenso: linear-gradient(150deg, #eaa9b9 0%, #d4698a 38%, #c25a7c 70%, #6c4a44 100%);
-    --deg-oscuro: linear-gradient(135deg, #3e2a30 0%, #8a4a5c 100%);
-    --tinta: #44303a;
-    --gris: #866f77;
-    --borde: #ecd3d9;
-    --fondo: #fbf4f2;
+    --rosa: #a33a4a;
+    --coral: #cf7d89;
+    --violeta: #4a2226;
+    --frambuesa: #7a2131;
+    --frambuesa-oscuro: #3f1219;
+    --rosa-medio: #e3b3ba;
+    --rosa-suave: #f5e3e5;
+    --fuerte: #8c2a3a;
+    --claro: #e09aa5;
+    --cabecera: #ecccd1;
+    --foco-rgb: 163, 58, 74;
+    --sombra-rgb: 122, 33, 49;
+    --deg: linear-gradient(135deg, var(--rosa) 0%, var(--coral) 100%);
+    --deg-intenso: linear-gradient(150deg, var(--claro) 0%, var(--rosa) 38%, var(--fuerte) 70%, var(--violeta) 100%);
+    --deg-oscuro: linear-gradient(135deg, var(--oscuro-1) 0%, var(--oscuro-2) 100%);
+    --oscuro-1: #2a1215;
+    --oscuro-2: #6e2a35;
+    --tinta: #3b2125;
+    --gris: #7f6266;
+    --borde: #e8d0d3;
+    --fondo: #faf3f2;
     --blanco: #ffffff;
     --verde: #2fb37a;
     --titulo: 'Shippori Mincho B1', 'Hiragino Mincho ProN', 'Yu Mincho', Georgia, serif;
@@ -48,7 +57,7 @@
   html { font-synthesis: none; }
   body {
     font-family: 'Jost', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    background: linear-gradient(180deg, #f9eceb 0%, #fbf4f1 55%, #fbf4f2 100%) fixed; background-color: var(--fondo); color: var(--tinta); font-size: 16px;
+    background: linear-gradient(180deg, var(--rosa-suave) 0%, var(--fondo) 55%, var(--fondo) 100%) fixed; background-color: var(--fondo); color: var(--tinta); font-size: 16px;
     padding-bottom: calc(80px + env(safe-area-inset-bottom));
   }
   button, select, input { font: inherit; color: inherit; }
@@ -92,7 +101,7 @@
   .tablero { padding: 0 14px; margin: -14px auto 0; position: relative; max-width: 720px; }
   .tarjeta {
     background: var(--blanco); border-radius: 22px; padding: 18px 16px; margin-bottom: 14px;
-    box-shadow: 0 8px 28px rgba(176, 77, 110, .08), 0 1px 2px rgba(176, 77, 110, .06);
+    box-shadow: 0 8px 28px rgba(var(--sombra-rgb), .08), 0 1px 2px rgba(var(--sombra-rgb), .06);
   }
   .tarjeta h3 { margin: 0; font-family: var(--titulo); font-style: italic; font-weight: 600; font-size: 22px; color: var(--frambuesa); }
   .tarjeta .sub { font-size: 13px; color: var(--gris); margin: 2px 0 14px; }
@@ -121,7 +130,7 @@
     display: flex; align-items: center; justify-content: center; white-space: nowrap; overflow: hidden;
     background: var(--deg);
   }
-  .tramo.noche { background: linear-gradient(90deg, #c25a7c, #6c4a44); }
+  .tramo.noche { background: linear-gradient(90deg, var(--fuerte), var(--violeta)); }
   .horas-eje { position: relative; height: 18px; margin-left: 116px; font-size: 10.5px; color: var(--gris); }
   .horas-eje span { position: absolute; transform: translateX(-50%); }
   .ya { position: absolute; top: -6px; bottom: 16px; width: 2px; background: var(--tinta); border-radius: 2px; pointer-events: none; }
@@ -139,7 +148,7 @@
   .barras-dias { flex: 1; display: flex; gap: 6px; align-items: flex-end; height: 72px; }
   .barras-dias div { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; height: 100%; gap: 4px; }
   .barras-dias i { width: 100%; max-width: 22px; border-radius: 6px 6px 3px 3px; background: var(--rosa-suave); min-height: 6px; }
-  .barras-dias .ok i { background: linear-gradient(180deg, #e9a3b6, #d4698a 60%, #c25a7c); }
+  .barras-dias .ok i { background: linear-gradient(180deg, var(--coral), var(--rosa) 60%, var(--fuerte)); }
   .barras-dias span { font-size: 11px; color: var(--gris); }
   .barras-dias em { font-style: normal; font-size: 10px; font-weight: 600; color: var(--frambuesa); height: 12px; }
   .estado { font-size: 14px; margin: 0 0 14px; color: var(--gris); }
@@ -198,7 +207,7 @@
   .interruptor.on i::after { transform: translateX(15px); }
   .dia-libre { margin: 6px 0 2px; padding: 12px; border-radius: 14px; background: linear-gradient(135deg, #f0fbf5, #e3f6ec); color: #1f7a4d; font-weight: 600; text-align: center; }
   .persona.es-libre { background: linear-gradient(180deg, #fff, #fbfffd); }
-  .etiqueta { font-size: 12px; font-weight: 500; padding: 3px 10px; border-radius: 99px; background: #f3eef0; color: var(--gris); }
+  .etiqueta { font-size: 12px; font-weight: 500; padding: 3px 10px; border-radius: 99px; background: color-mix(in srgb, var(--gris) 14%, var(--blanco)); color: var(--gris); }
   .etiqueta.trabaja { background: var(--rosa-suave); color: var(--frambuesa); }
   .turno { display: flex; align-items: center; gap: 6px; margin-top: 6px; }
   .turno .lbl { width: 58px; font-size: 13px; color: var(--gris); }
@@ -210,7 +219,7 @@
   .turno input::-webkit-calendar-picker-indicator { display: none; }
   .turno input::-webkit-date-and-time-value { text-align: center; }
   .turno input:not(.lleno)::-webkit-datetime-edit { color: #c9b5bd; }
-  .turno input:focus { border-color: var(--rosa); box-shadow: 0 0 0 3px rgba(212, 105, 138, .18); background: var(--blanco); }
+  .turno input:focus { border-color: var(--rosa); box-shadow: 0 0 0 3px rgba(var(--foco-rgb), .18); background: var(--blanco); }
   .turno input.lleno { background: var(--rosa-suave); border-color: var(--rosa-medio); color: var(--frambuesa); font-weight: 600; }
   .turno .a { color: var(--gris); font-size: 13px; }
   .turno .borrar { width: 40px; height: 46px; border: 0; background: none; font-size: 18px; color: #c9b5bd; }
@@ -218,7 +227,7 @@
   .acciones { display: grid; gap: 10px; margin: 16px 0; }
   .tarjeta .acciones { margin: 0; }
   .btn { display: block; width: 100%; min-height: 52px; border-radius: 16px; border: 0; font-weight: 600; font-size: 16.5px; padding: 12px; letter-spacing: .01em; }
-  .btn.principal { background: var(--deg); color: #fff; box-shadow: 0 8px 20px rgba(212, 105, 138, .35); }
+  .btn.principal { background: var(--deg); color: #fff; box-shadow: 0 8px 20px rgba(var(--foco-rgb), .35); }
   .btn.secundario { background: var(--blanco); border: 1px solid var(--rosa-medio); color: var(--frambuesa); }
   .btn.peligro { background: var(--blanco); border: 1px solid #f0c9c9; color: #b42318; }
   .btn:active { transform: scale(.985); }
@@ -267,7 +276,7 @@
   .kiosco-reloj span { font-size: 14px; color: var(--gris); }
   .kiosco-nota { text-align: center; margin: 0 0 14px; }
   .kiosco { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-  .kiosco button { border: 1px solid var(--borde); background: var(--blanco); border-radius: 18px; padding: 16px 8px 14px; display: flex; flex-direction: column; align-items: center; gap: 6px; font: inherit; color: var(--tinta); box-shadow: 0 4px 14px rgba(176, 77, 110, .06); }
+  .kiosco button { border: 1px solid var(--borde); background: var(--blanco); border-radius: 18px; padding: 16px 8px 14px; display: flex; flex-direction: column; align-items: center; gap: 6px; font: inherit; color: var(--tinta); box-shadow: 0 4px 14px rgba(var(--sombra-rgb), .06); }
   .kiosco button .avatar { width: 56px; height: 56px; font-size: 19px; }
   .kiosco button b { font-size: 15px; font-weight: 600; letter-spacing: .02em; }
   .kiosco button small { font-size: 12.5px; color: var(--gris); text-align: center; }
@@ -313,7 +322,7 @@
   .org li:first-child::after { border-radius: 10px 0 0 0; }
   .org li:only-child::after { border-radius: 0; }
   .org ul ul::before { content: ''; position: absolute; top: 0; left: 50%; height: 18px; border-left: 2px solid var(--rosa-medio); }
-  .org-caja { display: inline-flex; flex-direction: column; align-items: center; gap: 1px; min-width: 92px; max-width: 150px; padding: 8px 10px; border-radius: 14px; border: 1px solid var(--rosa-medio); background: var(--blanco); font: inherit; color: var(--tinta); box-shadow: 0 3px 10px rgba(176, 77, 110, .08); }
+  .org-caja { display: inline-flex; flex-direction: column; align-items: center; gap: 1px; min-width: 92px; max-width: 150px; padding: 8px 10px; border-radius: 14px; border: 1px solid var(--rosa-medio); background: var(--blanco); font: inherit; color: var(--tinta); box-shadow: 0 3px 10px rgba(var(--sombra-rgb), .08); }
   .org-caja small { font-family: var(--letra); font-size: 10px; letter-spacing: .1em; text-transform: uppercase; color: var(--frambuesa); line-height: 1.25; margin-bottom: 3px; }
   .org-caja b { font-size: 13.5px; font-weight: 600; line-height: 1.3; }
   .org-caja i { font-size: 12.5px; color: var(--gris); }
@@ -327,16 +336,16 @@
 
   nav {
     position: fixed; left: 0; right: 0; bottom: 0; z-index: 10; display: flex;
-    background: rgba(255,255,255,.94); border-top: 1px solid var(--borde);
+    background: color-mix(in srgb, var(--blanco) 94%, transparent); border-top: 1px solid var(--borde);
     padding-bottom: env(safe-area-inset-bottom); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
   }
   nav button { flex: 1; border: 0; background: none; padding: 9px 0 10px; font-size: 12px; color: var(--gris); }
   nav svg { display: block; margin: 0 auto 3px; width: 24px; height: 24px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
-  nav button.activo { color: var(--rosa); font-weight: 600; }
+  nav button.activo { color: var(--frambuesa); font-weight: 600; }
   nav button.mas { position: relative; }
   nav .circulo {
     display: grid; place-items: center; width: 52px; height: 52px; margin: -24px auto 2px; border-radius: 50%; color: #fff;
-    background: var(--deg-intenso); box-shadow: 0 8px 20px rgba(176, 77, 110, .35); border: 4px solid var(--fondo);
+    background: var(--deg-intenso); box-shadow: 0 8px 20px rgba(var(--sombra-rgb), .35); border: 4px solid var(--fondo);
   }
   nav .circulo svg { margin: 0; width: 24px; height: 24px; stroke-width: 2.4; }
   .accesos { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 16px; }
@@ -467,7 +476,7 @@
   /* Stock e inventario */
   .segmento { display: flex; background: var(--rosa-suave); border-radius: 14px; padding: 4px; margin-bottom: 14px; }
   .segmento button { flex: 1; border: 0; background: none; border-radius: 11px; padding: 9px 0; font-size: 14px; font-weight: 500; color: var(--frambuesa); }
-  .segmento button.activo { background: var(--blanco); font-weight: 600; box-shadow: 0 1px 4px rgba(176, 77, 110, .15); }
+  .segmento button.activo { background: var(--blanco); font-weight: 600; box-shadow: 0 1px 4px rgba(var(--sombra-rgb), .15); }
   .fila-botones { display: flex; gap: 8px; margin-bottom: 14px; }
   .fila-botones .btn { min-height: 46px; font-size: 15px; padding: 10px 8px; }
   .pedir { background: var(--deg-oscuro); color: #fff; }
@@ -497,7 +506,7 @@
   .producto .cant b { font-family: var(--titulo); font-style: italic; font-size: 19px; color: var(--frambuesa); }
   .producto .cant small { display: block; font-size: 11px; color: var(--gris); }
   .pill { font-size: 11px; font-weight: 600; padding: 3px 9px; border-radius: 99px; background: #ffe4e1; color: #b42318; white-space: nowrap; }
-  .pill.gris { background: #f3eef0; color: var(--gris); }
+  .pill.gris { background: color-mix(in srgb, var(--gris) 14%, var(--blanco)); color: var(--gris); }
   .fila-recuento { display: grid; grid-template-columns: 1fr 96px 62px; gap: 8px; align-items: center; padding: 8px 0; border-top: 1px solid var(--borde); }
   .fila-recuento:first-of-type { border-top: 0; }
   .fila-recuento b { font-weight: 600; font-size: 14.5px; }
@@ -512,7 +521,7 @@
   .fila-recuento select { font: inherit; font-size: 13px; padding: 6px 4px; border: 1px solid var(--borde); border-radius: 8px; background: transparent; color: inherit; }
   .foto-recuento .resultado { background: #fff8e6; border: 1px solid #f5d48b; color: #6b4b00; border-radius: 12px; padding: 10px 12px; font-size: 13.5px; line-height: 1.45; }
   .numero { height: 44px; width: 100%; border-radius: 12px; border: 1px solid var(--borde); background: var(--fondo); text-align: center; font-size: 17px; font-variant-numeric: tabular-nums; outline: none; }
-  .numero:focus { border-color: var(--rosa); background: var(--blanco); box-shadow: 0 0 0 3px rgba(212, 105, 138, .18); }
+  .numero:focus { border-color: var(--rosa); background: var(--blanco); box-shadow: 0 0 0 3px rgba(var(--foco-rgb), .18); }
   .compra { display: grid; grid-template-columns: 1fr auto 36px; gap: 8px; align-items: center; padding: 9px 0; border-top: 1px solid var(--borde); font-size: 14px; }
   .compra:first-of-type { border-top: 0; }
   .compra b { font-weight: 600; }
@@ -544,7 +553,7 @@
   .alergenos button i { font-style: normal; font-size: 18px; }
   .alergenos button em { font-style: normal; font-size: 10.5px; color: var(--gris); }
   .alergenos button.si { background: var(--frambuesa); color: #fff; border-color: transparent; }
-  .alergenos button.si em { color: #f6d3dc; }
+  .alergenos button.si em { color: var(--cabecera); }
   .alergenos button.trazas { border: 1.5px dashed var(--frambuesa); background: var(--rosa-suave); }
   .sugeridos { background: #fff7e0; border: 1px solid #f5d48b; color: #6b4b00; border-radius: 12px; padding: 9px 12px; font-size: 13px; margin-bottom: 12px; }
   .sugeridos button { margin-top: 6px; }
@@ -587,12 +596,12 @@
   .copia .sub b { color: var(--frambuesa); }
 
   #zonaImprimir { display: none; }
-  .inf { font-family: 'Jost', Arial, sans-serif; color: #44303a; font-size: 11pt; }
-  .inf-marca { font-family: var(--letra); font-size: 8.5pt; letter-spacing: .18em; text-transform: uppercase; color: #b04d6e; }
-  .inf h1 { font-family: 'Shippori Mincho B1', 'Hiragino Mincho ProN', Georgia, serif; font-weight: 700; font-size: 22pt; margin: 4px 0 2px; color: #b04d6e; }
-  .inf .inf-sub { margin: 0 0 14px; color: #866f77; font-size: 10pt; }
+  .inf { font-family: 'Jost', Arial, sans-serif; color: var(--tinta); font-size: 11pt; }
+  .inf-marca { font-family: var(--letra); font-size: 8.5pt; letter-spacing: .18em; text-transform: uppercase; color: var(--frambuesa); }
+  .inf h1 { font-family: 'Shippori Mincho B1', 'Hiragino Mincho ProN', Georgia, serif; font-weight: 700; font-size: 22pt; margin: 4px 0 2px; color: var(--frambuesa); }
+  .inf .inf-sub { margin: 0 0 14px; color: var(--gris); font-size: 10pt; }
   .inf table { width: 100%; border-collapse: collapse; margin-bottom: 10px; }
-  .inf th { background: #f6d3dc; text-align: left; font-weight: 600; padding: 6px 8px; font-size: 9.5pt; }
+  .inf th { background: var(--cabecera); text-align: left; font-weight: 600; padding: 6px 8px; font-size: 9.5pt; }
   .inf td { padding: 5px 8px; border-bottom: 1px solid #ead6dd; font-variant-numeric: tabular-nums; }
   .inf td.n, .inf th.n { text-align: right; }
   .inf tr.suma td { font-weight: 700; border-top: 2px solid #44303a; border-bottom: 0; }
@@ -600,17 +609,17 @@
   .inf-persona { break-inside: avoid; margin-top: 14px; }
   .inf-persona.salto { break-before: page; break-inside: auto; }
   .inf-org .org { overflow: visible; margin-top: 10mm; }
-  .inf-org .org li::before, .inf-org .org li::after, .inf-org .org ul ul::before { border-color: #b04d6e; }
-  .inf-org .org li:last-child::before { border-right-color: #b04d6e; }
-  .inf-org .org-caja { box-shadow: none; border-color: #b04d6e; min-width: 38mm; max-width: 58mm; padding: 3mm 4mm; }
+  .inf-org .org li::before, .inf-org .org li::after, .inf-org .org ul ul::before { border-color: var(--frambuesa); }
+  .inf-org .org li:last-child::before { border-right-color: var(--frambuesa); }
+  .inf-org .org-caja { box-shadow: none; border-color: var(--frambuesa); min-width: 38mm; max-width: 58mm; padding: 3mm 4mm; }
   .inf-org .org-caja b { font-size: 13pt; }
   .inf-org .org-caja small { font-size: 8.5pt; }
   .inf-org .org li { padding: 9mm 2mm 0; }
   .inf-org .org ul { padding-top: 9mm; }
   .inf-org .org > ul { padding-top: 0; }
   .inf-org .org li::before, .inf-org .org li::after, .inf-org .org ul ul::before { height: 9mm; }
-  .inf-org .org > ul > li > .org-caja { background: #b04d6e; color: #fff; }
-  .inf h2 { font-size: 12pt; margin: 0 0 4px; display: flex; justify-content: space-between; border-bottom: 2px solid #b04d6e; padding-bottom: 3px; }
+  .inf-org .org > ul > li > .org-caja { background: var(--frambuesa); color: #fff; }
+  .inf h2 { font-size: 12pt; margin: 0 0 4px; display: flex; justify-content: space-between; border-bottom: 2px solid var(--frambuesa); padding-bottom: 3px; }
   .inf-firmas { display: flex; gap: 40px; margin-top: 36px; break-inside: avoid; font-size: 10pt; }
   .inf-firmas div { flex: 1; border-top: 1px solid #44303a; padding-top: 6px; }
   /* Comparar precios */
@@ -793,6 +802,13 @@
   .cm-nota { font-family: var(--cm-letra); font-size: 9pt; letter-spacing: .04em; color: var(--cm-gris); font-style: italic; margin: 1mm 0 4mm; }
   .cm-footer { display: flex; justify-content: space-between; border-top: .6pt solid var(--cm-linea); padding-top: 2.5mm; font-family: var(--cm-letra); font-size: 8pt; letter-spacing: .24em; text-transform: uppercase; color: var(--cm-gris); }
 
+  .temas { display: grid; gap: 10px; margin-bottom: 14px; }
+  .temas button { display: grid; grid-template-columns: 52px 1fr auto; align-items: center; gap: 14px; padding: 12px 14px; border: 1px solid var(--borde); border-radius: 16px; background: var(--blanco); color: var(--tinta); text-align: left; font: inherit; }
+  .temas button.activo { border: 2px solid var(--frambuesa); padding: 11px 13px; }
+  .temas .muestra { width: 52px; height: 52px; border-radius: 50%; box-shadow: inset 0 0 0 3px rgba(255, 255, 255, .6); }
+  .temas b { display: block; font-size: 15.5px; }
+  .temas small { display: block; font-size: 12.5px; color: var(--gris); }
+  .temas i { font-style: normal; font-size: 18px; color: var(--frambuesa); }
   @media print {
     @page { size: landscape; margin: 8mm; }
     @page informe { size: A4 portrait; margin: 14mm 12mm; }
@@ -810,8 +826,8 @@
   }
   .inf .ficha-alg { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; margin-bottom: 12px; }
   .inf .ficha-alg div { border: 1px solid #ead6dd; border-radius: 6px; padding: 4px 2px; text-align: center; font-size: 8.5pt; line-height: 1.2; color: #b9a9af; }
-  .inf .ficha-alg div.si { background: #b04d6e; color: #fff; border-color: #b04d6e; font-weight: 600; }
-  .inf .ficha-alg div.trazas { border: 1.5px dashed #b04d6e; color: #b04d6e; font-weight: 600; }
+  .inf .ficha-alg div.si { background: var(--frambuesa); color: #fff; border-color: var(--frambuesa); font-weight: 600; }
+  .inf .ficha-alg div.trazas { border: 1.5px dashed var(--frambuesa); color: var(--frambuesa); font-weight: 600; }
   .inf .ficha-txt { white-space: pre-line; margin: 0 0 12px; line-height: 1.45; }
   .ficha-ms .ficha-cab { display: flex; justify-content: space-between; gap: 8mm; align-items: flex-start; margin-bottom: 4mm; }
   .ficha-ms .ficha-titulo { font-family: 'Jost', Arial, sans-serif; font-style: normal; text-transform: uppercase; font-size: 22pt; letter-spacing: .02em; color: #44303a; line-height: 1.15; }
@@ -826,7 +842,7 @@
   .fe-doc-sec { text-align: center; }
   #zonaImprimir img.fe-doc-inf { width: auto; max-width: 100%; max-height: 150mm; }
   .inf table.ficha-ing td { border: 1px solid #ead6dd; }
-  .inf table.ficha-ing td.alg-txt { font-size: 9pt; text-transform: uppercase; color: #b04d6e; font-weight: 600; }
+  .inf table.ficha-ing td.alg-txt { font-size: 9pt; text-transform: uppercase; color: var(--frambuesa); font-weight: 600; }
   .ficha-ms .ficha-servicio { display: flex; justify-content: space-between; align-items: center; gap: 8mm; }
   .ficha-ms .ficha-servicio b { display: block; font-size: 12pt; }
   .ficha-ms .ficha-servicio span { font-size: 12pt; }
@@ -843,7 +859,7 @@
   .inf table.matriz th:first-child { text-align: left; font-size: 9pt; }
   .inf table.matriz td { text-align: center; padding: 4px 2px; font-size: 11pt; }
   .inf table.matriz td:first-child { text-align: left; font-size: 9.5pt; }
-  .inf table.matriz tr.cat td { background: #fbeef2; font-weight: 600; font-size: 9pt; text-align: left; letter-spacing: .08em; text-transform: uppercase; color: #b04d6e; }
+  .inf table.matriz tr.cat td { background: var(--rosa-suave); font-weight: 600; font-size: 9pt; text-align: left; letter-spacing: .08em; text-transform: uppercase; color: var(--frambuesa); }
 </style>
 </head>
 <body>
@@ -1477,8 +1493,8 @@ function pintarInicio() {
     '<div class="' + (porDia[d] ? 'ok' : '') + '"><em>' + (porDia[d] || '') + '</em><i style="height:' + (porDia[d] ? 14 + (porDia[d] / maxDia) * 40 : 6) + 'px"></i><span>' + l + '</span></div>').join('');
   const r = 36, circ = 2 * Math.PI * r;
   $('proxAnillo').innerHTML =
-    '<svg width="86" height="86" viewBox="0 0 86 86"><defs><linearGradient id="gAnillo" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#e9a3b6"/><stop offset="1" stop-color="#d4698a"/></linearGradient></defs>' +
-    '<circle cx="43" cy="43" r="' + r + '" fill="none" stroke="#fce8ef" stroke-width="9"/>' +
+    '<svg width="86" height="86" viewBox="0 0 86 86"><defs><linearGradient id="gAnillo" x1="0" y1="0" x2="1" y2="1"><stop offset="0" style="stop-color:var(--coral)"/><stop offset="1" style="stop-color:var(--rosa)"/></linearGradient></defs>' +
+    '<circle cx="43" cy="43" r="' + r + '" fill="none" style="stroke:var(--rosa-suave)" stroke-width="9"/>' +
     '<circle cx="43" cy="43" r="' + r + '" fill="none" stroke="url(#gAnillo)" stroke-width="9" stroke-linecap="round" stroke-dasharray="' + circ + '" stroke-dashoffset="' + (circ * (1 - listos / 7)) + '"/></svg>' +
     '<div class="cifra"><b>' + listos + '/7</b><small>días</small></div>';
   $('proxEstado').innerHTML = listos === 0 ? 'Todavía <b>sin empezar</b>. Lo normal es prepararla el jueves o el viernes.'
@@ -1898,14 +1914,14 @@ function dibujarCuadro() {
 
   const fuente = 'Jost, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif';
   ctx.textBaseline = 'middle';
-  ctx.fillStyle = '#b04d6e'; ctx.textAlign = 'left';
+  ctx.fillStyle = colorTema('--frambuesa'); ctx.textAlign = 'left';
   ctx.font = '700 30px "Shippori Mincho B1", Georgia, serif';
   ctx.fillText('Horario · semana del ' + rango(lunes, true) + ' ' + sumarDias(lunes, 6).getFullYear(), M, M + TIT / 2 - 8);
 
   const x0 = M, y0 = M + TIT, xd = x0 + NOM, yp = y0 + CAB;
   const finX = xd + COL * 14, finY = yp + equipo.length * FIL * 2;
 
-  ctx.fillStyle = '#f6d3dc';
+  ctx.fillStyle = colorTema('--cabecera');
   ctx.fillRect(xd, y0, COL * 14, CAB);
   ctx.fillRect(x0, yp, NOM, finY - yp);
 
@@ -2738,7 +2754,7 @@ function pdfDeImagenes(paginas) {
 function hojaPedido(fecha, filas, cuantos, num, de, total) {
   const ANCHO = 1240, ALTO = 1754, IZQ = 90, DER = 1150, FILA = 50;
   const COL = { quedan: 640, minimo: 800, pedir: 960, importe: DER - 12 };
-  const TINTA = '#44303a', GRIS = '#866f77', TITULO = '#b04d6e', CABECERA = '#f6d3dc';
+  const TINTA = colorTema('--tinta'), GRIS = colorTema('--gris'), TITULO = colorTema('--frambuesa'), CABECERA = colorTema('--cabecera');
   const c = document.createElement('canvas');
   c.width = ANCHO; c.height = ALTO;
   const g = c.getContext('2d');
@@ -4169,9 +4185,82 @@ $('archivoCopia').addEventListener('change', async (e) => {
   escribirLocal('horario-cocina-antes-de-restaurar', JSON.stringify(antes));
   datos = copia.datos;
   guardar();
+  temaKumi();
   refrescar();
-  ofrecerDeshacer('Copia recuperada', () => { datos = antes; });
+  ofrecerDeshacer('Copia recuperada', () => { datos = antes; temaKumi(); });
 });
+
+
+// --- Color de la app: cada tema cambia las variables de color de :root. Se guarda en los datos (viaja en la copia)
+// y aparte en 'kumi-mara-tema', que el <head> lee antes de pintar para no enseñar un instante el color anterior.
+const TEMAS = {
+  borgona: { nombre: 'Borgoña Hinoki', sub: 'El granate de la carta japonesa', c: '#7a2131', v: { '--rosa': '#a33a4a', '--coral': '#cf7d89', '--violeta': '#4a2226', '--frambuesa': '#7a2131', '--frambuesa-oscuro': '#3f1219', '--rosa-medio': '#e3b3ba', '--rosa-suave': '#f5e3e5', '--fuerte': '#8c2a3a', '--claro': '#e09aa5', '--cabecera': '#ecccd1', '--foco-rgb': '163, 58, 74', '--sombra-rgb': '122, 33, 49', '--oscuro-1': '#2a1215', '--oscuro-2': '#6e2a35', '--tinta': '#3b2125', '--gris': '#7f6266', '--borde': '#e8d0d3', '--fondo': '#faf3f2' } },
+  sakura: { nombre: 'Rosa sakura', sub: 'El rosa de siempre de Kumi Mara', c: '#b04d6e', v: { '--rosa': '#d4698a', '--coral': '#e9a3b6', '--violeta': '#6c4a44', '--frambuesa': '#b04d6e', '--frambuesa-oscuro': '#5b2f3e', '--rosa-medio': '#f3b9c8', '--rosa-suave': '#fbe4ea', '--fuerte': '#c25a7c', '--claro': '#eaa9b9', '--cabecera': '#f6d3dc', '--foco-rgb': '212, 105, 138', '--sombra-rgb': '176, 77, 110', '--oscuro-1': '#3e2a30', '--oscuro-2': '#8a4a5c', '--tinta': '#44303a', '--gris': '#866f77', '--borde': '#ecd3d9', '--fondo': '#fbf4f2' } },
+  matcha: { nombre: 'Verde matcha', sub: 'Tranquilo, de té verde', c: '#3f6b35', v: { '--rosa': '#5f8f4e', '--coral': '#9dc086', '--violeta': '#3f4a2e', '--frambuesa': '#3f6b35', '--frambuesa-oscuro': '#22391d', '--rosa-medio': '#c9dfba', '--rosa-suave': '#edf5e6', '--fuerte': '#4f7d40', '--claro': '#b5d39f', '--cabecera': '#d6e8c9', '--foco-rgb': '95, 143, 78', '--sombra-rgb': '63, 107, 53', '--oscuro-1': '#1f2a1b', '--oscuro-2': '#4a6b3c', '--tinta': '#2c3327', '--gris': '#6c7564', '--borde': '#dbe5d2', '--fondo': '#f6f8f2' } },
+  indigo: { nombre: 'Azul índigo', sub: 'Sobrio, como el tinte japonés', c: '#2f4c82', v: { '--rosa': '#4e6fa8', '--coral': '#8ea8d4', '--violeta': '#353d55', '--frambuesa': '#2f4c82', '--frambuesa-oscuro': '#1a2a4a', '--rosa-medio': '#c4d2ea', '--rosa-suave': '#e9eff8', '--fuerte': '#3d5c94', '--claro': '#a9bde0', '--cabecera': '#d3def0', '--foco-rgb': '78, 111, 168', '--sombra-rgb': '47, 76, 130', '--oscuro-1': '#18213a', '--oscuro-2': '#3d5a8c', '--tinta': '#252c3b', '--gris': '#687185', '--borde': '#d8dfea', '--fondo': '#f5f7fb' } },
+};
+const TEMA_INICIAL = 'borgona';
+const FONDOS = { claro: 'Claro', rosa: 'Rosa viejo', tema: 'Del color del tema' };
+const LETRAS = { blanco: { nombre: 'Blancas', color: '#fffaf8' }, rosa: { nombre: 'Rosa viejo', color: '#efcdc8' } };
+const temaActual = () => TEMAS[datos.tema] || TEMAS[TEMA_INICIAL];
+// Los colores para dibujar (imagen del horario, hoja de pedido) salen siempre del tema con fondo claro: esas imágenes son blancas.
+const colorTema = (variable) => temaActual().v[variable] || getComputedStyle(document.documentElement).getPropertyValue(variable).trim();
+const reglas = (v) => Object.entries(v).map(([k, c]) => k + ': ' + c).join('; ');
+// «:root:root» gana a los colores de :root de la hoja de estilos, aunque este bloque se escriba antes.
+function cssTema() {
+  const t = temaActual();
+  const fondo = FONDOS[datos.fondo] ? datos.fondo : 'claro';
+  let cambios = {};
+  if (fondo === 'rosa') cambios = { '--fondo': '#ead6d4', '--blanco': '#f8efee', '--borde': '#dcc1bf', '--rosa-suave': '#f2e1df' };
+  if (fondo === 'tema') {
+    const o = t.v['--frambuesa-oscuro'];
+    const l = (LETRAS[datos.letras] || LETRAS.blanco).color;
+    cambios = {
+      '--fondo': o, '--blanco': 'color-mix(in srgb, ' + o + ' 84%, #ffffff)', '--tinta': l,
+      '--gris': 'color-mix(in srgb, ' + l + ' 68%, ' + o + ')', '--borde': 'color-mix(in srgb, ' + l + ' 22%, ' + o + ')',
+      '--rosa-suave': 'color-mix(in srgb, ' + t.v['--rosa'] + ' 32%, ' + o + ')', '--rosa-medio': 'color-mix(in srgb, ' + t.v['--rosa'] + ' 60%, ' + o + ')',
+      '--frambuesa': t.v['--claro'], '--cabecera': 'color-mix(in srgb, ' + t.v['--rosa'] + ' 45%, ' + o + ')',
+    };
+  }
+  // Al imprimir, el papel es blanco: los PDF vuelven a los colores claros del tema.
+  return ':root:root { ' + reglas({ ...t.v, ...cambios }) + ' }' + (fondo === 'claro' ? '' : ' @media print { :root:root { ' + reglas(t.v) + ' } }');
+}
+function temaKumi() {
+  const t = temaActual();
+  const css = cssTema();
+  let s = $('temaVars');
+  if (!s) { s = document.createElement('style'); s.id = 'temaVars'; document.head.appendChild(s); }
+  s.textContent = css;
+  const c = datos.fondo === 'tema' ? t.v['--frambuesa-oscuro'] : t.c;
+  document.querySelector('meta[name="theme-color"]').content = c;
+  escribirLocal('kumi-mara-tema', JSON.stringify({ css, c }));
+}
+function abrirTema() {
+  const actual = TEMAS[datos.tema] ? datos.tema : TEMA_INICIAL;
+  const fondo = FONDOS[datos.fondo] ? datos.fondo : 'claro';
+  const letras = LETRAS[datos.letras] ? datos.letras : 'blanco';
+  abrirPanel('<h3>Color de la app</h3><p class="sub">Cambia todas las pantallas. Los PDF salen siempre en papel blanco y la carta del menú mantiene sus colores.</p><div class="temas">' +
+    Object.entries(TEMAS).map(([k, t]) => '<button data-tema="' + k + '"' + (k === actual ? ' class="activo" aria-pressed="true"' : ' aria-pressed="false"') + '>' +
+      '<span class="muestra" style="background: linear-gradient(135deg, ' + t.v['--claro'] + ' 0%, ' + t.v['--rosa'] + ' 45%, ' + t.v['--frambuesa-oscuro'] + ' 100%)"></span>' +
+      '<span><b>' + t.nombre + '</b><small>' + t.sub + '</small></span><i>' + (k === actual ? '✓' : '') + '</i></button>').join('') +
+    '</div><div class="grupo-stock">Fondo</div><div class="segmento">' +
+    Object.entries(FONDOS).map(([k, n]) => '<button data-fondo="' + k + '"' + (k === fondo ? ' class="activo"' : '') + '>' + n + '</button>').join('') + '</div>' +
+    (fondo === 'tema' ? '<div class="grupo-stock">Letras</div><div class="segmento">' +
+      Object.entries(LETRAS).map(([k, l]) => '<button data-letras="' + k + '"' + (k === letras ? ' class="activo"' : '') + '>' + l.nombre + '</button>').join('') + '</div>' : '') +
+    '<div class="acciones"><button class="btn secundario" data-tema-cerrar>Listo</button></div>');
+}
+$('panel').addEventListener('click', (e) => {
+  if (e.target.closest('[data-tema-cerrar]')) { cerrarPanel(); return; }
+  const b = e.target.closest('[data-tema], [data-fondo], [data-letras]');
+  if (!b) return;
+  if (b.dataset.tema) datos.tema = b.dataset.tema;
+  if (b.dataset.fondo) datos.fondo = b.dataset.fondo;
+  if (b.dataset.letras) datos.letras = b.dataset.letras;
+  guardar();
+  temaKumi();
+  abrirTema();
+});
+temaKumi();
 
 // --- Ventana ＋ : atajos y lo que se usa menos ---
 function abrirMas() {
@@ -4190,6 +4279,7 @@ function abrirMas() {
     acceso('comparador', '⚖️', 'Comparar precios', comparador().catalogos.length ? comparador().catalogos.map((x) => x.proveedor).join(' · ') : 'Catálogos de tus proveedores', vista === 'comparador') +
     acceso('equipo', '👥', 'Tu equipo', datos.equipo.length + (datos.equipo.length === 1 ? ' persona' : ' personas'), vista === 'equipo') +
     acceso('servicios', '🍽️', 'Servicios y mínimos', franjas().map((f) => f.nombre + ' ' + f.minimo).join(' · ') || 'Sin servicios') +
+    acceso('tema', '🎨', 'Color de la app', temaActual().nombre + ' · fondo ' + (FONDOS[datos.fondo] || FONDOS.claro).toLowerCase()) +
     '</div><div class="grupo-stock">Tus datos</div><div class="accesos">' +
     acceso('guardar-copia', '💾', 'Guardar copia', textoUltimaCopia().replace(/<[^>]+>/g, '')) +
     acceso('recuperar-copia', '📂', 'Recuperar copia', 'Desde un archivo guardado') +
@@ -4201,6 +4291,7 @@ $('panel').addEventListener('click', (e) => {
   if (!b) return;
   const que = b.dataset.mas;
   if (que === 'servicios') { abrirServicios(); return; }
+  if (que === 'tema') { abrirTema(); return; }
   const navega = ['horas', 'equipo', 'fichas', 'recuento', 'compra', 'fichar', 'ausencias', 'organigrama', 'comparador'].includes(que);
   cerrarPanel(navega);
   if (que === 'equipo' || que === 'fichar' || que === 'ausencias') { subEquipo = que === 'equipo' ? 'equipo' : que; irA('equipo'); }
