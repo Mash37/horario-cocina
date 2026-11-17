@@ -2400,6 +2400,8 @@ function pintarListaStock() {
 // Dirección del lector (kumi-lector, un Cloudflare Worker con la clave de Anthropic). Vacía: la opción no aparece.
 const LECTOR_URL = 'https://kumi-lector.mash37.workers.dev/';
 const LADO_MAX_FOTO = 1600;
+// Por encima de lo que el lector tarda en probar sus tres modelos: así el botón nunca se queda «Leyendo…» para siempre.
+const ESPERA_LECTOR_MS = 150000;
 
 async function fotoReducida(archivo) {
   const imagen = await createImageBitmap(archivo);
@@ -2421,7 +2423,12 @@ const cifraFoto = new Intl.NumberFormat('es-ES', { maximumFractionDigits: 3 });
 const normalizarNombre = (t) => t.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-z0-9]+/g, ' ').trim();
 
 async function leerFoto(archivo, productos) {
-  const r = await fetch(LECTOR_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ imagen: await fotoReducida(archivo), tipo: 'image/jpeg', productos }) });
+  let r;
+  try {
+    r = await fetch(LECTOR_URL, { method: 'POST', signal: AbortSignal.timeout(ESPERA_LECTOR_MS), headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ imagen: await fotoReducida(archivo), tipo: 'image/jpeg', productos }) });
+  } catch (e) {
+    throw new Error(e && e.name === 'TimeoutError' ? 'El lector tarda demasiado: inténtalo en un rato o rellénalo a mano' : 'No hay conexión con el lector: revisa el internet e inténtalo de nuevo');
+  }
   const datos = await r.json().catch(() => ({}));
   if (!r.ok) throw new Error(datos.error || 'No se pudo leer la foto');
   return datos;
